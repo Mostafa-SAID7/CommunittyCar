@@ -1,3 +1,5 @@
+using CommunityCar.Api.Models;
+using CommunityCar.Domain.Exceptions;
 using System.Net;
 using System.Text.Json;
 
@@ -27,18 +29,47 @@ public class ExceptionHandlingMiddleware
         }
     }
 
-    private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         context.Response.ContentType = "application/json";
 
-        var response = new
-        {
-            success = false,
-            message = "An error occurred while processing your request",
-            error = exception.Message
-        };
+        var traceId = context.TraceIdentifier;
+        ErrorResponse errorResponse;
 
-        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+        switch (exception)
+        {
+            case BadRequestException badRequestEx:
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                errorResponse = ErrorResponse.Create(badRequestEx.Message, null, traceId);
+                break;
+
+            case NotFoundException notFoundEx:
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                errorResponse = ErrorResponse.Create(notFoundEx.Message, null, traceId);
+                break;
+
+            case UnauthorizedException unauthorizedEx:
+                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                errorResponse = ErrorResponse.Create(unauthorizedEx.Message, null, traceId);
+                break;
+
+            case ValidationException validationEx:
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                errorResponse = ErrorResponse.Create(validationEx.Message, validationEx.Errors, traceId);
+                break;
+
+            case FluentValidation.ValidationException fluentValidationEx:
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                var errors = fluentValidationEx.Errors.Select(e => e.ErrorMessage);
+                errorResponse = ErrorResponse.Create("Validation failed", errors, traceId);
+                break;
+
+            default:
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                errorResponse = ErrorResponse.Create("An unexpected error occurred", null, traceId);
+                break;
+        }
+
+        await context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse));
     }
 }

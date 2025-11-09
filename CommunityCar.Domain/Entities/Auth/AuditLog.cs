@@ -1,17 +1,51 @@
+using CommunityCar.Domain.Common;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace CommunityCar.Domain.Entities.Auth;
 
-public class AuditLog
+[Table("AuditLogs")]
+public class AuditLog : BaseEntity
 {
-    public int Id { get; set; }
-    public string UserId { get; set; } = string.Empty;
-    public string Action { get; set; } = string.Empty;
+    [Required]
+    [MaxLength(450)]
+    public string? UserId { get; set; }
+
+    [Required]
+    [MaxLength(10)]
+    public string Action { get; set; } = string.Empty; // INSERT, UPDATE, DELETE
+
+    [Required]
+    [MaxLength(200)]
     public string EntityType { get; set; } = string.Empty;
+
+    [Required]
+    [MaxLength(50)]
     public string EntityId { get; set; } = string.Empty;
-    public string OldValues { get; set; } = string.Empty;
-    public string NewValues { get; set; } = string.Empty;
-    public string IpAddress { get; set; } = string.Empty;
-    public string UserAgent { get; set; } = string.Empty;
-    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+
+    public string? OldValues { get; set; } // JSON serialized
+
+    public string? NewValues { get; set; } // JSON serialized
+
+    public string? ChangedColumns { get; set; } // JSON serialized array
+
+    [MaxLength(45)]
+    public string? IpAddress { get; set; }
+
+    [MaxLength(500)]
+    public string? UserAgent { get; set; }
+
+    [MaxLength(256)]
+    public string? UserName { get; set; }
+
     public bool IsSuccessful { get; set; } = true;
+
+    [MaxLength(1000)]
     public string? ErrorMessage { get; set; }
+
+    [MaxLength(1000)]
+    public string? ChangeReason { get; set; }
+
+    // Navigation property
+    public virtual User? User { get; set; }
 }
