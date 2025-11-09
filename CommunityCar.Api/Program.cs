@@ -1,10 +1,7 @@
-using CommunityCar.Api;
-using CommunityCar.Application.Interfaces;
-using CommunityCar.Application.Services;
+using CommunityCar.Api.Extensions;
+using CommunityCar.Application.Extensions;
 using CommunityCar.Infrastructure.Configurations;
-using CommunityCar.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -15,10 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
-// Configure database
+// Configure database and identity
 builder.Services.AddDatabaseConfiguration(builder.Configuration);
-
-// Configure Identity
 builder.Services.AddIdentityConfiguration(builder.Configuration);
 
 // Configure JWT Authentication
@@ -41,19 +36,10 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Register application services
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IProfileService, ProfileService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
-builder.Services.AddScoped<EmailService>();
-builder.Services.AddScoped<AuditService>();
-builder.Services.AddScoped<SessionService>();
-builder.Services.AddScoped<BiometricService>();
-builder.Services.AddScoped<SecurityMonitoringService>();
-builder.Services.AddScoped<ApiKeyService>();
-builder.Services.AddScoped<OtpService>();
-builder.Services.AddScoped<SocialAuthService>();
+// Register all services using extension methods
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices();
+builder.Services.AddApiServices();
 
 // Register HttpClient for external API calls
 builder.Services.AddHttpClient();
