@@ -1,12 +1,12 @@
 using CommunityCar.Application.DTOs.Auth;
-using CommunityCar.Application.Interfaces;
-using CommunityCar.Application.Services;
+using CommunityCar.Application.Interfaces.Auth;
+using CommunityCar.Application.Services.Auth;
 using CommunityCar.Domain.Entities.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Moq;
 
-namespace CommunityCar.Tests;
+namespace CommunityCar.Tests.Auth;
 
 public class AuthServiceTests
 {
@@ -64,7 +64,7 @@ public class AuthServiceTests
             .ReturnsAsync(user);
 
         _signInManagerMock.Setup(x => x.CheckPasswordSignInAsync(user, loginRequest.Password, false))
-            .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
+            .ReturnsAsync(SignInResult.Success);
 
         _tokenServiceMock.Setup(x => x.GenerateJwtToken(user))
             .Returns("jwt-token");

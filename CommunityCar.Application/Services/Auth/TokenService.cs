@@ -1,4 +1,5 @@
-using CommunityCar.Application.Interfaces;
+using CommunityCar.Application.Interfaces.Auth;
+using CommunityCar.Application.Services;
 using CommunityCar.Domain.Entities.Auth;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -7,7 +8,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace CommunityCar.Application.Services;
+namespace CommunityCar.Application.Services.Auth;
 
 public class TokenService : ITokenService
 {

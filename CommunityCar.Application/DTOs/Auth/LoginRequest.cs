@@ -13,4 +13,7 @@ public class LoginRequest
     public string Password { get; set; } = string.Empty;
 
     public bool RememberMe { get; set; }
+    public string? DeviceFingerprint { get; set; }
+    public string? OtpCode { get; set; }
+    public string? BiometricToken { get; set; }
 }

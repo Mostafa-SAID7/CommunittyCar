@@ -1,8 +1,11 @@
 using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 
-namespace CommunityCar.Infrastructure.Configurations;
+namespace CommunityCar.Infrastructure.Configurations.Auth;
 
 public static class IdentityConfiguration
 {

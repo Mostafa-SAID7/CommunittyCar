@@ -1,9 +1,10 @@
 using CommunityCar.Application.DTOs.Auth;
-using CommunityCar.Application.Interfaces;
+using CommunityCar.Application.Interfaces.Auth;
+using CommunityCar.Application.Services;
 using CommunityCar.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace CommunityCar.Application.Services;
+namespace CommunityCar.Application.Services.Auth;
 
 public class AuthService : IAuthService
 {

@@ -1,6 +1,6 @@
 using CommunityCar.Domain.Entities.Auth;
 
-namespace CommunityCar.Application.Interfaces;
+namespace CommunityCar.Application.Interfaces.Auth;
 
 public interface ITokenService
 {

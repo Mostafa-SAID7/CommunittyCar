@@ -28,6 +28,9 @@ public class User : IdentityUser
     public string? BiometricKey { get; set; }
     public string? SocialLoginProvider { get; set; }
     public string? SocialLoginId { get; set; }
+    public string? ApiKey { get; set; }
+    public DateTime? ApiKeyCreatedAt { get; set; }
+    public DateTime? ApiKeyExpiresAt { get; set; }
 
     public string FullName => $"{FirstName} {LastName}";
 }

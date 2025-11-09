@@ -1,6 +1,6 @@
 using CommunityCar.Api;
-using CommunityCar.Application.Interfaces;
-using CommunityCar.Application.Services;
+using CommunityCar.Application.Interfaces.Auth;
+using CommunityCar.Application.Services.Auth;
 using CommunityCar.Infrastructure.Configurations;
 using CommunityCar.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -43,6 +43,18 @@ builder.Services.AddAuthentication(options =>
 // Register application services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<AuditService>();
+builder.Services.AddScoped<SessionService>();
+builder.Services.AddScoped<BiometricService>();
+builder.Services.AddScoped<SecurityMonitoringService>();
+builder.Services.AddScoped<ApiKeyService>();
+builder.Services.AddScoped<OtpService>();
+builder.Services.AddScoped<SocialAuthService>();
+
+// Register HttpClient for external API calls
+builder.Services.AddHttpClient();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -86,6 +98,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Use security middleware
+app.UseMiddleware<SecurityHeadersMiddleware>();
+app.UseMiddleware<RateLimitingMiddleware>();
 
 // Use custom exception handling middleware
 app.UseMiddleware<ExceptionHandlingMiddleware>();
