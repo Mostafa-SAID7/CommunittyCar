@@ -3,15 +3,15 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:43797",
-      "sslPort": 44319
+      "applicationUrl": "http://localhost:62468",
+      "sslPort": 44396
     }
   },
   "profiles": {
     "CommunityCar.Client": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:7057;http://localhost:5203",
+      "applicationUrl": "https://localhost:7078;http://localhost:5170",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
