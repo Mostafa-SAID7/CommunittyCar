@@ -15,6 +15,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCar.Tests", "Commu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCar.Client", "CommunityCar.Client\CommunityCar.Client.csproj", "{05B26AD7-559E-49D3-ADEE-594606FE7934}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		basePartApi.md = basePartApi.md
+		basePartApplication.md = basePartApplication.md
+		basePartDomain.md = basePartDomain.md
+		basePartFront.md = basePartFront.md
+		basePartInfrastructure.md = basePartInfrastructure.md
+		basePartTests.md = basePartTests.md
+		BaseStructure.md = BaseStructure.md
+		EnhancedStructure.md = EnhancedStructure.md
+		FullStructure.md = FullStructure.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
