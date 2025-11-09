@@ -16,6 +16,18 @@ builder.Services.AddControllers();
 builder.Services.AddDatabaseConfiguration(builder.Configuration);
 builder.Services.AddIdentityConfiguration(builder.Configuration);
 
+// Configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000", "https://localhost:3000", "http://localhost:5000", "https://localhost:5000")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
+
 // Configure JWT Authentication
 builder.Services.AddAuthentication(options =>
 {
@@ -117,6 +129,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Enable CORS
+app.UseCors("AllowReactApp");
 
 // Use custom exception handling middleware
 app.UseMiddleware<ExceptionHandlingMiddleware>();
