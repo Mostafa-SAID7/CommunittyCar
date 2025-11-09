@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Email - CommunityCar</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        .verification-code {
+            background-color: #f8f9fa;
+            border: 2px dashed #4CAF50;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 30px 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+            letter-spacing: 3px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">CommunityCar</div>
+            <h1>Verify Your Email Address</h1>
+        </div>
+
+        <p>Hello <strong>{{FirstName}} {{LastName}}</strong>,</p>
+
+        <p>Welcome to CommunityCar! To complete your registration and start using our platform, please verify your email address.</p>
+
+        <div class="verification-code">
+            {{VerificationCode}}
+        </div>
+
+        <p>Enter this verification code on our website to activate your account. This code will expire in 48 hours.</p>
+
+        <div class="warning">
+            <strong>Security Notice:</strong> If you didn't create an account with CommunityCar, please ignore this email. Your email address will not be used without verification.
+        </div>
+
+        <p>If the verification button doesn't work, you can copy and paste this link into your browser:</p>
+        <p><a href="{{VerificationUrl}}">{{VerificationUrl}}</a></p>
+
+        <p>Thank you for joining CommunityCar!</p>
+        <p>Best regards,<br>The CommunityCar Team</p>
+
+        <div class="footer">
+            <p>This email was sent to {{Email}}. If you have any questions, please contact our support team at <a href="mailto:support@communitycar.com">support@communitycar.com</a>.</p>
+            <p>&copy; 2024 CommunityCar. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 
-namespace CommunityCar.Tests;
+namespace CommunityCar.Tests.Auth;
 
 public class ProfileServiceTests : IDisposable
 {

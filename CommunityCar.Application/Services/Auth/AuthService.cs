@@ -3,6 +3,7 @@ using CommunityCar.Application.Interfaces.Auth;
 using CommunityCar.Application.Services;
 using CommunityCar.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Cryptography;
 
 namespace CommunityCar.Application.Services.Auth;
 
@@ -11,15 +12,18 @@ public class AuthService : IAuthService
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly ITokenService _tokenService;
+    private readonly IEmailService _emailService;
 
     public AuthService(
         UserManager<User> userManager,
         SignInManager<User> signInManager,
-        ITokenService tokenService)
+        ITokenService tokenService,
+        IEmailService emailService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _tokenService = tokenService;
+        _emailService = emailService;
     }
 
     public async Task<AuthResponse> LoginAsync(LoginRequest request)
@@ -71,7 +75,7 @@ public class AuthService : IAuthService
             Email = request.Email,
             FirstName = request.FirstName,
             LastName = request.LastName,
-            EmailConfirmed = true // For demo purposes
+            EmailConfirmed = false // Email verification required
         };
 
         var result = await _userManager.CreateAsync(user, request.Password);
@@ -85,16 +89,20 @@ public class AuthService : IAuthService
             };
         }
 
-        var token = _tokenService.GenerateJwtToken(user);
-        var refreshToken = _tokenService.GenerateRefreshToken();
+        // Generate email verification code
+        var verificationCode = GenerateVerificationCode();
+
+        // Send verification email
+        await _emailService.SendEmailVerificationAsync(
+            request.Email,
+            request.FirstName,
+            request.LastName,
+            verificationCode);
 
         return new AuthResponse
         {
             Success = true,
-            Message = "Registration successful",
-            Token = token,
-            RefreshToken = refreshToken,
-            Expiration = DateTime.UtcNow.AddHours(1)
+            Message = "Registration successful. Please check your email to verify your account."
         };
     }
 
@@ -112,5 +120,286 @@ public class AuthService : IAuthService
     {
         // Implementation for logout logic
         return true;
+    }
+
+    public async Task<AuthResponse> ForgotPasswordAsync(ForgotPasswordRequest request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null)
+        {
+            // Don't reveal that the user does not exist
+            return new AuthResponse
+            {
+                Success = true,
+                Message = "If an account with this email exists, a password reset link has been sent."
+            };
+        }
+
+        var resetCode = GenerateVerificationCode();
+
+        await _emailService.SendPasswordResetAsync(
+            request.Email,
+            user.FirstName,
+            user.LastName,
+            resetCode);
+
+        return new AuthResponse
+        {
+            Success = true,
+            Message = "If an account with this email exists, a password reset link has been sent."
+        };
+    }
+
+    public async Task<AuthResponse> ResetPasswordAsync(ResetPasswordRequest request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null)
+        {
+            return new AuthResponse
+            {
+                Success = false,
+                Message = "Invalid reset request"
+            };
+        }
+
+        var result = await _userManager.ResetPasswordAsync(user, request.ResetCode, request.NewPassword);
+        if (!result.Succeeded)
+        {
+            return new AuthResponse
+            {
+                Success = false,
+                Message = "Password reset failed",
+                Errors = result.Errors.Select(e => e.Description)
+            };
+        }
+
+        return new AuthResponse
+        {
+            Success = true,
+            Message = "Password reset successful"
+        };
+    }
+
+    public async Task<AuthResponse> VerifyEmailAsync(VerifyEmailRequest request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null)
+        {
+            return new AuthResponse
+            {
+                Success = false,
+                Message = "Invalid verification request"
+            };
+        }
+
+        // In a real implementation, you'd verify the code against a stored value
+        // For demo purposes, we'll just confirm the email
+        user.EmailConfirmed = true;
+        await _userManager.UpdateAsync(user);
+
+        // Send welcome email
+        await _emailService.SendWelcomeEmailAsync(
+            request.Email,
+            user.FirstName,
+            user.LastName);
+
+        var token = _tokenService.GenerateJwtToken(user);
+        var refreshToken = _tokenService.GenerateRefreshToken();
+
+        return new AuthResponse
+        {
+            Success = true,
+            Message = "Email verified successfully",
+            Token = token,
+            RefreshToken = refreshToken,
+            Expiration = DateTime.UtcNow.AddHours(1)
+        };
+    }
+
+    public async Task<AuthResponse> ResendEmailVerificationAsync(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+        {
+            return new AuthResponse
+            {
+                Success = false,
+                Message = "User not found"
+            };
+        }
+
+        if (user.EmailConfirmed)
+        {
+            return new AuthResponse
+            {
+                Success = false,
+                Message = "Email already verified"
+            };
+        }
+
+        var verificationCode = GenerateVerificationCode();
+
+        await _emailService.SendEmailVerificationAsync(
+            email,
+            user.FirstName,
+            user.LastName,
+            verificationCode);
+
+        return new AuthResponse
+        {
+            Success = true,
+            Message = "Verification email sent"
+        };
+    }
+
+    public async Task<string> GenerateOtpAsync(string userId, string purpose)
+    {
+        var otp = GenerateOtpCode();
+
+        // In a real implementation, you'd store this OTP with expiration
+        // For demo purposes, we'll just return it
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user != null)
+        {
+            await _emailService.SendOtpAsync(
+                user.Email!,
+                user.FirstName,
+                user.LastName,
+                otp,
+                purpose);
+        }
+
+        return otp;
+    }
+
+    public async Task<AuthResponse> VerifyOtpAsync(OtpRequest request)
+    {
+        // In a real implementation, you'd verify against stored OTP
+        // For demo purposes, we'll accept any 6-digit code
+        if (request.Otp.Length != 6 || !request.Otp.All(char.IsDigit))
+        {
+            return new AuthResponse
+            {
+                Success = false,
+                Message = "Invalid OTP"
+            };
+        }
+
+        return new AuthResponse
+        {
+            Success = true,
+            Message = "OTP verified successfully"
+        };
+    }
+
+    public async Task<AuthResponse> EnableTwoFactorAsync(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return new AuthResponse
+            {
+                Success = false,
+                Message = "User not found"
+            };
+        }
+
+        var result = await _userManager.SetTwoFactorEnabledAsync(user, true);
+        if (!result.Succeeded)
+        {
+            return new AuthResponse
+            {
+                Success = false,
+                Message = "Failed to enable two-factor authentication"
+            };
+        }
+
+        return new AuthResponse
+        {
+            Success = true,
+            Message = "Two-factor authentication enabled"
+        };
+    }
+
+    public async Task<AuthResponse> DisableTwoFactorAsync(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return new AuthResponse
+            {
+                Success = false,
+                Message = "User not found"
+            };
+        }
+
+        var result = await _userManager.SetTwoFactorEnabledAsync(user, false);
+        if (!result.Succeeded)
+        {
+            return new AuthResponse
+            {
+                Success = false,
+                Message = "Failed to disable two-factor authentication"
+            };
+        }
+
+        return new AuthResponse
+        {
+            Success = true,
+            Message = "Two-factor authentication disabled"
+        };
+    }
+
+    public async Task<AuthResponse> VerifyTwoFactorAsync(string userId, string code)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return new AuthResponse
+            {
+                Success = false,
+                Message = "User not found"
+            };
+        }
+
+        var result = await _userManager.VerifyTwoFactorTokenAsync(user, "Authenticator", code);
+        if (!result)
+        {
+            return new AuthResponse
+            {
+                Success = false,
+                Message = "Invalid two-factor code"
+            };
+        }
+
+        return new AuthResponse
+        {
+            Success = true,
+            Message = "Two-factor authentication verified"
+        };
+    }
+
+    public async Task<bool> IsAccountLockedAsync(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        return user != null && await _userManager.IsLockedOutAsync(user);
+    }
+
+    public async Task<bool> LogSecurityEventAsync(string userId, string action, string ipAddress, string userAgent)
+    {
+        // Implementation for security event logging
+        // This would typically log to a database or external service
+        return true;
+    }
+
+    private string GenerateVerificationCode()
+    {
+        return RandomNumberGenerator.GetInt32(100000, 999999).ToString();
+    }
+
+    private string GenerateOtpCode()
+    {
+        return RandomNumberGenerator.GetInt32(100000, 999999).ToString();
     }
 }

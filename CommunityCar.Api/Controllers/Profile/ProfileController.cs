@@ -3,7 +3,7 @@ using CommunityCar.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CommunityCar.Api.Controllers;
+namespace CommunityCar.Api.Controllers.Profile;
 
 [ApiController]
 [Route("api/[controller]")]

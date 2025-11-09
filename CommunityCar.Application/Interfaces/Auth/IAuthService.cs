@@ -8,15 +8,16 @@ public interface IAuthService
     Task<AuthResponse> RegisterAsync(RegisterRequest request);
     Task<AuthResponse> RefreshTokenAsync(string refreshToken);
     Task<bool> LogoutAsync(string userId);
-    Task<AuthResponse> GenerateOtpAsync(string email);
+    Task<AuthResponse> ForgotPasswordAsync(ForgotPasswordRequest request);
+    Task<AuthResponse> ResetPasswordAsync(ResetPasswordRequest request);
+    Task<AuthResponse> VerifyEmailAsync(VerifyEmailRequest request);
+    Task<AuthResponse> ResendEmailVerificationAsync(string email);
+    Task<string> GenerateOtpAsync(string userId, string purpose);
     Task<AuthResponse> VerifyOtpAsync(OtpRequest request);
     Task<AuthResponse> SocialLoginAsync(SocialLoginRequest request);
     Task<AuthResponse> EnableTwoFactorAsync(string userId);
     Task<AuthResponse> DisableTwoFactorAsync(string userId);
     Task<AuthResponse> VerifyTwoFactorAsync(string userId, string code);
-    Task<AuthResponse> ResetPasswordAsync(string email);
-    Task<AuthResponse> ConfirmResetPasswordAsync(string token, string newPassword);
-    Task<AuthResponse> VerifyEmailAsync(string token);
     Task<bool> IsAccountLockedAsync(string userId);
     Task<bool> LogSecurityEventAsync(string userId, string action, string ipAddress, string userAgent);
 }
