@@ -94,6 +94,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{72F2BD38-FD1C-40D8-8EC5-D114B271B839}"
 	ProjectSection(SolutionItems) = preProject
 		FrontStructure.md = FrontStructure.md
+		prompt.md = prompt.md
 	EndProjectSection
 EndProject
 Global

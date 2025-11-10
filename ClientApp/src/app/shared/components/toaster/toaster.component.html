@@ -1,0 +1,41 @@
+<div class="toaster-container" *ngIf="currentNotification" [ngClass]="getPositionClass()">
+  <div class="toast" [ngClass]="currentNotification.type" [@toastAnimation]>
+    <div class="toast-icon">
+      <i [class]="getIconClass()"></i>
+    </div>
+
+    <div class="toast-content">
+      <div class="toast-title" *ngIf="currentNotification.title">
+        {{ currentNotification.title }}
+      </div>
+      <div class="toast-message">
+        {{ currentNotification.message }}
+      </div>
+    </div>
+
+    <div class="toast-actions">
+      <button
+        class="toast-action-btn"
+        *ngIf="currentNotification.action"
+        (click)="onAction()"
+      >
+        {{ currentNotification.action.label }}
+      </button>
+
+      <button
+        class="toast-close-btn"
+        (click)="onClose()"
+        *ngIf="!currentNotification.persistent"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Progress bar for timed notifications -->
+    <div
+      class="toast-progress"
+      *ngIf="currentNotification.duration && !currentNotification.persistent"
+      [style.animation-duration]="currentNotification.duration + 'ms'"
+    ></div>
+  </div>
+</div>

@@ -1,0 +1,107 @@
+<!-- Chat Toggle Button -->
+<div class="chat-toggle" (click)="toggleChat()" [class.has-unread]="unreadCount > 0">
+  <i class="fas fa-comments"></i>
+  <span class="unread-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+</div>
+
+<!-- Chat Window -->
+<div class="chat-window" *ngIf="isOpen" [@slideInOut] [class.minimized]="isMinimized">
+  <!-- Chat Header -->
+  <div class="chat-header">
+    <div class="header-info">
+      <div class="agent-status">
+        <span class="status-indicator" [class.online]="isConnected"></span>
+        <span class="status-text">
+          {{ isConnected ? 'Support Online' : 'Connecting...' }}
+        </span>
+      </div>
+      <div class="chat-title">Live Support</div>
+    </div>
+
+    <div class="header-actions">
+      <button class="minimize-btn" (click)="minimizeChat()" title="Minimize">
+        <i class="fas fa-minus"></i>
+      </button>
+      <button class="close-btn" (click)="closeChat()" title="Close">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Chat Messages -->
+  <div class="chat-messages" #messagesContainer *ngIf="!isMinimized">
+    <div class="welcome-message" *ngIf="!activeConversation || activeConversation.messages.length === 0">
+      <div class="welcome-content">
+        <i class="fas fa-comments"></i>
+        <h4>Welcome to Live Support!</h4>
+        <p>How can we help you today?</p>
+      </div>
+    </div>
+
+    <div
+      class="message"
+      *ngFor="let message of activeConversation?.messages; trackBy: trackByMessageId"
+      [ngClass]="{'sent': isMessageFromCurrentUser(message), 'received': !isMessageFromCurrentUser(message)}"
+      [@messageAnimation]
+    >
+      <div class="message-avatar" *ngIf="!isMessageFromCurrentUser(message)">
+        <img [src]="message.senderAvatar || '/assets/images/default-avatar.png'" [alt]="message.senderName">
+      </div>
+
+      <div class="message-content">
+        <div class="message-bubble">
+          <div class="message-text">{{ message.content }}</div>
+          <div class="message-time">{{ message.timestamp | dateFormat:'time' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Typing Indicator -->
+    <div class="typing-indicator" *ngIf="getTypingUsers().length > 0">
+      <div class="typing-avatar">
+        <i class="fas fa-user-circle"></i>
+      </div>
+      <div class="typing-bubble">
+        <div class="typing-dots">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="typing-text">
+          {{ getTypingUsers().join(', ') }} {{ getTypingUsers().length === 1 ? 'is' : 'are' }} typing...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Input -->
+  <div class="chat-input" *ngIf="!isMinimized">
+    <div class="input-container">
+      <textarea
+        #messageInput
+        [(ngModel)]="currentMessage"
+        (input)="onMessageInput()"
+        (keypress)="onKeyPress($event)"
+        placeholder="Type your message..."
+        rows="1"
+        maxlength="1000"
+      ></textarea>
+
+      <button
+        class="send-btn"
+        (click)="sendMessage()"
+        [disabled]="!currentMessage.trim() || !isConnected"
+        [class.active]="currentMessage.trim() && isConnected"
+      >
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+
+    <div class="input-footer">
+      <span class="character-count">{{ currentMessage.length }}/1000</span>
+      <span class="connection-status" [class.connected]="isConnected">
+        {{ isConnected ? 'Connected' : 'Disconnected' }}
+      </span>
+    </div>
+  </div>
+</div>

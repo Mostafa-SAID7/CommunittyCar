@@ -1,0 +1,35 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <a routerLink="/dashboard" class="brand-link">
+        <span class="brand-text">Community Car</span>
+      </a>
+    </div>
+
+    <div class="navbar-menu" *ngIf="currentUser">
+      <a routerLink="/cars" class="nav-link">Cars</a>
+      <a routerLink="/bookings" class="nav-link">Bookings</a>
+      <a routerLink="/profile" class="nav-link">Profile</a>
+    </div>
+
+    <div class="navbar-actions">
+      <button class="theme-toggle" (click)="toggleTheme()" [title]="currentTheme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'">
+        <span *ngIf="currentTheme === 'light'">🌙</span>
+        <span *ngIf="currentTheme === 'dark'">☀️</span>
+      </button>
+
+      <div class="user-menu" *ngIf="currentUser">
+        <div class="user-info">
+          <span class="user-avatar">{{ currentUser.name?.charAt(0)?.toUpperCase() }}</span>
+          <span class="user-name">{{ currentUser.name }}</span>
+        </div>
+        <button class="logout-btn" (click)="logout()">Logout</button>
+      </div>
+
+      <div class="auth-links" *ngIf="!currentUser">
+        <a routerLink="/login" class="nav-link">Login</a>
+        <a routerLink="/register" class="nav-link btn-primary">Sign Up</a>
+      </div>
+    </div>
+  </div>
+</nav>

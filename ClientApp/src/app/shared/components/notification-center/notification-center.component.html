@@ -1,0 +1,80 @@
+<!-- Notification Bell Button -->
+<div class="notification-bell" (click)="toggleNotificationCenter()">
+  <i class="fas fa-bell"></i>
+  <span class="notification-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+</div>
+
+<!-- Notification Center Panel -->
+<div class="notification-center" *ngIf="isOpen" [@slideInOut]>
+  <div class="notification-header">
+    <h3>Notifications</h3>
+    <div class="header-actions">
+      <button
+        class="clear-all-btn"
+        (click)="clearAllNotifications()"
+        *ngIf="notifications.length > 0"
+      >
+        <i class="fas fa-trash"></i>
+        Clear All
+      </button>
+      <button class="close-btn" (click)="closeNotificationCenter()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="notification-list">
+    <div
+      class="notification-item"
+      *ngFor="let notification of notifications; trackBy: trackByNotificationId"
+      [ngClass]="{'unread': !notification.read}"
+      [@fadeIn]
+    >
+      <div class="notification-icon">
+        <i [class]="getIconClass(notification.type)"></i>
+      </div>
+
+      <div class="notification-content">
+        <div class="notification-title" *ngIf="notification.title">
+          {{ notification.title }}
+        </div>
+        <div class="notification-message">
+          {{ notification.message }}
+        </div>
+        <div class="notification-time">
+          {{ notification.timestamp | dateFormat:'time' }}
+        </div>
+      </div>
+
+      <div class="notification-actions">
+        <button
+          class="action-btn"
+          *ngIf="notification.action"
+          (click)="onNotificationAction(notification)"
+        >
+          {{ notification.action.label }}
+        </button>
+        <button
+          class="remove-btn"
+          (click)="removeNotification(notification.id)"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="notifications.length === 0">
+      <i class="fas fa-bell-slash"></i>
+      <p>No notifications yet</p>
+      <span>You'll see updates here when something happens</span>
+    </div>
+  </div>
+</div>
+
+<!-- Backdrop -->
+<div
+  class="notification-backdrop"
+  *ngIf="isOpen"
+  (click)="closeNotificationCenter()"
+></div>
