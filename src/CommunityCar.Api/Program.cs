@@ -1,4 +1,3 @@
-using CommunityCar.Api.Extensions;
 using CommunityCar.Application.Extensions;
 using CommunityCar.Infrastructure.Configurations.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

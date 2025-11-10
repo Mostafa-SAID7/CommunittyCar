@@ -49,6 +49,13 @@ public class AuditLog : BaseEntity
 
     public string? RelatedEntityType { get; set; }
 
+    public bool IsSuccessful { get; set; } = true;
+
+    [MaxLength(1000)]
+    public string? ErrorMessage { get; set; }
+
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+
     // Navigation property
     public virtual User? User { get; set; }
 }

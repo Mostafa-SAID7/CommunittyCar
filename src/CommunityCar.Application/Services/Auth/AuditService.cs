@@ -1,3 +1,4 @@
+using CommunityCar.Domain.Common;
 using CommunityCar.Domain.Entities.Auth;
 using CommunityCar.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;

@@ -1,0 +1,47 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Welcome to Community Car</h1>
+    <div class="user-info" *ngIf="currentUser">
+      <span class="user-name">{{ currentUser.name }}</span>
+      <button class="btn btn-secondary" (click)="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="dashboard-content">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Total Cars</h3>
+        <p class="stat-number">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Active Bookings</h3>
+        <p class="stat-number">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Revenue</h3>
+        <p class="stat-number">$0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Reviews</h3>
+        <p class="stat-number">0</p>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <h2>Quick Actions</h2>
+      <div class="action-buttons">
+        <button class="btn btn-primary" routerLink="/cars">Browse Cars</button>
+        <button class="btn btn-primary" routerLink="/bookings">My Bookings</button>
+        <button class="btn btn-primary" routerLink="/profile">My Profile</button>
+        <button class="btn btn-primary" routerLink="/cars/add">Add Car</button>
+      </div>
+    </div>
+
+    <div class="recent-activity">
+      <h2>Recent Activity</h2>
+      <div class="activity-list">
+        <p class="no-activity">No recent activity</p>
+      </div>
+    </div>
+  </div>
+</div>
