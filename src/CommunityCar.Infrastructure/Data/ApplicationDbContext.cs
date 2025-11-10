@@ -1,6 +1,7 @@
 using CommunityCar.Domain.Common;
 using CommunityCar.Domain.Entities.Auth;
 using CommunityCar.Domain.Entities.Car;
+using CommunityCar.Domain.Entities.Booking;
 using CommunityCar.Domain.Entities.Profile;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>
     public DbSet<Car> Cars { get; set; }
     public DbSet<Booking> Bookings { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
-    public DbSet<CommunityCar.Domain.Entities.Auth.AuditLog> AuditLogs { get; set; }
+    public DbSet<AuditLog> AuditLogs { get; set; }
     public DbSet<ApiKey> ApiKeys { get; set; }
     public DbSet<UserProfile> UserProfiles { get; set; }
 
@@ -183,7 +184,7 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>
 
     private void ConfigureAuditLog(ModelBuilder builder)
     {
-        builder.Entity<CommunityCar.Domain.Entities.Auth.AuditLog>(entity =>
+        builder.Entity<AuditLog>(entity =>
         {
             entity.Property(a => a.Action).HasMaxLength(10).IsRequired();
             entity.Property(a => a.EntityType).HasMaxLength(200).IsRequired();
@@ -191,7 +192,6 @@ public class ApplicationDbContext : IdentityDbContext<User, Role, string>
             entity.Property(a => a.IpAddress).HasMaxLength(45);
             entity.Property(a => a.UserAgent).HasMaxLength(500);
             entity.Property(a => a.UserName).HasMaxLength(256);
-            entity.Property(a => a.ErrorMessage).HasMaxLength(1000);
             entity.Property(a => a.ChangeReason).HasMaxLength(1000);
 
             // Relationships

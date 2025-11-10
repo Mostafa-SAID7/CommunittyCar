@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
+		.github\FUNDING.yml = .github\FUNDING.yml
+		.github\ISSUE_TEMPLATE\bug_report.md = .github\ISSUE_TEMPLATE\bug_report.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientApp", "ClientApp", "{FA9F9F11-11FB-4399-89A5-F3A263873818}"
@@ -32,6 +34,36 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientApp", "ClientApp", "{
 		ClientApp\tsconfig.app.json = ClientApp\tsconfig.app.json
 		ClientApp\tsconfig.json = ClientApp\tsconfig.json
 		ClientApp\tsconfig.spec.json = ClientApp\tsconfig.spec.json
+		ClientApp\public\favicon.ico = ClientApp\public\favicon.ico
+		ClientApp\src\index.html = ClientApp\src\index.html
+		ClientApp\src\main.ts = ClientApp\src\main.ts
+		ClientApp\src\styles.scss = ClientApp\src\styles.scss
+		ClientApp\src\app\app.component.html = ClientApp\src\app\app.component.html
+		ClientApp\src\app\app.component.scss = ClientApp\src\app\app.component.scss
+		ClientApp\src\app\app.component.ts = ClientApp\src\app\app.component.ts
+		ClientApp\src\app\app.config.ts = ClientApp\src\app\app.config.ts
+		ClientApp\src\app\app.routes.ts = ClientApp\src\app\app.routes.ts
+		ClientApp\src\app\components\auth\login\login.component.html = ClientApp\src\app\components\auth\login\login.component.html
+		ClientApp\src\app\components\auth\login\login.component.scss = ClientApp\src\app\components\auth\login\login.component.scss
+		ClientApp\src\app\components\auth\login\login.component.ts = ClientApp\src\app\components\auth\login\login.component.ts
+		ClientApp\src\app\components\auth\register\register.component.html = ClientApp\src\app\components\auth\register\register.component.html
+		ClientApp\src\app\components\auth\register\register.component.scss = ClientApp\src\app\components\auth\register\register.component.scss
+		ClientApp\src\app\components\auth\register\register.component.ts = ClientApp\src\app\components\auth\register\register.component.ts
+		ClientApp\src\app\guards\auth.guard.ts = ClientApp\src\app\guards\auth.guard.ts
+		ClientApp\src\app\interceptors\auth.interceptor.ts = ClientApp\src\app\interceptors\auth.interceptor.ts
+		ClientApp\src\app\modules\auth\auth-routing.module.ts = ClientApp\src\app\modules\auth\auth-routing.module.ts
+		ClientApp\src\app\modules\auth\auth.module.ts = ClientApp\src\app\modules\auth\auth.module.ts
+		ClientApp\src\app\modules\dashboard\dashboard-routing.module.ts = ClientApp\src\app\modules\dashboard\dashboard-routing.module.ts
+		ClientApp\src\app\modules\dashboard\dashboard.module.ts = ClientApp\src\app\modules\dashboard\dashboard.module.ts
+		ClientApp\src\app\modules\dashboard\components\dashboard\dashboard.component.html = ClientApp\src\app\modules\dashboard\components\dashboard\dashboard.component.html
+		ClientApp\src\app\modules\dashboard\components\dashboard\dashboard.component.scss = ClientApp\src\app\modules\dashboard\components\dashboard\dashboard.component.scss
+		ClientApp\src\app\modules\dashboard\components\dashboard\dashboard.component.ts = ClientApp\src\app\modules\dashboard\components\dashboard\dashboard.component.ts
+		ClientApp\src\app\modules\profile\profile-routing.module.ts = ClientApp\src\app\modules\profile\profile-routing.module.ts
+		ClientApp\src\app\modules\profile\profile.module.ts = ClientApp\src\app\modules\profile\profile.module.ts
+		ClientApp\src\app\modules\profile\components\profile\profile.component.html = ClientApp\src\app\modules\profile\components\profile\profile.component.html
+		ClientApp\src\app\modules\profile\components\profile\profile.component.scss = ClientApp\src\app\modules\profile\components\profile\profile.component.scss
+		ClientApp\src\app\modules\profile\components\profile\profile.component.ts = ClientApp\src\app\modules\profile\components\profile\profile.component.ts
+		ClientApp\src\app\services\api.service.ts = ClientApp\src\app\services\api.service.ts
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FilesStructures", "FilesStructures", "{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}"
@@ -46,11 +78,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FilesStructures", "FilesStr
 		FilesStructures\Basics\EnhancedStructure.md = FilesStructures\Basics\EnhancedStructure.md
 		FilesStructures\Basics\FullStructure.md = FilesStructures\Basics\FullStructure.md
 		FilesStructures\SomePrompt\Review Code.md = FilesStructures\SomePrompt\Review Code.md
+		FilesStructures\UpdatedStructure\1-Api Documantation.md = FilesStructures\UpdatedStructure\1-Api Documantation.md
+		FilesStructures\UpdatedStructure\2-Last Structure for 2weeks.md = FilesStructures\UpdatedStructure\2-Last Structure for 2weeks.md
+		FilesStructures\UpdatedStructure\2-UpdateStructure.md = FilesStructures\UpdatedStructure\2-UpdateStructure.md
+		FilesStructures\UpdatedStructure\3-Last Structure for 2weeks - deep.md = FilesStructures\UpdatedStructure\3-Last Structure for 2weeks - deep.md
+		FilesStructures\UpdatedStructure\4-Last Structure for 2weeks - deep - Enhanced.md = FilesStructures\UpdatedStructure\4-Last Structure for 2weeks - deep - Enhanced.md
+		FilesStructures\UpdatedStructure\in the end Structure.md = FilesStructures\UpdatedStructure\in the end Structure.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SocialAcounts", "SocialAcounts", "{788B7945-E463-40AC-A47B-84CA9E92EEFB}"
 	ProjectSection(SolutionItems) = preProject
-		SocialAccounts.md = SocialAccounts.md
+		FilesStructures\SocialAccounts.md = FilesStructures\SocialAccounts.md
 	EndProjectSection
 EndProject
 Global

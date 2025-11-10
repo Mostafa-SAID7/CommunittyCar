@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using CommunityCar.Domain.Entities.Auth;
 
 namespace CommunityCar.Domain.Entities.Profile;
 
@@ -64,7 +65,7 @@ public class UserProfile
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     // Navigation property
-    public virtual Auth.User? User { get; set; }
+    public virtual User? User { get; set; }
 
     // Computed properties
     public string FullAddress => string.Join(", ",

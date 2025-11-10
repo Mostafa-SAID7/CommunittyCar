@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using CommunityCar.Domain.Entities.Auth;
 
 namespace CommunityCar.Domain.Common;
 
@@ -47,4 +48,7 @@ public class AuditLog : BaseEntity
     public string? RelatedEntityId { get; set; }
 
     public string? RelatedEntityType { get; set; }
+
+    // Navigation property
+    public virtual User? User { get; set; }
 }

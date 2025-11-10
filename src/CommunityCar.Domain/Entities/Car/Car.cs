@@ -1,4 +1,6 @@
 using CommunityCar.Domain.Common;
+using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Booking;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -42,5 +44,5 @@ public class Car : BaseEntity
     public string OwnerId { get; set; } = string.Empty;
     public virtual User? Owner { get; set; }
 
-    public virtual ICollection<Booking>? Bookings { get; set; }
+    public virtual ICollection<CommunityCar.Domain.Entities.Booking.Booking>? Bookings { get; set; }
 }
