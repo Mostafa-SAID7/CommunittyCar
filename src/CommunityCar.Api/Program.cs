@@ -19,7 +19,7 @@ builder.Services.AddIdentityConfiguration(builder.Configuration);
 // Configure CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp", policy =>
+    options.AddPolicy("AllowAngularApp", policy =>
     {
         policy.WithOrigins("http://localhost:3000", "https://localhost:3000", "http://localhost:5000", "https://localhost:5000")
               .AllowAnyHeader()
@@ -125,6 +125,13 @@ if (app.Environment.IsDevelopment())
         c.DefaultModelRendering(Swashbuckle.AspNetCore.SwaggerUI.ModelRendering.Model);
         c.DisplayRequestDuration();
         c.EnableTryItOutByDefault();
+    });
+
+    // Automatically redirect root URL to Swagger UI
+    app.MapGet("/", context =>
+    {
+        context.Response.Redirect("/swagger");
+        return Task.CompletedTask;
     });
 }
 

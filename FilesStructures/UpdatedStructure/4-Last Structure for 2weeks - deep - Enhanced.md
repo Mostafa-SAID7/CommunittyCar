@@ -1,0 +1,433 @@
+src/
+├── CommunityCar.Api/
+│   ├── Controllers/
+│   │   ├── Auth/
+│   │   │   ├── AuthController.cs
+│   │   │   └── SocialAuthController.cs
+│   │   ├── Profile/
+│   │   │   └── ProfileController.cs
+│   │   ├── Bookings/
+│   │   │   └── BookingsController.cs
+│   │   ├── Cars/
+│   │   │   ├── CarsController.cs
+│   │   │   └── CarReviewsController.cs
+│   │   ├── Chat/
+│   │   │   └── ChatController.cs
+│   │   ├── Admin/
+│   │   │   ├── AdminController.cs
+│   │   │   └── UsersManagementController.cs
+│   │   └── HealthController.cs
+│   ├── Hubs/
+│   │   ├── ChatHub.cs
+│   │   └── NotificationHub.cs
+│   ├── Middleware/
+│   │   ├── ExceptionHandlingMiddleware.cs
+│   │   ├── RateLimitingMiddleware.cs
+│   │   ├── LoggingMiddleware.cs
+│   │   ├── SecurityHeadersMiddleware.cs
+│   │   ├── RequestResponseLoggingMiddleware.cs
+│   │   └── CorrelationIdMiddleware.cs
+│   ├── Filters/
+│   │   ├── ValidateModelAttribute.cs
+│   │   ├── AuthorizeAttribute.cs
+│   │   └── RateLimitAttribute.cs
+│   ├── Extensions/
+│   │   ├── ServiceCollectionExtensions.cs
+│   │   ├── ApplicationBuilderExtensions.cs
+│   │   └── SwaggerExtensions.cs
+│   ├── Templates/
+│   │   └── Email/
+│   │       ├── EmailVerificationTemplate.html
+│   │       ├── OtpVerificationTemplate.html
+│   │       ├── PasswordResetTemplate.html
+│   │       ├── WelcomeEmailTemplate.html
+│   │       └── BookingConfirmationTemplate.html
+│   ├── BackgroundJobs/
+│   │   ├── EmailBackgroundService.cs
+│   │   └── CleanupBackgroundService.cs
+│   ├── HostedServices/
+│   │   └── DatabaseMigrationHostedService.cs
+│   ├── HealthChecks/
+│   │   ├── DatabaseHealthCheck.cs
+│   │   └── RedisHealthCheck.cs
+│   ├── Program.cs
+│   ├── Startup.cs
+│   ├── GlobalUsings.cs
+│   ├── appsettings.json
+│   ├── appsettings.Development.json
+│   └── appsettings.Production.json
+│
+├── CommunityCar.Application/
+│   ├── Features/
+│   │   ├── Auth/
+│   │   │   ├── Commands/
+│   │   │   │   ├── LoginCommand.cs
+│   │   │   │   ├── RegisterCommand.cs
+│   │   │   │   ├── RefreshTokenCommand.cs
+│   │   │   │   ├── ForgotPasswordCommand.cs
+│   │   │   │   ├── ResetPasswordCommand.cs
+│   │   │   │   ├── VerifyEmailCommand.cs
+│   │   │   │   ├── SocialLoginCommand.cs
+│   │   │   │   └── LogoutCommand.cs
+│   │   │   ├── Queries/
+│   │   │   │   ├── GetUserQuery.cs
+│   │   │   │   └── ValidateTokenQuery.cs
+│   │   │   ├── Handlers/
+│   │   │   │   ├── LoginCommandHandler.cs
+│   │   │   │   ├── RegisterCommandHandler.cs
+│   │   │   │   └── [Other Command/Query Handlers]
+│   │   │   └── Validators/
+│   │   │       ├── LoginCommandValidator.cs
+│   │   │       ├── RegisterCommandValidator.cs
+│   │   │       └── [Other Validators]
+│   │   ├── Chat/
+│   │   │   ├── Commands/
+│   │   │   │   ├── SendMessageCommand.cs
+│   │   │   │   ├── CreateChatRoomCommand.cs
+│   │   │   │   ├── JoinChatRoomCommand.cs
+│   │   │   │   └── LeaveChatRoomCommand.cs
+│   │   │   ├── Queries/
+│   │   │   │   ├── GetChatHistoryQuery.cs
+│   │   │   │   ├── GetChatRoomsQuery.cs
+│   │   │   │   └── GetUnreadMessagesCountQuery.cs
+│   │   │   ├── Handlers/
+│   │   │   │   ├── SendMessageCommandHandler.cs
+│   │   │   │   └── [Other Handlers]
+│   │   │   └── Validators/
+│   │   │       ├── SendMessageCommandValidator.cs
+│   │   │       └── [Other Validators]
+│   │   ├── Profile/
+│   │   │   ├── Commands/
+│   │   │   │   ├── UpdateProfileCommand.cs
+│   │   │   │   ├── ChangePasswordCommand.cs
+│   │   │   │   └── UploadProfileImageCommand.cs
+│   │   │   ├── Queries/
+│   │   │   │   ├── GetProfileQuery.cs
+│   │   │   │   └── GetUserBookingsQuery.cs
+│   │   │   ├── Handlers/
+│   │   │   │   └── [Command/Query Handlers]
+│   │   │   └── Validators/
+│   │   │       └── [Validators]
+│   │   ├── Cars/
+│   │   │   ├── Commands/
+│   │   │   │   ├── CreateCarCommand.cs
+│   │   │   │   ├── UpdateCarCommand.cs
+│   │   │   │   ├── DeleteCarCommand.cs
+│   │   │   │   └── AddCarImageCommand.cs
+│   │   │   ├── Queries/
+│   │   │   │   ├── GetCarsQuery.cs
+│   │   │   │   ├── GetCarByIdQuery.cs
+│   │   │   │   └── SearchCarsQuery.cs
+│   │   │   ├── Handlers/
+│   │   │   │   └── [Command/Query Handlers]
+│   │   │   └── Validators/
+│   │   │       └── [Validators]
+│   │   ├── Bookings/
+│   │   │   ├── Commands/
+│   │   │   │   ├── CreateBookingCommand.cs
+│   │   │   │   ├── UpdateBookingCommand.cs
+│   │   │   │   └── CancelBookingCommand.cs
+│   │   │   ├── Queries/
+│   │   │   │   ├── GetBookingsQuery.cs
+│   │   │   │   ├── GetBookingByIdQuery.cs
+│   │   │   │   └── GetBookingAvailabilityQuery.cs
+│   │   │   ├── Handlers/
+│   │   │   │   └── [Command/Query Handlers]
+│   │   │   └── Validators/
+│   │   │       └── [Validators]
+│   │   └── Notifications/
+│   │       ├── Commands/
+│   │       │   ├── SendNotificationCommand.cs
+│   │       │   └── MarkNotificationAsReadCommand.cs
+│   │       ├── Queries/
+│   │       │   ├── GetNotificationsQuery.cs
+│   │       │   └── GetUnreadNotificationsCountQuery.cs
+│   │       ├── Handlers/
+│   │       │   └── [Command/Query Handlers]
+│   │       └── Validators/
+│   │           └── [Validators]
+│   ├── Common/
+│   │   ├── Behaviors/
+│   │   │   ├── ValidationBehavior.cs
+│   │   │   ├── LoggingBehavior.cs
+│   │   │   └── PerformanceBehavior.cs
+│   │   ├── Interfaces/
+│   │   │   ├── ICurrentUserService.cs
+│   │   │   ├── IDateTimeService.cs
+│   │   │   └── IEmailTemplateService.cs
+│   │   └── Models/
+│   │       ├── PaginatedList.cs
+│   │       ├── Result.cs
+│   │       └── PagedRequest.cs
+│   ├── Services/
+│   │   ├── Auth/
+│   │   │   ├── AuthService.cs
+│   │   │   ├── TokenService.cs
+│   │   │   ├── OtpService.cs
+│   │   │   ├── SocialAuthService.cs
+│   │   │   ├── SessionService.cs
+│   │   │   └── BiometricService.cs
+│   │   ├── Email/
+│   │   │   ├── EmailService.cs
+│   │   │   └── EmailTemplateService.cs
+│   │   ├── Storage/
+│   │   │   ├── IFileStorageService.cs
+│   │   │   ├── LocalFileStorageService.cs
+│   │   │   └── CloudStorageService.cs
+│   │   ├── Chat/
+│   │   │   ├── IChatService.cs
+│   │   │   └── ChatService.cs
+│   │   ├── Payment/
+│   │   │   ├── IPaymentService.cs
+│   │   │   └── StripePaymentService.cs
+│   │   └── Notification/
+│   │       ├── INotificationService.cs
+│   │       ├── NotificationService.cs
+│   │       ├── PushNotificationService.cs
+│   │       └── SmsNotificationService.cs
+│   ├── Mappings/
+│   │   ├── AuthMappingProfile.cs
+│   │   ├── ProfileMappingProfile.cs
+│   │   ├── CarMappingProfile.cs
+│   │   ├── BookingMappingProfile.cs
+│   │   ├── ChatMappingProfile.cs
+│   │   ├── NotificationMappingProfile.cs
+│   │   └── GlobalMappingProfile.cs
+│   ├── Extensions/
+│   │   ├── ServiceCollectionExtensions.cs
+│   │   └── MediatrExtensions.cs
+│   └── GlobalUsings.cs
+│
+├── CommunityCar.Domain/
+│   ├── Common/
+│   │   ├── Enums/
+│   │   │   ├── UserStatus.cs
+│   │   │   ├── CarStatus.cs
+│   │   │   ├── BookingStatus.cs
+│   │   │   ├── PaymentStatus.cs
+│   │   │   └── NotificationType.cs
+│   │   ├── ValueObjects/
+│   │   │   ├── Address.cs
+│   │   │   ├── Location.cs
+│   │   │   ├── Money.cs
+│   │   │   └── TimeRange.cs
+│   │   ├── AuditEntry.cs
+│   │   ├── AuditLog.cs
+│   │   ├── BaseEntity.cs
+│   │   ├── BaseAuditableEntity.cs
+│   │   └── DomainEvent.cs
+│   ├── Entities/
+│   │   ├── Auth/
+│   │   │   ├── User.cs
+│   │   │   ├── Role.cs
+│   │   │   ├── RefreshToken.cs
+│   │   │   ├── ApiKey.cs
+│   │   │   ├── UserLogin.cs
+│   │   │   └── Permission.cs
+│   │   ├── Profile/
+│   │   │   ├── UserProfile.cs
+│   │   │   ├── DriverLicense.cs
+│   │   │   └── PaymentMethod.cs
+│   │   ├── Car/
+│   │   │   ├── Car.cs
+│   │   │   ├── CarImage.cs
+│   │   │   ├── CarFeature.cs
+│   │   │   ├── CarReview.cs
+│   │   │   └── CarMaintenance.cs
+│   │   ├── Chat/
+│   │   │   ├── ChatRoom.cs
+│   │   │   ├── ChatMessage.cs
+│   │   │   └── UserChatRoom.cs
+│   │   ├── Booking/
+│   │   │   ├── Booking.cs
+│   │   │   ├── BookingTransaction.cs
+│   │   │   └── Insurance.cs
+│   │   └── Notification/
+│   │       ├── Notification.cs
+│   │       └── UserNotification.cs
+│   ├── Events/
+│   │   ├── UserRegisteredEvent.cs
+│   │   ├── BookingCreatedEvent.cs
+│   │   └── CarStatusChangedEvent.cs
+│   ├── Exceptions/
+│   │   ├── DomainException.cs
+│   │   ├── BadRequestException.cs
+│   │   ├── NotFoundException.cs
+│   │   ├── UnauthorizedException.cs
+│   │   ├── ValidationException.cs
+│   │   └── ConflictException.cs
+│   ├── Interfaces/
+│   │   ├── IRepository.cs
+│   │   ├── IUnitOfWork.cs
+│   │   ├── IDomainEventDispatcher.cs
+│   │   └── IAggregateRoot.cs
+│   ├── Services/
+│   │   └── IDomainEventService.cs
+│   ├── Specifications/
+│   │   ├── BaseSpecification.cs
+│   │   ├── CarAvailableSpecification.cs
+│   │   └── UserWithProfileSpecification.cs
+│   ├── Utilities/
+│   │   ├── SD.cs
+│   │   ├── PasswordHasher.cs
+│   │   ├── CryptoHelper.cs
+│   │   └── DateTimeHelper.cs
+│   └── GlobalUsings.cs
+│
+├── CommunityCar.Infrastructure/
+│   ├── Data/
+│   │   ├── ApplicationDbContext.cs
+│   │   ├── ApplicationDbContextSeed.cs
+│   │   ├── Configurations/
+│   │   │   ├── UserConfiguration.cs
+│   │   │   ├── CarConfiguration.cs
+│   │   │   ├── BookingConfiguration.cs
+│   │   │   ├── ChatRoomConfiguration.cs
+│   │   │   ├── ChatMessageConfiguration.cs
+│   │   │   ├── UserChatRoomConfiguration.cs
+│   │   │   └── NotificationConfiguration.cs
+│   │   └── Migrations/
+│   │       └── [Migration Files]
+│   ├── Repositories/
+│   │   ├── BaseRepository.cs
+│   │   ├── UnitOfWork.cs
+│   │   └── Specific/
+│   │       ├── UserRepository.cs
+│   │       ├── CarRepository.cs
+│   │       ├── BookingRepository.cs
+│   │       ├── ChatRoomRepository.cs
+│   │       ├── ChatMessageRepository.cs
+│   │       └── NotificationRepository.cs
+│   ├── Services/
+│   │   ├── Auth/
+│   │   │   ├── JwtTokenService.cs
+│   │   │   ├── BiometricService.cs
+│   │   │   └── SessionService.cs
+│   │   ├── External/
+│   │   │   ├── GoogleAuthService.cs
+│   │   │   ├── FacebookAuthService.cs
+│   │   │   ├── SmsService.cs
+│   │   │   └── PushNotificationService.cs
+│   │   ├── Storage/
+│   │   │   ├── AzureBlobStorageService.cs
+│   │   │   └── AWSS3StorageService.cs
+│   │   ├── Payment/
+│   │   │   ├── StripePaymentService.cs
+│   │   │   └── PayPalPaymentService.cs
+│   │   ├── Caching/
+│   │   │   ├── RedisCacheService.cs
+│   │   │   └── MemoryCacheService.cs
+│   │   ├── BackgroundJobs/
+│   │   │   └── HangfireService.cs
+│   │   ├── Chat/
+│   │   │   └── ChatService.cs
+│   │   └── Notifications/
+│   │       └── NotificationService.cs
+│   ├── Identity/
+│   │   ├── ApplicationUser.cs
+│   │   ├── ApplicationRole.cs
+│   │   └── UserClaimsPrincipalFactory.cs
+│   ├── MessageBus/
+│   │   ├── IMessageBus.cs
+│   │   ├── AzureServiceBus.cs
+│   │   └── RabbitMQService.cs
+│   ├── Logging/
+│   │   ├── SerilogConfiguration.cs
+│   │   └── DatabaseLogger.cs
+│   ├── HealthChecks/
+│   │   ├── DatabaseHealthCheck.cs
+│   │   └── RedisHealthCheck.cs
+│   ├── Security/
+│   │   ├── DataProtectionService.cs
+│   │   └── EncryptionService.cs
+│   └── GlobalUsings.cs
+│
+├── CommunityCar.Shared/
+│   ├── DTOs/
+│   │   ├── Common/
+│   │   │   ├── PaginatedRequest.cs
+│   │   │   ├── PaginatedResponse.cs
+│   │   │   └── FileUploadRequest.cs
+│   │   └── Notifications/
+│   │       ├── NotificationDto.cs
+│   │       ├── SmsRequest.cs
+│   │       └── PushNotificationRequest.cs
+│   ├── Utilities/
+│   │   ├── DateTimeExtensions.cs
+│   │   ├── StringExtensions.cs
+│   │   ├── EnumExtensions.cs
+│   │   └── CollectionExtensions.cs
+│   ├── Constants/
+│   │   ├── AppConstants.cs
+│   │   ├── ErrorMessages.cs
+│   │   ├── SuccessMessages.cs
+│   │   └── ValidationMessages.cs
+│   └── GlobalUsings.cs
+│
+├── CommunityCar.Messaging/
+│   ├── Contracts/
+│   │   ├── UserRegisteredEvent.cs
+│   │   ├── BookingCreatedEvent.cs
+│   │   └── NotificationEvent.cs
+│   ├── Consumers/
+│   │   ├── UserRegisteredConsumer.cs
+│   │   └── BookingCreatedConsumer.cs
+│   ├── Producers/
+│   │   ├── EventProducer.cs
+│   │   └── NotificationProducer.cs
+│   └── GlobalUsings.cs
+│
+└── CommunityCar.Tests/
+    ├── Unit/
+    │   ├── Application/
+    │   │   ├── Auth/
+    │   │   │   ├── AuthServiceTests.cs
+    │   │   │   ├── TokenServiceTests.cs
+    │   │   │   ├── LoginCommandValidatorTests.cs
+    │   │   │   └── RegisterCommandHandlerTests.cs
+    │   │   ├── Profile/
+    │   │   │   └── ProfileServiceTests.cs
+    │   │   ├── Cars/
+    │   │   │   └── CarServiceTests.cs
+    │   │   ├── Bookings/
+    │   │   │   └── BookingServiceTests.cs
+    │   │   ├── Chat/
+    │   │   │   └── ChatServiceTests.cs
+    │   │   └── Notifications/
+    │   │       └── NotificationServiceTests.cs
+    │   ├── Domain/
+    │   │   ├── UserTests.cs
+    │   │   ├── CarTests.cs
+    │   │   ├── BookingTests.cs
+    │   │   └── ValueObjectTests.cs
+    │   └── Infrastructure/
+    │       ├── RepositoryTests.cs
+    │       └── EmailServiceTests.cs
+    ├── Integration/
+    │   ├── Api/
+    │   │   ├── AuthControllerTests.cs
+    │   │   ├── ProfileControllerTests.cs
+    │   │   ├── CarsControllerTests.cs
+    │   │   ├── BookingsControllerTests.cs
+    │   │   └── ChatControllerTests.cs
+    │   └── Database/
+    │       ├── RepositoryIntegrationTests.cs
+    │       └── DbContextTests.cs
+    ├── Functional/
+    │   ├── AuthFlowTests.cs
+    │   ├── BookingFlowTests.cs
+    │   ├── ProfileManagementTests.cs
+    │   └── ChatFlowTests.cs
+    ├── TestHelpers/
+    │   ├── TestDataFactory.cs
+    │   ├── MockServices.cs
+    │   ├── TestDbContextFactory.cs
+    │   └── AuthenticationTestHelper.cs
+    ├── Shared/
+    │   ├── TestBase.cs
+    │   ├── DatabaseFixture.cs
+    │   └── ApiWebApplicationFactory.cs
+    ├── GlobalUsings.cs
+    ├── testsettings.json
+    ├── xunit.runner.json
+    └── docker-compose.test.yml

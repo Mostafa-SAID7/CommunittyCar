@@ -1,4 +1,3 @@
-using CommunityCar.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace CommunityCar.Domain.Entities.Auth;

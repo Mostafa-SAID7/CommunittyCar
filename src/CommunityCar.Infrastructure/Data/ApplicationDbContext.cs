@@ -1,6 +1,6 @@
 using CommunityCar.Domain.Common;
-using CommunityCar.Domain.Entities;
 using CommunityCar.Domain.Entities.Auth;
+using CommunityCar.Domain.Entities.Car;
 using CommunityCar.Domain.Entities.Profile;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

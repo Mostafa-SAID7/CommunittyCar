@@ -2,7 +2,7 @@ using CommunityCar.Domain.Common;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CommunityCar.Domain.Entities;
+namespace CommunityCar.Domain.Entities.Car;
 
 [Table("Cars")]
 public class Car : BaseEntity
