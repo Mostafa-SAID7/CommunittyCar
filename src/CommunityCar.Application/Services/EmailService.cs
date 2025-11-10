@@ -1,5 +1,6 @@
 using CommunityCar.Application.DTOs.Email;
 using CommunityCar.Application.Interfaces;
+using CommunityCar.Domain.Utilities;
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Mail;

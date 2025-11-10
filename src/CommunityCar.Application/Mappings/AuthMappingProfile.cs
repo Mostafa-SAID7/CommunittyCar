@@ -1,6 +1,6 @@
 using AutoMapper;
 using CommunityCar.Application.DTOs.Auth;
-using CommunityCar.Domain.Entities;
+using CommunityCar.Domain.Entities.Auth;
 
 namespace CommunityCar.Application.Mappings;
 
@@ -34,4 +34,11 @@ public class AuthMappingProfile : Profile
         CreateMap<Role, RoleDto>();
         CreateMap<RoleDto, Role>();
     }
+}
+
+public class RoleDto
+{
+    public string Id { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
 }

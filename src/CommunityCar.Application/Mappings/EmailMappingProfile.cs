@@ -9,26 +9,46 @@ public class EmailMappingProfile : Profile
     {
         // Email request mappings
         CreateMap<EmailRequest, EmailRequest>();
-
-        // Email template data mappings
-        CreateMap<EmailVerificationData, EmailRequest>()
-            .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => "Verify Your Email Address"))
-            .ForMember(dest => dest.TemplateName, opt => opt.MapFrom(src => "EmailVerification"))
-            .ForMember(dest => dest.TemplateData, opt => opt.MapFrom(src => src));
-
-        CreateMap<PasswordResetData, EmailRequest>()
-            .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => "Reset Your Password"))
-            .ForMember(dest => dest.TemplateName, opt => opt.MapFrom(src => "PasswordReset"))
-            .ForMember(dest => dest.TemplateData, opt => opt.MapFrom(src => src));
-
-        CreateMap<OtpData, EmailRequest>()
-            .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => "Your One-Time Password"))
-            .ForMember(dest => dest.TemplateName, opt => opt.MapFrom(src => "OtpVerification"))
-            .ForMember(dest => dest.TemplateData, opt => opt.MapFrom(src => src));
-
-        CreateMap<WelcomeEmailData, EmailRequest>()
-            .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => "Welcome to CommunityCar!"))
-            .ForMember(dest => dest.TemplateName, opt => opt.MapFrom(src => "WelcomeEmail"))
-            .ForMember(dest => dest.TemplateData, opt => opt.MapFrom(src => src));
     }
+}
+
+public class EmailVerificationData
+{
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string VerificationCode { get; set; } = string.Empty;
+    public string VerificationUrl { get; set; } = string.Empty;
+}
+
+public class PasswordResetData
+{
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string ResetCode { get; set; } = string.Empty;
+    public string ResetUrl { get; set; } = string.Empty;
+}
+
+public class OtpData
+{
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string OTP { get; set; } = string.Empty;
+    public string Purpose { get; set; } = string.Empty;
+    public string Timestamp { get; set; } = string.Empty;
+    public string Digit1 { get; set; } = string.Empty;
+    public string Digit2 { get; set; } = string.Empty;
+    public string Digit3 { get; set; } = string.Empty;
+    public string Digit4 { get; set; } = string.Empty;
+    public string Digit5 { get; set; } = string.Empty;
+    public string Digit6 { get; set; } = string.Empty;
+}
+
+public class WelcomeEmailData
+{
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
 }

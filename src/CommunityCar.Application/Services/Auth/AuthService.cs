@@ -108,7 +108,7 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponse> RefreshTokenAsync(string refreshToken)
     {
-        // Implementation for refresh token logic
+        // TODO: Implement proper refresh token logic with database validation
         return new AuthResponse
         {
             Success = false,
@@ -118,7 +118,7 @@ public class AuthService : IAuthService
 
     public async Task<bool> LogoutAsync(string userId)
     {
-        // Implementation for logout logic
+        // TODO: Implement proper logout logic with token revocation
         return true;
     }
 
@@ -192,7 +192,7 @@ public class AuthService : IAuthService
             };
         }
 
-        // In a real implementation, you'd verify the code against a stored value
+        // TODO: Verify the code against a stored value in database/cache
         // For demo purposes, we'll just confirm the email
         user.EmailConfirmed = true;
         await _userManager.UpdateAsync(user);
@@ -256,7 +256,7 @@ public class AuthService : IAuthService
     {
         var otp = GenerateOtpCode();
 
-        // In a real implementation, you'd store this OTP with expiration
+        // TODO: Store OTP in database/cache with expiration (e.g., 5 minutes)
         // For demo purposes, we'll just return it
 
         var user = await _userManager.FindByIdAsync(userId);
@@ -275,7 +275,7 @@ public class AuthService : IAuthService
 
     public async Task<AuthResponse> VerifyOtpAsync(OtpRequest request)
     {
-        // In a real implementation, you'd verify against stored OTP
+        // TODO: Verify against stored OTP in database/cache with expiration check
         // For demo purposes, we'll accept any 6-digit code
         if (request.Otp.Length != 6 || !request.Otp.All(char.IsDigit))
         {
@@ -388,14 +388,14 @@ public class AuthService : IAuthService
 
     public async Task<bool> LogSecurityEventAsync(string userId, string action, string ipAddress, string userAgent)
     {
-        // Implementation for security event logging
+        // TODO: Implement security event logging with audit trail
         // This would typically log to a database or external service
         return true;
     }
 
     public async Task<AuthResponse> SocialLoginAsync(SocialLoginRequest request)
     {
-        // Implementation for social login
+        // TODO: Implement social login with OAuth providers (Google, Facebook, etc.)
         return new AuthResponse
         {
             Success = false,

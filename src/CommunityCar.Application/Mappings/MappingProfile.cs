@@ -25,3 +25,8 @@ public class MappingProfile : Profile
         }
     }
 }
+
+public interface IMapFrom<T>
+{
+    void Mapping(Profile profile);
+}

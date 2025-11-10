@@ -14,17 +14,39 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCar.Tests", "src\CommunityCar.Tests\CommunityCar.Tests.csproj", "{B0A9CF6D-FB57-4F91-82ED-F28D9B4CAF27}"
 EndProject
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
-		basePartApi.md = basePartApi.md
-		basePartApplication.md = basePartApplication.md
-		basePartDomain.md = basePartDomain.md
-		basePartFront.md = basePartFront.md
-		basePartInfrastructure.md = basePartInfrastructure.md
-		basePartTests.md = basePartTests.md
-		BaseStructure.md = BaseStructure.md
-		EnhancedStructure.md = EnhancedStructure.md
-		FullStructure.md = FullStructure.md
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
+		FilesStructures\Basics\basePartApi.md = FilesStructures\Basics\basePartApi.md
+		FilesStructures\Basics\basePartApplication.md = FilesStructures\Basics\basePartApplication.md
+		FilesStructures\Basics\basePartDomain.md = FilesStructures\Basics\basePartDomain.md
+		FilesStructures\Basics\basePartFront.md = FilesStructures\Basics\basePartFront.md
+		FilesStructures\Basics\basePartInfrastructure.md = FilesStructures\Basics\basePartInfrastructure.md
+		FilesStructures\Basics\basePartTests.md = FilesStructures\Basics\basePartTests.md
+		FilesStructures\Basics\BaseStructure.md = FilesStructures\Basics\BaseStructure.md
+		FilesStructures\Basics\EnhancedStructure.md = FilesStructures\Basics\EnhancedStructure.md
+		FilesStructures\Basics\FullStructure.md = FilesStructures\Basics\FullStructure.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientApp", "ClientApp", "{F2B8C3D9-4E5F-6G7H-8I9J-0K1L2M3N4O5P}"
+	ProjectSection(SolutionItems) = preProject
+		ClientApp\.editorconfig = ClientApp\.editorconfig
+		ClientApp\.gitignore = ClientApp\.gitignore
+		ClientApp\angular.json = ClientApp\angular.json
+		ClientApp\package-lock.json = ClientApp\package-lock.json
+		ClientApp\package.json = ClientApp\package.json
+		ClientApp\README.md = ClientApp\README.md
+		ClientApp\tsconfig.app.json = ClientApp\tsconfig.app.json
+		ClientApp\tsconfig.json = ClientApp\tsconfig.json
+		ClientApp\tsconfig.spec.json = ClientApp\tsconfig.spec.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FilesStructures", "FilesStructures", "{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}"
+	ProjectSection(SolutionItems) = preProject
+		FilesStructures\SomePrompt\Review Code.md = FilesStructures\SomePrompt\Review Code.md
 	EndProjectSection
 EndProject
 Global
