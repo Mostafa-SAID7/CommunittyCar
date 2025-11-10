@@ -3,17 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36518.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCar.Api", "CommunityCar.Api\CommunityCar.Api.csproj", "{C4B84C31-0627-456B-9EC6-72372C27BE97}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCar.Api", "src\CommunityCar.Api\CommunityCar.Api.csproj", "{C4B84C31-0627-456B-9EC6-72372C27BE97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCar.Domain", "CommunityCar.Domain\CommunityCar.Domain.csproj", "{564DEFC5-352A-4678-B3B6-AEA4F04D48A1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCar.Domain", "src\CommunityCar.Domain\CommunityCar.Domain.csproj", "{564DEFC5-352A-4678-B3B6-AEA4F04D48A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCar.Application", "CommunityCar.Application\CommunityCar.Application.csproj", "{AE2A47BF-1B73-45EB-A5D0-7FC4C3BD2504}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCar.Application", "src\CommunityCar.Application\CommunityCar.Application.csproj", "{AE2A47BF-1B73-45EB-A5D0-7FC4C3BD2504}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCar.Infrastructure", "CommunityCar.Infrastructure\CommunityCar.Infrastructure.csproj", "{04D619A3-263A-45FE-8A1F-0BA1169AD3A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCar.Infrastructure", "src\CommunityCar.Infrastructure\CommunityCar.Infrastructure.csproj", "{04D619A3-263A-45FE-8A1F-0BA1169AD3A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCar.Tests", "CommunityCar.Tests\CommunityCar.Tests.csproj", "{B0A9CF6D-FB57-4F91-82ED-F28D9B4CAF27}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCar.Tests", "src\CommunityCar.Tests\CommunityCar.Tests.csproj", "{B0A9CF6D-FB57-4F91-82ED-F28D9B4CAF27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCar.Client", "CommunityCar.Client\CommunityCar.Client.csproj", "{05B26AD7-559E-49D3-ADEE-594606FE7934}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject

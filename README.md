@@ -1,304 +1,135 @@
-# CommunityCar - Car Sharing Platform
+# Community Car
 
-A comprehensive car sharing platform built with ASP.NET Core 9 and React, featuring clean architecture, authentication, and modern development practices.
+A full-stack application for community car sharing and management.
 
-## 🏗️ Architecture
+## Project Structure
 
-This project follows Clean Architecture principles with the following layers:
+This project consists of:
+- **Backend API**: ASP.NET Core Web API (.NET 9)
+- **Frontend**: Angular 19 client application
+- **Tests**: Unit and integration tests
 
-```
-CommunityCar/
-├── CommunityCar.Api/           # ASP.NET Core Web API (Presentation Layer)
-├── CommunityCar.Application/   # Business Logic, DTOs, CQRS Handlers
-├── CommunityCar.Domain/        # Entities, Value Objects, Domain Services
-├── CommunityCar.Infrastructure/# EF Core, Identity, Repositories, External Services
-├── CommunityCar.Tests/         # Unit and Integration Tests
-└── CommunityCar.Client/        # React SPA (Frontend)
-```
+## Backend (ASP.NET Core)
 
-## 🚀 Features
-
-### Backend Features
-- **ASP.NET Core 9** with minimal APIs
-- **ASP.NET Core Identity** with JWT authentication
-- **Entity Framework Core** with SQL Server
-- **Clean Architecture** implementation
-- **Soft Delete** functionality with global filters
-- **Audit Trail** system
-- **Repository Pattern** with Unit of Work
-- **CORS** configuration for frontend integration
-- **Comprehensive logging** and error handling
-
-### Frontend Features
-- **React 18** with modern hooks
-- **Redux Toolkit** for state management
-- **React Router** for client-side routing
-- **Bootstrap 5** for responsive UI
-- **Formik & Yup** for form handling and validation
-- **Axios** for API communication with interceptors
-- **JWT token management** with automatic refresh
-
-### Security Features
-- JWT Bearer authentication
-- Password hashing and validation
+### Features
+- JWT Authentication with refresh tokens
 - Role-based authorization
-- CORS protection
-- Input validation and sanitization
-- SQL injection prevention
-- XSS protection
+- OTP verification
+- Social login integration
+- Audit logging
+- Rate limiting
+- Security headers
+- Email services
 
-## 🛠️ Technology Stack
+### Technologies
+- ASP.NET Core 9
+- Entity Framework Core
+- SQL Server
+- JWT Bearer Authentication
+- AutoMapper
+- FluentValidation
+- Serilog
 
-### Backend
-- **ASP.NET Core 9**
-- **Entity Framework Core 9**
-- **SQL Server**
-- **ASP.NET Core Identity**
-- **JWT Bearer Tokens**
-- **FluentValidation**
-- **AutoMapper**
-- **MediatR** (CQRS)
-- **Serilog** (Logging)
+## Frontend (Angular 19)
 
-### Frontend
-- **React 18**
-- **Redux Toolkit**
-- **React Router DOM**
-- **Axios**
-- **Bootstrap 5**
-- **Formik**
-- **Yup**
-- **JWT Decode**
+### Features
+- Modern Angular 19 application
+- Angular Material UI components
+- Lazy-loaded modules
+- JWT authentication
+- Reactive forms
+- HTTP interceptors
+- Route guards
+- Responsive design
 
-### Development Tools
-- **Visual Studio 2022**
-- **Visual Studio Code**
-- **SQL Server Management Studio**
-- **Postman** (API Testing)
-- **Git** (Version Control)
+### Technologies
+- Angular 19
+- Angular Material
+- RxJS
+- TypeScript
+- SCSS
 
-## 📋 Prerequisites
+## Getting Started
 
-- **.NET 9 SDK** (https://dotnet.microsoft.com/download/dotnet/9.0)
-- **Node.js 18+** (https://nodejs.org/)
-- **SQL Server** (LocalDB or full instance)
-- **Visual Studio 2022** or **VS Code**
+### Prerequisites
+- .NET 9 SDK
+- Node.js 18+
+- npm or yarn
+- SQL Server (or other supported database)
 
-## 🚀 Getting Started
+### Backend Setup
+1. Navigate to `src/CommunityCar.Api`
+2. Update `appsettings.json` with your database connection
+3. Run migrations: `dotnet ef database update`
+4. Start the API: `dotnet run`
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/yourusername/CommunityCar.git
-cd CommunityCar
-```
+### Frontend Setup
+1. Navigate to `ClientApp`
+2. Install dependencies: `npm install`
+3. Start development server: `npm start`
+4. Build for production: `npm run build:prod`
 
-### 2. Backend Setup
+## API Endpoints
 
-#### Restore Dependencies
-```bash
-dotnet restore
-```
+### Authentication
+- `POST /api/auth/login` - User login
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/refresh` - Refresh access token
+- `POST /api/auth/forgot-password` - Request password reset
+- `POST /api/auth/reset-password` - Reset password
 
-#### Update Database Connection
-Edit `CommunityCar.Api/appsettings.json`:
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=CommunityCarDb;Trusted_Connection=True;MultipleActiveResultSets=true"
-  }
-}
-```
+### Profile
+- `GET /api/profile` - Get user profile
+- `PUT /api/profile` - Update user profile
 
-#### Run Database Migrations
-```bash
-dotnet ef database update --project CommunityCar.Api
-```
-
-#### Run the Backend
-```bash
-dotnet run --project CommunityCar.Api
-```
-API will be available at: `https://localhost:5001`
-
-### 3. Frontend Setup
-
-#### Install Dependencies
-```bash
-cd CommunityCar.Client/ClientApp
-npm install
-```
-
-#### Start Development Server
-```bash
-npm start
-```
-React app will be available at: `http://localhost:3000`
-
-### 4. Build for Production
-
-#### Using PowerShell Script (Recommended)
-```powershell
-# Full build (clean, restore, build, test)
-.\build.ps1
-
-# Or specify individual steps
-.\build.ps1 -Clean -Restore -Build -Test -Publish
-```
-
-#### Manual Build
-```bash
-# Backend
-dotnet publish CommunityCar.Api -c Release -o publish/Api
-
-# Frontend
-cd CommunityCar.Client/ClientApp
-npm run build
-```
-
-## 🔧 Configuration
-
-### Environment Variables
-
-#### Backend (`appsettings.json`)
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Your_SQL_Server_Connection_String"
-  },
-  "Jwt": {
-    "Key": "Your_256_bit_secret_key_here",
-    "Issuer": "CommunityCar.Api",
-    "Audience": "CommunityCar.Api"
-  }
-}
-```
-
-#### Frontend (`.env.development`)
-```env
-REACT_APP_API_URL=https://localhost:5001/api
-REACT_APP_ENVIRONMENT=development
-REACT_APP_VERSION=1.0.0
-```
-
-## 🧪 Testing
+## Testing
 
 ### Backend Tests
 ```bash
-dotnet test CommunityCar.Tests
+cd src/CommunityCar.Tests
+dotnet test
 ```
 
 ### Frontend Tests
 ```bash
-cd CommunityCar.Client/ClientApp
-npm test
+cd ClientApp
+npm run test:ci  # Headless testing
+npm test         # Interactive testing
 ```
 
-## 📁 Project Structure Details
+## Development
 
-### Domain Layer (`CommunityCar.Domain`)
-- **Entities/**: Domain entities (User, Role, Car, Booking, etc.)
-- **Common/**: BaseEntity, interfaces, value objects
-- **Interfaces/**: Repository and service contracts
-- **Enums/**: Domain enumerations
+### Code Style
+- Backend: Follow C# coding standards
+- Frontend: Follow Angular style guide
+- Use meaningful commit messages
+- Write tests for new features
 
-### Application Layer (`CommunityCar.Application`)
-- **DTOs/**: Data Transfer Objects for API communication
-- **Services/**: Application services and business logic
-- **Interfaces/**: Application service contracts
-- **Validators/**: Input validation rules
-- **Extensions/**: Service collection extensions
+### Branching Strategy
+- `main` - Production ready code
+- `develop` - Development branch
+- Feature branches: `feature/feature-name`
 
-### Infrastructure Layer (`CommunityCar.Infrastructure`)
-- **Data/**: Entity Framework DbContext and configurations
-- **Repositories/**: Repository implementations
-- **Configurations/**: Service configurations
-- **Migrations/**: Database migrations
+## Deployment
 
-### API Layer (`CommunityCar.Api`)
-- **Controllers/**: Web API controllers
-- **Middleware/**: Custom middleware components
-- **Extensions/**: API-specific extensions
-- **Program.cs**: Application startup and configuration
-
-### Client Layer (`CommunityCar.Client`)
-- **ClientApp/**
-  - **src/**
-    - **components/**: React components
-    - **store/**: Redux store and slices
-    - **services/**: API service functions
-    - **utils/**: Utility functions
-    - **styles/**: CSS and styling files
-
-## 🔒 Authentication Flow
-
-1. **Registration**: User registers with email/password
-2. **Email Verification**: Account activation (configurable)
-3. **Login**: JWT token generation and refresh token
-4. **Authorization**: Bearer token validation on protected endpoints
-5. **Token Refresh**: Automatic token renewal
-6. **Logout**: Token invalidation
-
-## 🗄️ Database Schema
-
-### Core Tables
-- **Users**: User accounts and profiles
-- **Roles**: User roles and permissions
-- **UserRoles**: User-role relationships
-- **Cars**: Available vehicles for sharing
-- **Bookings**: Car rental reservations
-- **RefreshTokens**: JWT refresh tokens
-- **AuditLogs**: System audit trail
-
-### Key Relationships
-- User → Cars (One-to-Many)
-- User → Bookings (One-to-Many)
-- Car → Bookings (One-to-Many)
-- User → RefreshTokens (One-to-Many)
-
-## 🚀 Deployment
-
-### Development
+### Backend
 ```bash
-# Run both backend and frontend
-dotnet run --project CommunityCar.Api
-# In another terminal
-cd CommunityCar.Client/ClientApp && npm start
+dotnet publish -c Release -o ./publish
 ```
 
-### Production
+### Frontend
 ```bash
-# Build everything
-.\build.ps1 -Publish
-
-# Deploy the publish folder to your web server
-# Configure IIS or nginx to serve the application
+npm run build:prod
 ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
 
-## 📝 License
+## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details.
-
-## 📞 Support
-
-For support, email support@communitycar.com or create an issue in this repository.
-
-## 🔄 Version History
-
-- **1.0.0** (Current)
-  - Initial release with core car sharing functionality
-  - ASP.NET Core 9 backend with React frontend
-  - JWT authentication and authorization
-  - Clean architecture implementation
-  - Soft delete and audit trail features
-
----
-
-**Built with ❤️ using ASP.NET Core and React**
+This project is licensed under the MIT License.
