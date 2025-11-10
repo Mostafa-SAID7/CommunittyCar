@@ -17,15 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
-		FilesStructures\Basics\basePartApi.md = FilesStructures\Basics\basePartApi.md
-		FilesStructures\Basics\basePartApplication.md = FilesStructures\Basics\basePartApplication.md
-		FilesStructures\Basics\basePartDomain.md = FilesStructures\Basics\basePartDomain.md
-		FilesStructures\Basics\basePartFront.md = FilesStructures\Basics\basePartFront.md
-		FilesStructures\Basics\basePartInfrastructure.md = FilesStructures\Basics\basePartInfrastructure.md
-		FilesStructures\Basics\basePartTests.md = FilesStructures\Basics\basePartTests.md
-		FilesStructures\Basics\BaseStructure.md = FilesStructures\Basics\BaseStructure.md
-		FilesStructures\Basics\EnhancedStructure.md = FilesStructures\Basics\EnhancedStructure.md
-		FilesStructures\Basics\FullStructure.md = FilesStructures\Basics\FullStructure.md
 		LICENSE.txt = LICENSE.txt
 		README.md = README.md
 	EndProjectSection
@@ -45,6 +36,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientApp", "ClientApp", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FilesStructures", "FilesStructures", "{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}"
 	ProjectSection(SolutionItems) = preProject
+		FilesStructures\Basics\basePartApi.md = FilesStructures\Basics\basePartApi.md
+		FilesStructures\Basics\basePartApplication.md = FilesStructures\Basics\basePartApplication.md
+		FilesStructures\Basics\basePartDomain.md = FilesStructures\Basics\basePartDomain.md
+		FilesStructures\Basics\basePartFront.md = FilesStructures\Basics\basePartFront.md
+		FilesStructures\Basics\basePartInfrastructure.md = FilesStructures\Basics\basePartInfrastructure.md
+		FilesStructures\Basics\basePartTests.md = FilesStructures\Basics\basePartTests.md
+		FilesStructures\Basics\BaseStructure.md = FilesStructures\Basics\BaseStructure.md
+		FilesStructures\Basics\EnhancedStructure.md = FilesStructures\Basics\EnhancedStructure.md
+		FilesStructures\Basics\FullStructure.md = FilesStructures\Basics\FullStructure.md
 		FilesStructures\SomePrompt\Review Code.md = FilesStructures\SomePrompt\Review Code.md
 	EndProjectSection
 EndProject
