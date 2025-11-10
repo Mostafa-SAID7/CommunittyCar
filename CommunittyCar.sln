@@ -13,13 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCar.Infrastructure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommunityCar.Tests", "src\CommunityCar.Tests\CommunityCar.Tests.csproj", "{B0A9CF6D-FB57-4F91-82ED-F28D9B4CAF27}"
 EndProject
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
-		LICENSE.txt = LICENSE.txt
-		README.md = README.md
 		FilesStructures\Basics\basePartApi.md = FilesStructures\Basics\basePartApi.md
 		FilesStructures\Basics\basePartApplication.md = FilesStructures\Basics\basePartApplication.md
 		FilesStructures\Basics\basePartDomain.md = FilesStructures\Basics\basePartDomain.md
@@ -29,9 +26,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		FilesStructures\Basics\BaseStructure.md = FilesStructures\Basics\BaseStructure.md
 		FilesStructures\Basics\EnhancedStructure.md = FilesStructures\Basics\EnhancedStructure.md
 		FilesStructures\Basics\FullStructure.md = FilesStructures\Basics\FullStructure.md
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientApp", "ClientApp", "{F2B8C3D9-4E5F-6G7H-8I9J-0K1L2M3N4O5P}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientApp", "ClientApp", "{FA9F9F11-11FB-4399-89A5-F3A263873818}"
 	ProjectSection(SolutionItems) = preProject
 		ClientApp\.editorconfig = ClientApp\.editorconfig
 		ClientApp\.gitignore = ClientApp\.gitignore
@@ -47,6 +46,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FilesStructures", "FilesStructures", "{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}"
 	ProjectSection(SolutionItems) = preProject
 		FilesStructures\SomePrompt\Review Code.md = FilesStructures\SomePrompt\Review Code.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SocialAcounts", "SocialAcounts", "{788B7945-E463-40AC-A47B-84CA9E92EEFB}"
+	ProjectSection(SolutionItems) = preProject
+		SocialAccounts.md = SocialAccounts.md
 	EndProjectSection
 EndProject
 Global
@@ -119,21 +123,12 @@ Global
 		{B0A9CF6D-FB57-4F91-82ED-F28D9B4CAF27}.Release|x64.Build.0 = Release|Any CPU
 		{B0A9CF6D-FB57-4F91-82ED-F28D9B4CAF27}.Release|x86.ActiveCfg = Release|Any CPU
 		{B0A9CF6D-FB57-4F91-82ED-F28D9B4CAF27}.Release|x86.Build.0 = Release|Any CPU
-		{05B26AD7-559E-49D3-ADEE-594606FE7934}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05B26AD7-559E-49D3-ADEE-594606FE7934}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05B26AD7-559E-49D3-ADEE-594606FE7934}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{05B26AD7-559E-49D3-ADEE-594606FE7934}.Debug|x64.Build.0 = Debug|Any CPU
-		{05B26AD7-559E-49D3-ADEE-594606FE7934}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{05B26AD7-559E-49D3-ADEE-594606FE7934}.Debug|x86.Build.0 = Debug|Any CPU
-		{05B26AD7-559E-49D3-ADEE-594606FE7934}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05B26AD7-559E-49D3-ADEE-594606FE7934}.Release|Any CPU.Build.0 = Release|Any CPU
-		{05B26AD7-559E-49D3-ADEE-594606FE7934}.Release|x64.ActiveCfg = Release|Any CPU
-		{05B26AD7-559E-49D3-ADEE-594606FE7934}.Release|x64.Build.0 = Release|Any CPU
-		{05B26AD7-559E-49D3-ADEE-594606FE7934}.Release|x86.ActiveCfg = Release|Any CPU
-		{05B26AD7-559E-49D3-ADEE-594606FE7934}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{788B7945-E463-40AC-A47B-84CA9E92EEFB} = {A1B2C3D4-E5F6-7890-ABCD-EF1234567890}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7DAB979A-5E62-4474-A6CD-B480E87E25AE}

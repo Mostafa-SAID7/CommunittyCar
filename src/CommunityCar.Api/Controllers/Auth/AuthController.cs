@@ -1,6 +1,8 @@
 using CommunityCar.Application.DTOs.Auth;
 using CommunityCar.Application.Interfaces.Auth;
+using CommunityCar.Domain.Entities.Auth;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommunityCar.Api.Controllers.Auth;
@@ -10,10 +12,12 @@ namespace CommunityCar.Api.Controllers.Auth;
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
+    private readonly UserManager<User> _userManager;
 
-    public AuthController(IAuthService authService)
+    public AuthController(IAuthService authService, UserManager<User> userManager)
     {
         _authService = authService;
+        _userManager = userManager;
     }
 
     [HttpPost("login")]
@@ -50,10 +54,12 @@ public class AuthController : ControllerBase
         if (string.IsNullOrWhiteSpace(email))
             return BadRequest("Email is required");
 
-        var result = await _authService.GenerateOtpAsync(email);
+        // Get user by email first
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+            return BadRequest("User not found");
 
-        if (!result.Success)
-            return BadRequest(result);
+        var otp = await _authService.GenerateOtpAsync(user.Id, "Email Verification");
 
         return Ok(new { message = "OTP sent to your email" });
     }
@@ -148,24 +154,26 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("reset-password")]
-    public async Task<IActionResult> ResetPassword([FromBody] string email)
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
     {
-        if (string.IsNullOrWhiteSpace(email))
-            return BadRequest("Email is required");
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
-        var result = await _authService.ResetPasswordAsync(email);
+        var result = await _authService.ResetPasswordAsync(request);
 
-        // Always return success for security reasons
-        return Ok(new { message = "If the email exists, a password reset link has been sent" });
+        if (!result.Success)
+            return BadRequest(result);
+
+        return Ok(result);
     }
 
     [HttpPost("verify-email")]
-    public async Task<IActionResult> VerifyEmail([FromBody] string token)
+    public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailRequest request)
     {
-        if (string.IsNullOrWhiteSpace(token))
-            return BadRequest("Token is required");
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
 
-        var result = await _authService.VerifyEmailAsync(token);
+        var result = await _authService.VerifyEmailAsync(request);
 
         if (!result.Success)
             return BadRequest(result);

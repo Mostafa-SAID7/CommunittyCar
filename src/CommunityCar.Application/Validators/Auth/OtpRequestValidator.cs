@@ -11,7 +11,7 @@ public class OtpRequestValidator : AbstractValidator<OtpRequest>
             .NotEmpty().WithMessage("Email is required")
             .EmailAddress().WithMessage("Invalid email format");
 
-        RuleFor(x => x.OtpCode)
+        RuleFor(x => x.Otp)
             .NotEmpty().WithMessage("OTP code is required")
             .Length(6).WithMessage("OTP code must be exactly 6 digits")
             .Matches(@"^\d{6}$").WithMessage("OTP code must contain only digits");

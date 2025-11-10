@@ -75,4 +75,5 @@ public class UserProfileDto
     public string? UserFirstName { get; set; }
     public string? UserLastName { get; set; }
     public string? UserFullName { get; set; }
+    public string? FullName { get; set; }
 }

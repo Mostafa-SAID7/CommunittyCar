@@ -35,6 +35,16 @@ public class User : IdentityUser
 
     public string FullName => $"{FirstName} {LastName}";
 
+    // Profile properties
+    public string? Bio { get; set; }
+    public string? Location { get; set; }
+    public string? Website { get; set; }
+    public DateTime? DateOfBirth { get; set; }
+    public string? Gender { get; set; }
+    public bool IsPrivate { get; set; } = false;
+    public string? ProfilePictureUrl { get; set; }
+    public string? CoverPhotoUrl { get; set; }
+
     // Navigation properties
     public virtual ICollection<Car> Cars { get; set; } = new List<Car>();
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();

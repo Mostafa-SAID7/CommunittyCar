@@ -1,6 +1,6 @@
 using CommunityCar.Api.Extensions;
 using CommunityCar.Application.Extensions;
-using CommunityCar.Infrastructure.Configurations;
+using CommunityCar.Infrastructure.Configurations.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -122,7 +122,7 @@ if (app.Environment.IsDevelopment())
         c.RoutePrefix = string.Empty; // Serve Swagger UI at the app's root
         c.DocumentTitle = "CommunityCar API Documentation";
         c.DefaultModelsExpandDepth(-1); // Hide models section by default
-        c.DefaultModelRendering(ModelRendering.Model);
+        c.DefaultModelRendering(Swashbuckle.AspNetCore.SwaggerUI.ModelRendering.Model);
         c.DisplayRequestDuration();
         c.EnableTryItOutByDefault();
     });

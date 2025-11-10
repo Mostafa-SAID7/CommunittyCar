@@ -50,4 +50,15 @@ public class UpdateProfileRequest
     public bool ShowEmail { get; set; } = false;
 
     public bool ShowPhone { get; set; } = false;
+
+    [StringLength(100)]
+    public string? FirstName { get; set; }
+
+    [StringLength(100)]
+    public string? LastName { get; set; }
+
+    [StringLength(200)]
+    public string? Location { get; set; }
+
+    public bool IsPrivate { get; set; } = false;
 }

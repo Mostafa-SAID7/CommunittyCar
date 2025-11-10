@@ -10,5 +10,5 @@ public class OtpRequest
 
     [Required]
     [StringLength(6, MinimumLength = 6)]
-    public string OtpCode { get; set; } = string.Empty;
+    public string Otp { get; set; } = string.Empty;
 }

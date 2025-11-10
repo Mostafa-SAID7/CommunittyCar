@@ -46,6 +46,8 @@ public class AuditLog : BaseEntity
     [MaxLength(1000)]
     public string? ChangeReason { get; set; }
 
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+
     // Navigation property
     public virtual User? User { get; set; }
 }
