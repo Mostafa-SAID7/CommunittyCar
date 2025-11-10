@@ -4,6 +4,7 @@ using CommunityCar.Application.Services;
 using CommunityCar.Domain.Entities;
 using CommunityCar.Domain.Entities.Profile;
 using CommunityCar.Infrastructure.Data;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

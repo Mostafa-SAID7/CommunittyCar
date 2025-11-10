@@ -34,11 +34,15 @@ public class AuthServiceTests
         // Setup TokenService mock
         _tokenServiceMock = new Mock<ITokenService>();
 
+        // Setup EmailService mock
+        var emailServiceMock = new Mock<IEmailService>();
+
         // Create AuthService instance
         _authService = new AuthService(
             _userManagerMock.Object,
             _signInManagerMock.Object,
-            _tokenServiceMock.Object);
+            _tokenServiceMock.Object,
+            emailServiceMock.Object);
     }
 
     [Fact]

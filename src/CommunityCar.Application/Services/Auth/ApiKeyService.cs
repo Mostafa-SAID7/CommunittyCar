@@ -1,5 +1,6 @@
 using CommunityCar.Domain.Entities.Auth;
 using CommunityCar.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CommunityCar.Application.Services.Auth;
 
@@ -57,7 +58,7 @@ public class ApiKeyService
         return key?.UserId;
     }
 
-    public async Task<bool> RevokeApiKeyAsync(string userId, string keyId)
+    public async Task<bool> RevokeApiKeyAsync(string userId, int keyId)
     {
         var key = await _context.ApiKeys
             .FirstOrDefaultAsync(k => k.Id == keyId && k.UserId == userId);
@@ -80,7 +81,7 @@ public class ApiKeyService
             .ToListAsync();
     }
 
-    public async Task<bool> UpdateApiKeyAsync(string userId, string keyId, string name, string description)
+    public async Task<bool> UpdateApiKeyAsync(string userId, int keyId, string name, string description)
     {
         var key = await _context.ApiKeys
             .FirstOrDefaultAsync(k => k.Id == keyId && k.UserId == userId);

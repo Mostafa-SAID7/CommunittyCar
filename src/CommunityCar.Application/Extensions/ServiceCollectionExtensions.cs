@@ -1,5 +1,7 @@
 using CommunityCar.Application.Interfaces;
+using CommunityCar.Application.Interfaces.Auth;
 using CommunityCar.Application.Services;
+using CommunityCar.Application.Services.Auth;
 using CommunityCar.Application.Validators.Auth;
 using CommunityCar.Application.Validators.Profile;
 using CommunityCar.Domain.Interfaces;
@@ -7,6 +9,7 @@ using CommunityCar.Infrastructure.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace CommunityCar.Application.Extensions;
 
@@ -17,26 +20,26 @@ public static class ServiceCollectionExtensions
         // Register application services
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITokenService, TokenService>();
-        services.AddScoped<IOtpService, OtpService>();
-        services.AddScoped<IEmailService, EmailService>();
+        // services.AddScoped<IOtpService, OtpService>(); // Commented out - interface not found
+        services.AddScoped<IEmailService, Services.EmailService>();
         services.AddScoped<IProfileService, ProfileService>();
-        services.AddScoped<ICarService, CarService>();
-        services.AddScoped<IBookingService, BookingService>();
-        services.AddScoped<IAuditService, AuditService>();
+        // services.AddScoped<ICarService, CarService>(); // Commented out - service not implemented
+        // services.AddScoped<IBookingService, BookingService>(); // Commented out - service not implemented
+        // services.AddScoped<IAuditService, AuditService>(); // Commented out - service not implemented
 
         // Register FluentValidation
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssemblyContaining<LoginRequestValidator>();
         services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
         services.AddValidatorsFromAssemblyContaining<UpdateProfileRequestValidator>();
-        services.AddValidatorsFromAssemblyContaining<CreateCarRequestValidator>();
-        services.AddValidatorsFromAssemblyContaining<CreateBookingRequestValidator>();
+        // services.AddValidatorsFromAssemblyContaining<CreateCarRequestValidator>(); // Commented out - validator not implemented
+        // services.AddValidatorsFromAssemblyContaining<CreateBookingRequestValidator>(); // Commented out - validator not implemented
 
-        // Register MediatR
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ServiceCollectionExtensions).Assembly));
+        // Register MediatR - commented out as package not installed
+        // services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
 
-        // Register AutoMapper
-        services.AddAutoMapper(typeof(ServiceCollectionExtensions).Assembly);
+        // Register AutoMapper - commented out due to version incompatibility
+        // services.AddAutoMapper(typeof(ServiceCollectionExtensions));
 
         return services;
     }
@@ -48,9 +51,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
 
         // Register specific repositories if needed
-        services.AddScoped<ICarRepository, CarRepository>();
-        services.AddScoped<IBookingRepository, BookingRepository>();
-        services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+        // services.AddScoped<ICarRepository, CarRepository>(); // Commented out - repository not implemented
+        // services.AddScoped<IBookingRepository, BookingRepository>(); // Commented out - repository not implemented
+        // services.AddScoped<IAuditLogRepository, AuditLogRepository>(); // Commented out - repository not implemented
 
         return services;
     }
@@ -58,13 +61,13 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddApiServices(this IServiceCollection services)
     {
         // Register API-specific services
-        services.AddScoped<ICurrentUserService, CurrentUserService>();
-        services.AddScoped<IApiResponseService, ApiResponseService>();
+        // services.AddScoped<ICurrentUserService, CurrentUserService>(); // Commented out - service not implemented
+        // services.AddScoped<IApiResponseService, ApiResponseService>(); // Commented out - service not implemented
 
         // Register background services
-        services.AddHostedService<EmailBackgroundService>();
-        services.AddHostedService<AuditCleanupService>();
-        services.AddHostedService<ExpiredBookingCleanupService>();
+        // services.AddHostedService<EmailBackgroundService>(); // Commented out - service not implemented
+        // services.AddHostedService<AuditCleanupService>(); // Commented out - service not implemented
+        // services.AddHostedService<ExpiredBookingCleanupService>(); // Commented out - service not implemented
 
         return services;
     }
