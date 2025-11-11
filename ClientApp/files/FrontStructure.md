@@ -2,7 +2,7 @@
 │
 ├── src/
 │   ├── app/
-│   │   ├── core/                               ← Cross-cutting concerns
+│   │   ├── core/                                ← Core cross-cutting logic
 │   │   │   ├── interceptors/
 │   │   │   │   ├── auth.interceptor.ts
 │   │   │   │   ├── error.interceptor.ts
@@ -18,50 +18,55 @@
 │   │   │   │   │   └── profile-api.service.ts
 │   │   │   │   ├── storage.service.ts
 │   │   │   │   ├── notification.service.ts
-│   │   │   │   └── theme.service.ts
+│   │   │   │   ├── theme.service.ts
+│   │   │   │   ├── animation.service.ts          ← Wrapper for Framer Motion (Angular Animations)
+│   │   │   │   └── ui.service.ts                 ← Centralized control for modals, toasts, drawers
 │   │   │   ├── models/
 │   │   │   │   ├── auth.model.ts
 │   │   │   │   ├── user.model.ts
 │   │   │   │   ├── car.model.ts
 │   │   │   │   ├── booking.model.ts
-│   │   │   │   └── api-response.model.ts
+│   │   │   │   ├── api-response.model.ts
+│   │   │   │   └── ui-config.model.ts            ← Shared UI config interfaces
 │   │   │   └── utilities/
 │   │   │       ├── constants.ts
 │   │   │       ├── helpers.ts
-│   │   │       └── validators.ts
+│   │   │       ├── validators.ts
+│   │   │       └── animations.ts                 ← Framer Motion–style Angular animations
 │   │   │
-│   │   ├── features/                           ← Mirrors backend modules
+│   │   ├── features/                             ← Mirrors backend modules
 │   │   │   ├── auth/
 │   │   │   │   ├── login/
-│   │   │   │   │   ├── login.component.ts
-│   │   │   │   │   ├── login.component.html
-│   │   │   │   │   └── login.component.scss
 │   │   │   │   ├── register/
 │   │   │   │   ├── forgot-password/
 │   │   │   │   ├── verify-email/
 │   │   │   │   └── otp-verification/
 │   │   │   ├── profile/
-│   │   │   │   ├── edit-profile/
-│   │   │   │   ├── view-profile/
-│   │   │   │   └── change-password/
 │   │   │   ├── cars/
-│   │   │   │   ├── car-list/
-│   │   │   │   ├── car-details/
-│   │   │   │   └── add-car/
 │   │   │   ├── bookings/
-│   │   │   │   ├── booking-list/
-│   │   │   │   ├── booking-details/
-│   │   │   │   └── new-booking/
 │   │   │   └── dashboard/
-│   │   │       ├── dashboard.component.ts
-│   │   │       └── dashboard.component.html
 │   │   │
-│   │   ├── shared/                              ← Reusable UI elements
+│   │   ├── shared/                               ← Reusable UI system (Shadcn-style)
 │   │   │   ├── components/
+│   │   │   │   ├── ui/                           ← Shadcn/ui-style component library
+│   │   │   │   │   ├── button/
+│   │   │   │   │   │   ├── button.component.ts
+│   │   │   │   │   │   ├── button.component.html
+│   │   │   │   │   │   └── button.component.scss
+│   │   │   │   │   ├── input/
+│   │   │   │   │   ├── card/
+│   │   │   │   │   ├── modal/
+│   │   │   │   │   ├── toast/
+│   │   │   │   │   ├── dropdown/
+│   │   │   │   │   ├── sheet/
+│   │   │   │   │   └── avatar/
+│   │   │   │   ├── icons/                        ← Lucide icon wrappers
+│   │   │   │   │   ├── icon.component.ts
+│   │   │   │   │   ├── icon.module.ts
+│   │   │   │   │   └── icons.config.ts
 │   │   │   │   ├── navbar/
 │   │   │   │   ├── footer/
 │   │   │   │   ├── loading-spinner/
-│   │   │   │   ├── modal/
 │   │   │   │   └── alert/
 │   │   │   ├── directives/
 │   │   │   │   ├── autofocus.directive.ts
@@ -71,15 +76,16 @@
 │   │   │       ├── capitalize.pipe.ts
 │   │   │       └── truncate.pipe.ts
 │   │   │
-│   │   ├── layouts/                             ← Page layout shells
+│   │   ├── layouts/
 │   │   │   ├── auth-layout/
 │   │   │   ├── main-layout/
 │   │   │   └── admin-layout/
 │   │   │
-│   │   ├── state/                               ← NgRx (optional)
+│   │   ├── state/                                ← NgRx (or Signals)
 │   │   │   ├── auth/
 │   │   │   ├── cars/
 │   │   │   ├── bookings/
+│   │   │   ├── ui/
 │   │   │   └── app.state.ts
 │   │   │
 │   │   ├── app-routing.module.ts
@@ -90,7 +96,11 @@
 │   ├── assets/
 │   │   ├── images/
 │   │   ├── icons/
+│   │   │   ├── lucide/                           ← Lucide Angular icon set
+│   │   │   └── custom/
 │   │   ├── styles/
+│   │   │   ├── tailwind.css                      ← Tailwind entry file
+│   │   │   ├── shadcn-theme.scss                 ← Shadcn-compatible styling
 │   │   │   ├── variables.scss
 │   │   │   ├── mixins.scss
 │   │   │   └── theme.scss
@@ -108,8 +118,16 @@
 │   ├── main.ts
 │   └── index.html
 │
+├── tailwind.config.js                            ← Tailwind configuration
+├── postcss.config.js                             ← Tailwind/PostCSS integration
 ├── angular.json
 ├── package.json
 ├── tsconfig.json
 ├── tsconfig.app.json
 └── tsconfig.spec.json
+
+update this stracture from this 
+ i Add Tailwind CSS
+ + Add Shadcn/ui
+ + icon (Lucide angular)
+ + animation (Framer Motion)

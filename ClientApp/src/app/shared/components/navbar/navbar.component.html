@@ -20,8 +20,8 @@
 
       <div class="user-menu" *ngIf="currentUser">
         <div class="user-info">
-          <span class="user-avatar">{{ currentUser.name?.charAt(0)?.toUpperCase() }}</span>
-          <span class="user-name">{{ currentUser.name }}</span>
+          <span class="user-avatar">{{ getUserInitials() }}</span>
+          <span class="user-name">{{ currentUser?.name || 'User' }}</span>
         </div>
         <button class="logout-btn" (click)="logout()">Logout</button>
       </div>

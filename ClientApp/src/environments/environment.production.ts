@@ -1,51 +1,91 @@
 export const environment = {
   production: true,
   apiUrl: 'https://api.communitycar.com/api',
+  wsUrl: 'wss://api.communitycar.com',
   appName: 'Community Car',
-  version: '1.0.0',
+  appVersion: '1.0.0',
+  defaultLanguage: 'en',
+  supportedLanguages: ['en', 'ar'],
   features: {
-    enableRegistration: true,
-    enableCarListing: true,
-    enableBooking: true,
-    enablePayment: true,
-    enableNotifications: true,
-    enableThemeToggle: true,
-  },
-  thirdParty: {
-    googleMapsApiKey: 'your-production-google-maps-api-key',
-    stripePublishableKey: 'pk_live_your-stripe-live-key',
-    firebaseConfig: {
-      apiKey: 'your-prod-api-key',
-      authDomain: 'your-prod-project.firebaseapp.com',
-      projectId: 'your-prod-project',
-      storageBucket: 'your-prod-project.appspot.com',
-      messagingSenderId: '123456789',
-      appId: '1:123456789:web:abcdef123456',
-    },
-  },
-  security: {
-    tokenExpirationTime: 3600000, // 1 hour
-    refreshTokenExpirationTime: 604800000, // 7 days
-    passwordMinLength: 8,
-    enableTwoFactorAuth: true,
+    socialLogin: true,
+    twoFactorAuth: true,
+    notifications: true,
+    liveChat: true,
+    themeSwitching: true,
+    profilePictures: true,
+    coverPhotos: true,
+    advancedSearch: true,
+    realTimeUpdates: true
   },
   pagination: {
-    defaultPageSize: 10,
-    maxPageSize: 100,
+    defaultPageSize: 12,
+    maxPageSize: 50
   },
-  cache: {
-    defaultTtl: 600000, // 10 minutes
+  fileUpload: {
+    maxFileSize: 5 * 1024 * 1024, // 5MB
+    maxProfilePictureSize: 2 * 1024 * 1024, // 2MB
+    maxCoverPhotoSize: 10 * 1024 * 1024, // 10MB
+    allowedImageTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+    allowedDocumentTypes: ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+  },
+  map: {
+    defaultCenter: {
+      lat: 40.7128,
+      lng: -74.0060
+    },
+    defaultZoom: 12,
+    apiKey: 'your-production-google-maps-api-key'
+  },
+  payment: {
+    stripePublishableKey: 'pk_live_your_stripe_key',
+    currency: 'USD',
+    supportedCurrencies: ['USD', 'EUR', 'GBP'],
+    commissionRate: 0.1, // 10%
+    minimumBookingAmount: 10
+  },
+  social: {
+    googleClientId: 'your-production-google-client-id',
+    facebookAppId: 'your-production-facebook-app-id',
+    twitterApiKey: 'your-production-twitter-api-key',
+    linkedinClientId: 'your-production-linkedin-client-id'
+  },
+  analytics: {
+    googleAnalyticsId: 'GA_MEASUREMENT_ID_PROD',
+    mixpanelToken: 'your-production-mixpanel-token',
+    sentryDsn: 'your-production-sentry-dsn'
   },
   logging: {
     level: 'error',
-    enableRemoteLogging: true,
+    remoteLogging: true,
+    logToConsole: false,
+    logToFile: false
   },
-  analytics: {
-    enableGoogleAnalytics: true,
-    trackingId: 'GA_TRACKING_ID',
+  security: {
+    sessionTimeout: 24 * 60 * 60 * 1000, // 24 hours
+    maxLoginAttempts: 5,
+    lockoutDuration: 15 * 60 * 1000, // 15 minutes
+    passwordMinLength: 8,
+    requireSpecialChars: true,
+    requireNumbers: true,
+    requireUppercase: true
   },
-  performance: {
-    enableMonitoring: true,
-    enableErrorTracking: true,
+  notifications: {
+    enableSound: false,
+    enableVibration: false,
+    maxNotifications: 50,
+    autoHideToasters: true,
+    defaultToastDuration: 3000
   },
+  chat: {
+    maxMessageLength: 1000,
+    maxFileSize: 10 * 1024 * 1024, // 10MB
+    supportedFileTypes: ['image/*', 'application/pdf', 'text/*'],
+    enableTypingIndicators: true,
+    enableReadReceipts: true
+  },
+  cache: {
+    defaultTtl: 10 * 60 * 1000, // 10 minutes
+    maxCacheSize: 100 * 1024 * 1024, // 100MB
+    enableOfflineMode: false
+  }
 };

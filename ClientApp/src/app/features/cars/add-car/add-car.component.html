@@ -1,0 +1,305 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <div class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-6">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Add Your Car</h1>
+          <p class="text-gray-600 mt-1">List your car for rent and start earning</p>
+        </div>
+        <button
+          (click)="onCancel()"
+          class="btn btn-outline"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-4xl mx-auto">
+      <form [formGroup]="carForm" (ngSubmit)="onSubmit()" class="space-y-8">
+        <!-- Car Images -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Car Photos</h3>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+            <div
+              *ngFor="let preview of previewUrls; let i = index; trackBy: trackByFn"
+              class="relative aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden"
+            >
+              <img [src]="preview" [alt]="'Car photo ' + (i + 1)" class="w-full h-full object-cover">
+              <button
+                type="button"
+                (click)="removeImage(i)"
+                class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+              >
+                ×
+              </button>
+            </div>
+            <div *ngIf="selectedFiles.length < 10" class="aspect-w-1 aspect-h-1 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:border-primary-500">
+              <label class="cursor-pointer w-full h-full flex flex-col items-center justify-center">
+                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                <span class="text-sm text-gray-500 mt-1">Add Photo</span>
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  (change)="onFileSelected($event)"
+                  class="hidden"
+                >
+              </label>
+            </div>
+          </div>
+          <p class="text-sm text-gray-500">Upload up to 10 high-quality photos of your car. First photo will be the main image.</p>
+        </div>
+
+        <!-- Basic Information -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-6">Basic Information</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Make *</label>
+              <input
+                type="text"
+                formControlName="make"
+                class="input w-full"
+                placeholder="e.g., Toyota, BMW, Ford"
+                [class.error]="carForm.get('make')?.invalid && carForm.get('make')?.touched"
+              >
+              <p class="text-red-500 text-xs mt-1" *ngIf="carForm.get('make')?.invalid && carForm.get('make')?.touched">
+                {{ getErrorMessage('make') }}
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Model *</label>
+              <input
+                type="text"
+                formControlName="model"
+                class="input w-full"
+                placeholder="e.g., Camry, X5, Mustang"
+                [class.error]="carForm.get('model')?.invalid && carForm.get('model')?.touched"
+              >
+              <p class="text-red-500 text-xs mt-1" *ngIf="carForm.get('model')?.invalid && carForm.get('model')?.touched">
+                {{ getErrorMessage('model') }}
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Year *</label>
+              <input
+                type="number"
+                formControlName="year"
+                class="input w-full"
+                placeholder="e.g., 2020"
+                [class.error]="carForm.get('year')?.invalid && carForm.get('year')?.touched"
+              >
+              <p class="text-red-500 text-xs mt-1" *ngIf="carForm.get('year')?.invalid && carForm.get('year')?.touched">
+                {{ getErrorMessage('year') }}
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Fuel Type *</label>
+              <select
+                formControlName="fuelType"
+                class="input w-full"
+                [class.error]="carForm.get('fuelType')?.invalid && carForm.get('fuelType')?.touched"
+              >
+                <option value="">Select fuel type</option>
+                <option value="petrol">Petrol</option>
+                <option value="diesel">Diesel</option>
+                <option value="electric">Electric</option>
+                <option value="hybrid">Hybrid</option>
+              </select>
+              <p class="text-red-500 text-xs mt-1" *ngIf="carForm.get('fuelType')?.invalid && carForm.get('fuelType')?.touched">
+                {{ getErrorMessage('fuelType') }}
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Transmission *</label>
+              <select
+                formControlName="transmission"
+                class="input w-full"
+                [class.error]="carForm.get('transmission')?.invalid && carForm.get('transmission')?.touched"
+              >
+                <option value="">Select transmission</option>
+                <option value="manual">Manual</option>
+                <option value="automatic">Automatic</option>
+              </select>
+              <p class="text-red-500 text-xs mt-1" *ngIf="carForm.get('transmission')?.invalid && carForm.get('transmission')?.touched">
+                {{ getErrorMessage('transmission') }}
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Seats *</label>
+              <input
+                type="number"
+                formControlName="seats"
+                class="input w-full"
+                placeholder="e.g., 5"
+                [class.error]="carForm.get('seats')?.invalid && carForm.get('seats')?.touched"
+              >
+              <p class="text-red-500 text-xs mt-1" *ngIf="carForm.get('seats')?.invalid && carForm.get('seats')?.touched">
+                {{ getErrorMessage('seats') }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pricing and Details -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-6">Pricing & Details</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Price per Day *</label>
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                <input
+                  type="number"
+                  formControlName="pricePerDay"
+                  class="input w-full pl-8"
+                  placeholder="50"
+                  [class.error]="carForm.get('pricePerDay')?.invalid && carForm.get('pricePerDay')?.touched"
+                >
+              </div>
+              <p class="text-red-500 text-xs mt-1" *ngIf="carForm.get('pricePerDay')?.invalid && carForm.get('pricePerDay')?.touched">
+                {{ getErrorMessage('pricePerDay') }}
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Mileage *</label>
+              <input
+                type="number"
+                formControlName="mileage"
+                class="input w-full"
+                placeholder="e.g., 15000"
+                [class.error]="carForm.get('mileage')?.invalid && carForm.get('mileage')?.touched"
+              >
+              <p class="text-red-500 text-xs mt-1" *ngIf="carForm.get('mileage')?.invalid && carForm.get('mileage')?.touched">
+                {{ getErrorMessage('mileage') }}
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+            <textarea
+              formControlName="description"
+              rows="4"
+              class="input w-full"
+              placeholder="Describe your car, its features, condition, and any special notes for renters..."
+              [class.error]="carForm.get('description')?.invalid && carForm.get('description')?.touched"
+            ></textarea>
+            <p class="text-gray-500 text-xs mt-1">Maximum 1000 characters</p>
+            <p class="text-red-500 text-xs mt-1" *ngIf="carForm.get('description')?.invalid && carForm.get('description')?.touched">
+              {{ getErrorMessage('description') }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-6">Location</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Street Address *</label>
+              <input
+                type="text"
+                formControlName="location.address"
+                class="input w-full"
+                placeholder="123 Main Street"
+                [class.error]="carForm.get('location.address')?.invalid && carForm.get('location.address')?.touched"
+              >
+              <p class="text-red-500 text-xs mt-1" *ngIf="carForm.get('location.address')?.invalid && carForm.get('location.address')?.touched">
+                {{ getErrorMessage('location.address') }}
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
+              <input
+                type="text"
+                formControlName="location.city"
+                class="input w-full"
+                placeholder="New York"
+                [class.error]="carForm.get('location.city')?.invalid && carForm.get('location.city')?.touched"
+              >
+              <p class="text-red-500 text-xs mt-1" *ngIf="carForm.get('location.city')?.invalid && carForm.get('location.city')?.touched">
+                {{ getErrorMessage('location.city') }}
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">State *</label>
+              <input
+                type="text"
+                formControlName="location.state"
+                class="input w-full"
+                placeholder="NY"
+                [class.error]="carForm.get('location.state')?.invalid && carForm.get('location.state')?.touched"
+              >
+              <p class="text-red-500 text-xs mt-1" *ngIf="carForm.get('location.state')?.invalid && carForm.get('location.state')?.touched">
+                {{ getErrorMessage('location.state') }}
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">ZIP Code *</label>
+              <input
+                type="text"
+                formControlName="location.zipCode"
+                class="input w-full"
+                placeholder="10001"
+                [class.error]="carForm.get('location.zipCode')?.invalid && carForm.get('location.zipCode')?.touched"
+              >
+              <p class="text-red-500 text-xs mt-1" *ngIf="carForm.get('location.zipCode')?.invalid && carForm.get('location.zipCode')?.touched">
+                {{ getErrorMessage('location.zipCode') }}
+              </p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Country *</label>
+              <input
+                type="text"
+                formControlName="location.country"
+                class="input w-full"
+                placeholder="United States"
+                [class.error]="carForm.get('location.country')?.invalid && carForm.get('location.country')?.touched"
+              >
+              <p class="text-red-500 text-xs mt-1" *ngIf="carForm.get('location.country')?.invalid && carForm.get('location.country')?.touched">
+                {{ getErrorMessage('location.country') }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-end space-x-4">
+          <button
+            type="button"
+            (click)="onCancel()"
+            class="btn btn-outline"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            [disabled]="isLoading || carForm.invalid"
+            class="btn btn-primary"
+          >
+            <span *ngIf="!isLoading">List My Car</span>
+            <span *ngIf="isLoading">Listing Car...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

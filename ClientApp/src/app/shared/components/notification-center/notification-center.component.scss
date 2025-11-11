@@ -58,6 +58,19 @@
   display: flex;
   flex-direction: column;
   border-left: 1px solid #e1e5e9;
+
+  &.left-position {
+    right: auto;
+    left: 0;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    border-left: none;
+    border-right: 1px solid #e1e5e9;
+  }
+
+  &.right-position {
+    right: 0;
+    left: auto;
+  }
 }
 
 .notification-header {
@@ -147,6 +160,23 @@
       background: #2196f3;
       border-radius: 50%;
     }
+  }
+
+  &.priority-high {
+    border-left: 4px solid #dc3545;
+    background: linear-gradient(90deg, rgba(220, 53, 69, 0.05) 0%, transparent 100%);
+
+    &::before {
+      background: #dc3545;
+    }
+  }
+
+  &.priority-medium {
+    border-left: 3px solid #ffc107;
+  }
+
+  &.priority-low {
+    border-left: 2px solid #28a745;
   }
 }
 
@@ -319,6 +349,183 @@
   }
 }
 
+// Filters and search
+.notification-filters {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e1e5e9;
+  background: #f8f9fa;
+}
+
+.search-container {
+  position: relative;
+  margin-bottom: 12px;
+
+  i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 14px;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 8px 12px 8px 36px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+
+    &:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    }
+  }
+}
+
+.category-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.category-btn {
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 16px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #e9ecef;
+  }
+
+  &.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+
+  .category-count {
+    margin-left: 4px;
+    opacity: 0.8;
+  }
+}
+
+// Notification meta
+.notification-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #666;
+}
+
+.notification-priority {
+  background: #f8f9fa;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.category-tag {
+  background: #e9ecef;
+  color: #495057;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+// Priority indicator
+.priority-indicator {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 8px;
+  height: 8px;
+  background: #dc3545;
+  border-radius: 50%;
+  animation: pulse-priority 2s infinite;
+}
+
+@keyframes pulse-priority {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+// Footer
+.notification-footer {
+  padding: 16px 20px;
+  border-top: 1px solid #e1e5e9;
+  background: #f8f9fa;
+}
+
+.bulk-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.bulk-action-btn {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &:hover {
+    background: #e9ecef;
+  }
+
+  &.secondary {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+
+    &:hover {
+      background: #0056b3;
+      border-color: #0056b3;
+    }
+  }
+
+  i {
+    font-size: 11px;
+  }
+}
+
+// Mark read button
+.mark-read-btn {
+  background: none;
+  border: none;
+  color: #28a745;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: rgba(40, 167, 69, 0.1);
+  }
+}
+
 // Mobile responsiveness
 @media (max-width: 480px) {
   .notification-center {
@@ -332,5 +539,27 @@
 
   .notification-item {
     padding: 12px 16px;
+  }
+
+  .notification-filters {
+    padding: 12px 16px;
+  }
+
+  .category-filters {
+    gap: 6px;
+  }
+
+  .category-btn {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .bulk-actions {
+    flex-direction: column;
+  }
+
+  .bulk-action-btn {
+    width: 100%;
+    justify-content: center;
   }
 }

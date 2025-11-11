@@ -1,0 +1,146 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <div class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-6">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">My Bookings</h1>
+          <p class="text-gray-600 mt-1">Manage your car reservations</p>
+        </div>
+        <button class="btn btn-primary">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          New Booking
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Tabs -->
+    <div class="mb-6">
+      <nav class="flex space-x-8" aria-label="Tabs">
+        <button
+          (click)="activeTab = 'upcoming'"
+          [class]="activeTab === 'upcoming' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+          class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
+        >
+          Upcoming
+        </button>
+        <button
+          (click)="activeTab = 'completed'"
+          [class]="activeTab === 'completed' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+          class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
+        >
+          Completed
+        </button>
+        <button
+          (click)="activeTab = 'cancelled'"
+          [class]="activeTab === 'cancelled' ? 'border-primary-500 text-primary-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+          class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm"
+        >
+          Cancelled
+        </button>
+      </nav>
+    </div>
+
+    <!-- Bookings List -->
+    <div class="space-y-6">
+      <div
+        *ngFor="let booking of filteredBookings; trackBy: trackByBooking"
+        class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 animate-fade-in"
+      >
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <!-- Car Image Placeholder -->
+            <div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+              <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+
+            <!-- Booking Details -->
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">Booking #{{ booking.id.slice(-8) }}</h3>
+              <p class="text-sm text-gray-600">
+                {{ booking.startDate | date:'shortDate' }} - {{ booking.endDate | date:'shortDate' }}
+                ({{ booking.totalDays }} days)
+              </p>
+              <div class="flex items-center space-x-4 mt-1">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" [ngClass]="getStatusColor(booking.status)">
+                  {{ booking.status | titlecase }}
+                </span>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" [ngClass]="getPaymentStatusColor(booking.paymentStatus)">
+                  {{ booking.paymentStatus | titlecase }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Price and Actions -->
+          <div class="text-right">
+            <div class="text-lg font-bold text-gray-900">${{ booking.totalPrice }}</div>
+            <div class="flex space-x-2 mt-2">
+              <button
+                (click)="onViewDetails(booking)"
+                class="btn btn-outline text-sm py-1 px-3"
+              >
+                View Details
+              </button>
+              <button
+                *ngIf="booking.status === 'pending' || booking.status === 'confirmed'"
+                (click)="onCancelBooking(booking)"
+                class="btn btn-outline text-red-600 border-red-300 hover:bg-red-50 text-sm py-1 px-3"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Details -->
+        <div class="mt-4 pt-4 border-t border-gray-200">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div>
+              <span class="font-medium text-gray-700">Pickup:</span>
+              <span class="text-gray-600 ml-2">{{ booking.pickupLocation.address }}</span>
+            </div>
+            <div>
+              <span class="font-medium text-gray-700">Dropoff:</span>
+              <span class="text-gray-600 ml-2">{{ booking.dropoffLocation.address }}</span>
+            </div>
+            <div>
+              <span class="font-medium text-gray-700">Created:</span>
+              <span class="text-gray-600 ml-2">{{ booking.createdAt | date:'short' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Bookings -->
+    <div *ngIf="filteredBookings.length === 0 && !isLoading" class="text-center py-12">
+      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900">No {{ activeTab }} bookings</h3>
+      <p class="mt-1 text-sm text-gray-500">
+        <span *ngIf="activeTab === 'upcoming'">You don't have any upcoming bookings.</span>
+        <span *ngIf="activeTab === 'completed'">You haven't completed any bookings yet.</span>
+        <span *ngIf="activeTab === 'cancelled'">You don't have any cancelled bookings.</span>
+      </p>
+      <div class="mt-6" *ngIf="activeTab === 'upcoming'">
+        <button routerLink="/cars" class="btn btn-primary">
+          Browse Cars
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="flex justify-center py-12">
+      <app-loading-spinner size="large"></app-loading-spinner>
+    </div>
+  </div>
+</div>

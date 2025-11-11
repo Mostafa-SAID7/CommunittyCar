@@ -32,6 +32,24 @@ export class NavbarComponent implements OnInit {
   }
 
   logout(): void {
-    this.authService.logout();
+    this.authService.logout().subscribe({
+      next: () => {
+        // Navigation handled by auth service
+      },
+      error: (error) => {
+        console.error('Logout error:', error);
+      }
+    });
+  }
+
+  getUserInitials(): string {
+    if (this.currentUser?.name) {
+      return this.currentUser.name
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase())
+        .join('')
+        .substring(0, 2);
+    }
+    return 'U';
   }
 }

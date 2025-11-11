@@ -1,4 +1,36 @@
-import { Car } from '../../core/models/car.model';
+import { Car } from '../../models/car.model';
+
+export interface CarFilters {
+  searchTerm: string;
+  make: string;
+  model: string;
+  fuelType: string;
+  transmission: string;
+  minPrice: number;
+  maxPrice: number;
+  location: string;
+  year: number;
+  seats: number;
+  features: string[];
+  availability: {
+    startDate: Date | null;
+    endDate: Date | null;
+  };
+}
+
+export interface CarPagination {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+}
+
+export interface CarSorting {
+  field: 'price' | 'year' | 'rating' | 'createdAt';
+  direction: 'asc' | 'desc';
+}
 
 export interface CarsState {
   cars: Car[];
@@ -7,24 +39,17 @@ export interface CarsState {
   error: string | null;
   filters: CarFilters;
   pagination: CarPagination;
-}
-
-export interface CarFilters {
-  make?: string;
-  model?: string;
-  minPrice?: number;
-  maxPrice?: number;
-  fuelType?: string;
-  transmission?: string;
-  seats?: number;
-  location?: string;
-}
-
-export interface CarPagination {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
+  sorting: CarSorting;
+  favorites: string[]; // car IDs
+  recentlyViewed: Car[];
+  searchHistory: string[];
+  cache: {
+    [key: string]: {
+      data: Car[];
+      timestamp: number;
+      expiresAt: number;
+    };
+  };
 }
 
 export const initialCarsState: CarsState = {
@@ -32,11 +57,37 @@ export const initialCarsState: CarsState = {
   selectedCar: null,
   isLoading: false,
   error: null,
-  filters: {},
+  filters: {
+    searchTerm: '',
+    make: '',
+    model: '',
+    fuelType: '',
+    transmission: '',
+    minPrice: 0,
+    maxPrice: 1000,
+    location: '',
+    year: 0,
+    seats: 0,
+    features: [],
+    availability: {
+      startDate: null,
+      endDate: null
+    }
+  },
   pagination: {
     page: 1,
-    limit: 10,
+    limit: 12,
     total: 0,
     totalPages: 0,
+    hasNext: false,
+    hasPrev: false
   },
+  sorting: {
+    field: 'createdAt',
+    direction: 'desc'
+  },
+  favorites: [],
+  recentlyViewed: [],
+  searchHistory: [],
+  cache: {}
 };

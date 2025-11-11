@@ -1,0 +1,267 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <div class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-6">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Book Your Car</h1>
+          <p class="text-gray-600 mt-1">Complete your reservation details</p>
+        </div>
+        <button
+          (click)="onBack()"
+          class="btn btn-outline"
+        >
+          Back to Cars
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex justify-center items-center py-20">
+    <app-loading-spinner size="large"></app-loading-spinner>
+  </div>
+
+  <!-- Booking Form -->
+  <div *ngIf="!isLoading && car" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Car Summary -->
+      <div class="lg:col-span-1">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Car Summary</h2>
+
+          <!-- Car Image -->
+          <div class="aspect-w-16 aspect-h-9 bg-gray-200 rounded-lg mb-4 overflow-hidden">
+            <img
+              *ngIf="car.images && car.images.length > 0"
+              [src]="car.images[0]"
+              [alt]="car.make + ' ' + car.model"
+              class="w-full h-32 object-cover"
+            >
+            <div *ngIf="!car.images || car.images.length === 0" class="w-full h-32 flex items-center justify-center">
+              <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Car Details -->
+          <div class="space-y-2">
+            <h3 class="font-semibold text-gray-900">{{ car.make }} {{ car.model }}</h3>
+            <p class="text-sm text-gray-600">{{ car.year }}</p>
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-gray-600">Price per day:</span>
+              <span class="font-semibold text-gray-900">${{ car.pricePerDay }}</span>
+            </div>
+            <div class="flex items-center justify-between text-sm">
+              <span class="text-gray-600">Total days:</span>
+              <span class="font-semibold text-gray-900">{{ totalDays }}</span>
+            </div>
+            <hr class="my-3">
+            <div class="flex items-center justify-between text-lg font-bold">
+              <span class="text-gray-900">Total:</span>
+              <span class="text-primary-600">${{ totalPrice }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking Form -->
+      <div class="lg:col-span-2">
+        <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="space-y-6">
+          <!-- Dates -->
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Select Dates</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Pickup Date *</label>
+                <input
+                  type="date"
+                  formControlName="startDate"
+                  class="input w-full"
+                  [min]="getMinDate()"
+                  [class.error]="bookingForm.get('startDate')?.invalid && bookingForm.get('startDate')?.touched"
+                >
+                <p class="text-red-500 text-xs mt-1" *ngIf="bookingForm.get('startDate')?.invalid && bookingForm.get('startDate')?.touched">
+                  Pickup date is required
+                </p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Return Date *</label>
+                <input
+                  type="date"
+                  formControlName="endDate"
+                  class="input w-full"
+                  [min]="getMinEndDate()"
+                  [class.error]="bookingForm.get('endDate')?.invalid && bookingForm.get('endDate')?.touched"
+                >
+                <p class="text-red-500 text-xs mt-1" *ngIf="bookingForm.get('endDate')?.invalid && bookingForm.get('endDate')?.touched">
+                  Return date is required
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pickup Location -->
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Pickup Location</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Street Address *</label>
+                <input
+                  type="text"
+                  formControlName="pickupLocation.address"
+                  class="input w-full"
+                  placeholder="123 Main Street"
+                  [class.error]="bookingForm.get('pickupLocation.address')?.invalid && bookingForm.get('pickupLocation.address')?.touched"
+                >
+                <p class="text-red-500 text-xs mt-1" *ngIf="bookingForm.get('pickupLocation.address')?.invalid && bookingForm.get('pickupLocation.address')?.touched">
+                  Address is required
+                </p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
+                <input
+                  type="text"
+                  formControlName="pickupLocation.city"
+                  class="input w-full"
+                  placeholder="New York"
+                  [class.error]="bookingForm.get('pickupLocation.city')?.invalid && bookingForm.get('pickupLocation.city')?.touched"
+                >
+                <p class="text-red-500 text-xs mt-1" *ngIf="bookingForm.get('pickupLocation.city')?.invalid && bookingForm.get('pickupLocation.city')?.touched">
+                  City is required
+                </p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">State *</label>
+                <input
+                  type="text"
+                  formControlName="pickupLocation.state"
+                  class="input w-full"
+                  placeholder="NY"
+                  [class.error]="bookingForm.get('pickupLocation.state')?.invalid && bookingForm.get('pickupLocation.state')?.touched"
+                >
+                <p class="text-red-500 text-xs mt-1" *ngIf="bookingForm.get('pickupLocation.state')?.invalid && bookingForm.get('pickupLocation.state')?.touched">
+                  State is required
+                </p>
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">ZIP Code *</label>
+                <input
+                  type="text"
+                  formControlName="pickupLocation.zipCode"
+                  class="input w-full"
+                  placeholder="10001"
+                  [class.error]="bookingForm.get('pickupLocation.zipCode')?.invalid && bookingForm.get('pickupLocation.zipCode')?.touched"
+                >
+                <p class="text-red-500 text-xs mt-1" *ngIf="bookingForm.get('pickupLocation.zipCode')?.invalid && bookingForm.get('pickupLocation.zipCode')?.touched">
+                  ZIP code is required
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dropoff Location -->
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Dropoff Location</h2>
+            <div class="flex items-center mb-4">
+              <input
+                type="checkbox"
+                id="sameLocation"
+                class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                (change)="onSameLocationChange($event)"
+              >
+              <label for="sameLocation" class="ml-2 text-sm text-gray-700">
+                Same as pickup location
+              </label>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Street Address *</label>
+                <input
+                  type="text"
+                  formControlName="dropoffLocation.address"
+                  class="input w-full"
+                  placeholder="123 Main Street"
+                  [class.error]="bookingForm.get('dropoffLocation.address')?.invalid && bookingForm.get('dropoffLocation.address')?.touched"
+                >
+                <p class="text-red-500 text-xs mt-1" *ngIf="bookingForm.get('dropoffLocation.address')?.invalid && bookingForm.get('dropoffLocation.address')?.touched">
+                  Address is required
+                </p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">City *</label>
+                <input
+                  type="text"
+                  formControlName="dropoffLocation.city"
+                  class="input w-full"
+                  placeholder="New York"
+                  [class.error]="bookingForm.get('dropoffLocation.city')?.invalid && bookingForm.get('dropoffLocation.city')?.touched"
+                >
+                <p class="text-red-500 text-xs mt-1" *ngIf="bookingForm.get('dropoffLocation.city')?.invalid && bookingForm.get('dropoffLocation.city')?.touched">
+                  City is required
+                </p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">State *</label>
+                <input
+                  type="text"
+                  formControlName="dropoffLocation.state"
+                  class="input w-full"
+                  placeholder="NY"
+                  [class.error]="bookingForm.get('dropoffLocation.state')?.invalid && bookingForm.get('dropoffLocation.state')?.touched"
+                >
+                <p class="text-red-500 text-xs mt-1" *ngIf="bookingForm.get('dropoffLocation.state')?.invalid && bookingForm.get('dropoffLocation.state')?.touched">
+                  State is required
+                </p>
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">ZIP Code *</label>
+                <input
+                  type="text"
+                  formControlName="dropoffLocation.zipCode"
+                  class="input w-full"
+                  placeholder="10001"
+                  [class.error]="bookingForm.get('dropoffLocation.zipCode')?.invalid && bookingForm.get('dropoffLocation.zipCode')?.touched"
+                >
+                <p class="text-red-500 text-xs mt-1" *ngIf="bookingForm.get('dropoffLocation.zipCode')?.invalid && bookingForm.get('dropoffLocation.zipCode')?.touched">
+                  ZIP code is required
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Special Requests -->
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Special Requests (Optional)</h2>
+            <textarea
+              formControlName="specialRequests"
+              rows="4"
+              class="input w-full"
+              placeholder="Any special requests or notes for the car owner..."
+            ></textarea>
+          </div>
+
+          <!-- Submit -->
+          <div class="flex justify-end space-x-4">
+            <button
+              type="button"
+              (click)="onBack()"
+              class="btn btn-outline"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              [disabled]="isLoading || bookingForm.invalid || totalPrice === 0"
+              class="btn btn-primary"
+            >
+              <span *ngIf="!isLoading">Confirm Booking</span>
+              <span *ngIf="isLoading">Creating Booking...</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

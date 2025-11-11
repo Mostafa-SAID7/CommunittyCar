@@ -1,0 +1,208 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <div class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-6">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Available Cars</h1>
+          <p class="text-gray-600 mt-1">Find your perfect ride</p>
+        </div>
+        <button class="btn btn-primary">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          Add Your Car
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Filters Sidebar -->
+      <div class="lg:w-1/4">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 animate-slide-in">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Filters</h2>
+
+          <!-- Search -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
+            <input
+              type="text"
+              [(ngModel)]="searchTerm"
+              (input)="onSearch()"
+              placeholder="Search by make or model..."
+              class="input w-full"
+            >
+          </div>
+
+          <!-- Price Range -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Price per day</label>
+            <div class="flex space-x-2">
+              <input
+                type="number"
+                [(ngModel)]="selectedFilters.minPrice"
+                (input)="onFilter()"
+                placeholder="Min"
+                class="input w-1/2"
+              >
+              <input
+                type="number"
+                [(ngModel)]="selectedFilters.maxPrice"
+                (input)="onFilter()"
+                placeholder="Max"
+                class="input w-1/2"
+              >
+            </div>
+          </div>
+
+          <!-- Fuel Type -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Fuel Type</label>
+            <select
+              [(ngModel)]="selectedFilters.fuelType"
+              (change)="onFilter()"
+              class="input w-full"
+            >
+              <option value="">All</option>
+              <option value="petrol">Petrol</option>
+              <option value="diesel">Diesel</option>
+              <option value="electric">Electric</option>
+              <option value="hybrid">Hybrid</option>
+            </select>
+          </div>
+
+          <!-- Transmission -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Transmission</label>
+            <select
+              [(ngModel)]="selectedFilters.transmission"
+              (change)="onFilter()"
+              class="input w-full"
+            >
+              <option value="">All</option>
+              <option value="manual">Manual</option>
+              <option value="automatic">Automatic</option>
+            </select>
+          </div>
+
+          <button
+            (click)="onFilter()"
+            class="btn btn-primary w-full"
+          >
+            Apply Filters
+          </button>
+        </div>
+      </div>
+
+      <!-- Cars Grid -->
+      <div class="lg:w-3/4">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div
+            *ngFor="let car of filteredCars; trackBy: trackByCar"
+            class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300 animate-fade-in"
+            style="animation-delay: {{ 0.1 * (filteredCars.indexOf(car) % 6) }}s"
+          >
+            <!-- Car Image -->
+            <div class="relative h-48 bg-gray-200">
+              <img
+                *ngIf="car.images && car.images.length > 0"
+                [src]="car.images[0]"
+                [alt]="car.make + ' ' + car.model"
+                class="w-full h-full object-cover"
+              >
+              <div *ngIf="!car.images || car.images.length === 0" class="w-full h-full flex items-center justify-center">
+                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </div>
+              <div class="absolute top-4 right-4">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  Available
+                </span>
+              </div>
+            </div>
+
+            <!-- Car Details -->
+            <div class="p-6">
+              <div class="flex justify-between items-start mb-2">
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-900">{{ car.make }} {{ car.model }}</h3>
+                  <p class="text-sm text-gray-600">{{ car.year }}</p>
+                </div>
+                <div class="text-right">
+                  <p class="text-lg font-bold text-primary-600">${{ car.pricePerDay }}</p>
+                  <p class="text-xs text-gray-500">per day</p>
+                </div>
+              </div>
+
+              <!-- Car Specs -->
+              <div class="flex items-center space-x-4 mb-4 text-sm text-gray-600">
+                <div class="flex items-center">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                  </svg>
+                  {{ car.fuelType | titlecase }}
+                </div>
+                <div class="flex items-center">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
+                  </svg>
+                  {{ car.transmission | titlecase }}
+                </div>
+                <div class="flex items-center">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                  </svg>
+                  {{ car.seats }} seats
+                </div>
+              </div>
+
+              <!-- Rating -->
+              <div class="flex items-center mb-4">
+                <div class="flex items-center">
+                  <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                  <span class="ml-1 text-sm text-gray-600">{{ car.rating }} ({{ car.reviewCount }} reviews)</span>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="flex space-x-2">
+                <button
+                  (click)="onViewDetails(car)"
+                  class="flex-1 btn btn-outline text-sm py-2"
+                >
+                  View Details
+                </button>
+                <button
+                  (click)="onBookCar(car)"
+                  class="flex-1 btn btn-primary text-sm py-2"
+                >
+                  Book Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- No Results -->
+        <div *ngIf="filteredCars.length === 0 && !isLoading" class="text-center py-12">
+          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+          <h3 class="mt-2 text-sm font-medium text-gray-900">No cars found</h3>
+          <p class="mt-1 text-sm text-gray-500">Try adjusting your search or filter criteria.</p>
+        </div>
+
+        <!-- Loading -->
+        <div *ngIf="isLoading" class="flex justify-center py-12">
+          <app-loading-spinner size="large"></app-loading-spinner>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

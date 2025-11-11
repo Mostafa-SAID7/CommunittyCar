@@ -5,7 +5,14 @@
 </div>
 
 <!-- Notification Center Panel -->
-<div class="notification-center" *ngIf="isOpen" [@slideInOut]>
+<div
+  class="notification-center"
+  *ngIf="isOpen"
+  [@slideInOut]
+  [ngClass]="{'left-position': position === 'left', 'right-position': position === 'right'}"
+  [style.width]="width"
+  [style.max-height]="maxHeight"
+>
   <div class="notification-header">
     <h3>Notifications</h3>
     <div class="header-actions">
@@ -13,12 +20,48 @@
         class="clear-all-btn"
         (click)="clearAllNotifications()"
         *ngIf="notifications.length > 0"
+        title="Clear all notifications"
       >
         <i class="fas fa-trash"></i>
         Clear All
       </button>
-      <button class="close-btn" (click)="closeNotificationCenter()">
+      <button class="close-btn" (click)="closeNotificationCenter()" title="Close">
         <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Search and Filter -->
+  <div class="notification-filters" *ngIf="notifications.length > 0">
+    <div class="search-container">
+      <i class="fas fa-search"></i>
+      <input
+        type="text"
+        placeholder="Search notifications..."
+        [(ngModel)]="searchTerm"
+        class="search-input"
+      >
+    </div>
+
+    <div class="category-filters" *ngIf="showCategories && categories.length > 0">
+      <button
+        class="category-btn"
+        [ngClass]="{'active': selectedCategory === 'all'}"
+        (click)="selectedCategory = 'all'"
+      >
+        All
+        <span class="category-count" *ngIf="unreadCount > 0">({{ unreadCount }})</span>
+      </button>
+      <button
+        class="category-btn"
+        *ngFor="let category of categories"
+        [ngClass]="{'active': selectedCategory === category}"
+        (click)="selectedCategory = category"
+      >
+        {{ category | titlecase }}
+        <span class="category-count" *ngIf="unreadCountByCategory[category] > 0">
+          ({{ unreadCountByCategory[category] }})
+        </span>
       </button>
     </div>
   </div>
@@ -26,37 +69,61 @@
   <div class="notification-list">
     <div
       class="notification-item"
-      *ngFor="let notification of notifications; trackBy: trackByNotificationId"
-      [ngClass]="{'unread': !notification.read}"
-      [@fadeIn]
+      *ngFor="let notification of filteredNotifications; trackBy: trackByNotificationId"
+      [ngClass]="{
+        'unread': !notification.read,
+        'priority-high': notification.priority === 'high',
+        'priority-medium': notification.priority === 'medium',
+        'priority-low': notification.priority === 'low'
+      }"
+      [@notificationItem]
     >
       <div class="notification-icon">
         <i [class]="getIconClass(notification.type)"></i>
+        <span class="priority-indicator" *ngIf="notification.priority === 'high'"></span>
       </div>
 
       <div class="notification-content">
         <div class="notification-title" *ngIf="notification.title">
           {{ notification.title }}
+          <span class="category-tag" *ngIf="notification.category && showCategories">
+            {{ notification.category }}
+          </span>
         </div>
         <div class="notification-message">
           {{ notification.message }}
         </div>
-        <div class="notification-time">
-          {{ notification.timestamp | dateFormat:'time' }}
+        <div class="notification-meta">
+          <span class="notification-time">
+            {{ notification.timestamp | dateFormat:'relative' }}
+          </span>
+          <span class="notification-priority" *ngIf="notification.priority && notification.priority !== 'medium'">
+            {{ notification.priority | titlecase }} Priority
+          </span>
         </div>
       </div>
 
       <div class="notification-actions">
         <button
+          class="mark-read-btn"
+          *ngIf="!notification.read"
+          (click)="markAsRead(notification.id)"
+          title="Mark as read"
+        >
+          <i class="fas fa-check"></i>
+        </button>
+        <button
           class="action-btn"
           *ngIf="notification.action"
           (click)="onNotificationAction(notification)"
+          [ngClass]="{'primary': notification.action.primary}"
         >
           {{ notification.action.label }}
         </button>
         <button
           class="remove-btn"
           (click)="removeNotification(notification.id)"
+          title="Remove notification"
         >
           <i class="fas fa-times"></i>
         </button>
@@ -64,10 +131,37 @@
     </div>
 
     <!-- Empty State -->
-    <div class="empty-state" *ngIf="notifications.length === 0">
-      <i class="fas fa-bell-slash"></i>
-      <p>No notifications yet</p>
-      <span>You'll see updates here when something happens</span>
+    <div class="empty-state" *ngIf="filteredNotifications.length === 0">
+      <div class="empty-icon">
+        <i class="fas fa-bell-slash"></i>
+      </div>
+      <div class="empty-content">
+        <p *ngIf="notifications.length === 0">No notifications yet</p>
+        <p *ngIf="notifications.length > 0 && filteredNotifications.length === 0">No notifications match your search</p>
+        <span *ngIf="notifications.length === 0">You'll see updates here when something happens</span>
+        <span *ngIf="notifications.length > 0 && filteredNotifications.length === 0">Try adjusting your search or filters</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer with bulk actions -->
+  <div class="notification-footer" *ngIf="filteredNotifications.length > 0">
+    <div class="bulk-actions">
+      <button
+        class="bulk-action-btn"
+        (click)="clearCategoryNotifications(selectedCategory)"
+        *ngIf="selectedCategory !== 'all'"
+      >
+        <i class="fas fa-trash"></i>
+        Clear {{ selectedCategory | titlecase }}
+      </button>
+      <button
+        class="bulk-action-btn secondary"
+        (click)="markAllAsRead()"
+      >
+        <i class="fas fa-check-double"></i>
+        Mark All Read
+      </button>
     </div>
   </div>
 </div>
@@ -77,4 +171,5 @@
   class="notification-backdrop"
   *ngIf="isOpen"
   (click)="closeNotificationCenter()"
+  [@fadeIn]
 ></div>

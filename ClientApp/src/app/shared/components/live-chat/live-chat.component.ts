@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, BehaviorSubject } from 'rxjs';
 import { ChatService } from '../../../core/services/chat.service';
 import { ChatMessage, ChatConversation, TypingIndicator } from '../../../core/models/chat.model';
 import { DateFormatPipe } from '../../pipes/date-format.pipe';
@@ -41,6 +41,7 @@ export class LiveChatComponent implements OnInit, OnDestroy {
   isConnected: boolean = false;
   currentMessage: string = '';
   activeConversation: ChatConversation | null = null;
+  private activeConversationSubject: BehaviorSubject<ChatConversation | null> = new BehaviorSubject<ChatConversation | null>(null);
   typingIndicators: TypingIndicator[] = [];
   isTyping: boolean = false;
   unreadCount: number = 0;
@@ -166,10 +167,64 @@ export class LiveChatComponent implements OnInit, OnDestroy {
       // Create or load default conversation
       this.chatService.loadConversations();
       // For demo, create a conversation with support
-      this.chatService.createConversation(['support']).subscribe(conversation => {
-        this.chatService.setActiveConversation(conversation.id);
+      this.chatService.createConversation(['support']).subscribe({
+        next: (conversation) => {
+          this.chatService.setActiveConversation(conversation.id);
+        },
+        error: (error) => {
+          console.error('Failed to create conversation:', error);
+          // Fallback: create a mock conversation for demo
+          const mockConversation: ChatConversation = {
+            id: this.generateId(),
+            participants: [{ id: 'support', name: 'Support Agent', role: 'support', isOnline: true }],
+            messages: [],
+            unreadCount: 0,
+            isActive: true,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          };
+          this.activeConversation = mockConversation;
+          this.activeConversationSubject.next(mockConversation);
+          this.addDemoMessages();
+        }
       });
     }
+  }
+
+  // Add demo messages for better UX
+  private addDemoMessages(): void {
+    if (this.activeConversation && this.activeConversation.messages.length === 0) {
+      const demoMessages: ChatMessage[] = [
+        {
+          id: this.generateId(),
+          senderId: 'support',
+          senderName: 'Support Agent',
+          senderAvatar: '',
+          content: 'Hello! How can I help you today?',
+          timestamp: new Date(Date.now() - 300000), // 5 minutes ago
+          type: 'text',
+          status: 'sent'
+        },
+        {
+          id: this.generateId(),
+          senderId: 'support',
+          senderName: 'Support Agent',
+          senderAvatar: '',
+          content: 'Feel free to ask me anything about our car rental service!',
+          timestamp: new Date(Date.now() - 240000), // 4 minutes ago
+          type: 'text',
+          status: 'sent'
+        }
+      ];
+
+      // Add demo messages to conversation
+      this.activeConversation.messages = demoMessages;
+      this.activeConversationSubject.next(this.activeConversation);
+    }
+  }
+
+  private generateId(): string {
+    return Math.random().toString(36).substr(2, 9);
   }
 
   private scrollToBottom(): void {

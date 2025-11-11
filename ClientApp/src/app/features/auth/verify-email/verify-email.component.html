@@ -1,0 +1,41 @@
+<div class="verify-email-container">
+  <div class="verify-email-card">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="loading-spinner"></div>
+      <h2>Verifying Your Email</h2>
+      <p>Please wait while we verify your email address...</p>
+    </div>
+
+    <!-- Success State -->
+    <div *ngIf="!isLoading && isVerified" class="success-state">
+      <div class="success-icon">✓</div>
+      <h2>Email Verified!</h2>
+      <p class="success-message">
+        Your email has been successfully verified. You can now access your account.
+      </p>
+      <p class="redirect-message">
+        You will be redirected to the login page in a few seconds...
+      </p>
+      <button type="button" class="btn btn-primary" (click)="goToLogin()">
+        Go to Login
+      </button>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="!isLoading && !isVerified" class="error-state">
+      <div class="error-icon">✕</div>
+      <h2>Verification Failed</h2>
+      <p class="error-message">{{ errorMessage }}</p>
+
+      <div class="error-actions">
+        <button type="button" class="btn btn-primary" (click)="resendVerification()">
+          Resend Verification Email
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="goToLogin()">
+          Back to Login
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

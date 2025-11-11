@@ -1,0 +1,194 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <div class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-6">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Edit Profile</h1>
+          <p class="text-gray-600 mt-1">Update your account information</p>
+        </div>
+        <button
+          (click)="onSubmit()"
+          [disabled]="isSaving"
+          class="btn btn-primary"
+        >
+          <span *ngIf="!isSaving">Save Changes</span>
+          <span *ngIf="isSaving">Saving...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Profile Photo Sidebar -->
+      <div class="lg:col-span-1">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 animate-fade-in">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Profile Photo</h3>
+
+          <div class="text-center">
+            <div class="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 overflow-hidden">
+              <img
+                *ngIf="previewUrl"
+                [src]="previewUrl"
+                alt="Profile photo"
+                class="w-full h-full object-cover"
+              >
+              <div *ngIf="!previewUrl" class="w-full h-full flex items-center justify-center">
+                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <label class="btn btn-outline text-sm py-2 px-4 cursor-pointer">
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  accept="image/*"
+                  class="hidden"
+                >
+                Choose Photo
+              </label>
+              <button
+                *ngIf="previewUrl"
+                (click)="removePhoto()"
+                class="block w-full btn btn-outline text-red-600 border-red-300 hover:bg-red-50 text-sm py-2"
+              >
+                Remove Photo
+              </button>
+            </div>
+
+            <p class="text-xs text-gray-500 mt-4">
+              JPG, PNG or WebP. Max size 5MB.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Form -->
+      <div class="lg:col-span-2">
+        <form [formGroup]="profileForm" class="space-y-6">
+          <!-- Personal Information -->
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 animate-slide-in">
+            <h3 class="text-lg font-semibold text-gray-900 mb-6">Personal Information</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+                <input
+                  type="text"
+                  formControlName="name"
+                  class="input w-full"
+                  [class.error]="profileForm.get('name')?.invalid && profileForm.get('name')?.touched"
+                >
+                <p class="text-red-500 text-xs mt-1" *ngIf="profileForm.get('name')?.invalid && profileForm.get('name')?.touched">
+                  {{ getErrorMessage('name') }}
+                </p>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+                <input
+                  type="email"
+                  formControlName="email"
+                  class="input w-full"
+                  [class.error]="profileForm.get('email')?.invalid && profileForm.get('email')?.touched"
+                >
+                <p class="text-red-500 text-xs mt-1" *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
+                  {{ getErrorMessage('email') }}
+                </p>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+              <input
+                type="tel"
+                formControlName="phone"
+                class="input w-full"
+                [class.error]="profileForm.get('phone')?.invalid && profileForm.get('phone')?.touched"
+              >
+              <p class="text-red-500 text-xs mt-1" *ngIf="profileForm.get('phone')?.invalid && profileForm.get('phone')?.touched">
+                {{ getErrorMessage('phone') }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Address Information -->
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 animate-slide-in" style="animation-delay: 0.1s">
+            <h3 class="text-lg font-semibold text-gray-900 mb-6">Address Information</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Street Address</label>
+                <input
+                  type="text"
+                  formControlName="address.street"
+                  class="input w-full"
+                >
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">City</label>
+                <input
+                  type="text"
+                  formControlName="address.city"
+                  class="input w-full"
+                >
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">State</label>
+                <input
+                  type="text"
+                  formControlName="address.state"
+                  class="input w-full"
+                >
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">ZIP Code</label>
+                <input
+                  type="text"
+                  formControlName="address.zipCode"
+                  class="input w-full"
+                >
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Country</label>
+                <input
+                  type="text"
+                  formControlName="address.country"
+                  class="input w-full"
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex justify-end space-x-4">
+            <button
+              type="button"
+              routerLink="/profile"
+              class="btn btn-outline"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              [disabled]="isSaving || profileForm.invalid"
+              class="btn btn-primary"
+            >
+              <span *ngIf="!isSaving">Save Changes</span>
+              <span *ngIf="isSaving">Saving...</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<div class="loading-spinner-container" [class.overlay]="overlay">
+  <div class="loading-spinner-wrapper">
+    <div
+      class="loading-spinner"
+      [ngClass]="size"
+      [style.border-color]="color"
+      [style.border-top-color]="'transparent'"
+    ></div>
+    <div *ngIf="message" class="loading-message">{{ message }}</div>
+  </div>
+</div>

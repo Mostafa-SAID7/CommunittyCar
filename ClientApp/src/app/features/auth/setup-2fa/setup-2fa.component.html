@@ -1,0 +1,106 @@
+<div class="setup-2fa-container">
+  <div class="setup-2fa-card">
+    <div class="header">
+      <h2>Setup Two-Factor Authentication</h2>
+      <p>Add an extra layer of security to your account</p>
+    </div>
+
+    <div class="content">
+      <!-- Step 1: Enable 2FA -->
+      <div *ngIf="step === 'enable'" class="step">
+        <div class="step-header">
+          <div class="step-number">1</div>
+          <h3>Scan QR Code</h3>
+        </div>
+
+        <div class="qr-section" *ngIf="qrCodeUrl">
+          <p>Scan this QR code with your authenticator app:</p>
+          <div class="qr-code">
+            <img [src]="qrCodeUrl" alt="QR Code for 2FA setup">
+          </div>
+
+          <div class="manual-code" *ngIf="secret">
+            <p>Or enter this code manually:</p>
+            <code>{{ secret }}</code>
+          </div>
+        </div>
+
+        <div class="apps-list">
+          <p>Popular authenticator apps:</p>
+          <ul>
+            <li>Google Authenticator</li>
+            <li>Microsoft Authenticator</li>
+            <li>Authy</li>
+            <li>1Password</li>
+          </ul>
+        </div>
+
+        <div class="actions">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="step = 'verify'"
+            [disabled]="!qrCodeUrl"
+          >
+            I've scanned the code
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: Verify Code -->
+      <div *ngIf="step === 'verify'" class="step">
+        <div class="step-header">
+          <div class="step-number">2</div>
+          <h3>Enter Verification Code</h3>
+        </div>
+
+        <form [formGroup]="twoFactorForm" (ngSubmit)="onSubmit()" class="verification-form">
+          <div class="form-group">
+            <label for="code">Enter the 6-digit code from your authenticator app:</label>
+            <input
+              type="text"
+              id="code"
+              formControlName="code"
+              placeholder="000000"
+              maxlength="6"
+              (input)="onCodeInput($event)"
+              class="code-input"
+              [class.error]="twoFactorForm.get('code')?.invalid && twoFactorForm.get('code')?.touched"
+            >
+            <div class="error-message" *ngIf="twoFactorForm.get('code')?.invalid && twoFactorForm.get('code')?.touched">
+              Please enter a valid 6-digit code
+            </div>
+          </div>
+
+          <div class="actions">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="step = 'enable'"
+            >
+              Back
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="twoFactorForm.invalid || isLoading"
+            >
+              <span *ngIf="isLoading">Verifying...</span>
+              <span *ngIf="!isLoading">Verify & Complete Setup</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer">
+      <button
+        type="button"
+        class="btn btn-link"
+        (click)="skip2FA()"
+      >
+        Skip for now (not recommended)
+      </button>
+    </div>
+  </div>
+</div>

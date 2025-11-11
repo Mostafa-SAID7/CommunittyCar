@@ -1,31 +1,39 @@
-<div class="toaster-container" *ngIf="currentNotification" [ngClass]="getPositionClass()">
-  <div class="toast" [ngClass]="currentNotification.type" [@toastAnimation]>
+<!-- Multiple toast containers for different positions -->
+<div class="toaster-container toaster-top-right" *ngIf="hasNotificationsForPosition('top-right')">
+  <div
+    class="toast"
+    [ngClass]="notification.type"
+    [@toastAnimation]
+    *ngFor="let notification of getNotificationsForPosition('top-right'); trackBy: trackByNotificationId"
+    [ngStyle]="{'z-index': maxToasts - (getNotificationsForPosition('top-right').indexOf(notification))}"
+  >
     <div class="toast-icon">
-      <i [class]="getIconClass()"></i>
+      <i [class]="getIconClass(notification.type)"></i>
     </div>
 
     <div class="toast-content">
-      <div class="toast-title" *ngIf="currentNotification.title">
-        {{ currentNotification.title }}
+      <div class="toast-title" *ngIf="notification.title">
+        {{ notification.title }}
       </div>
       <div class="toast-message">
-        {{ currentNotification.message }}
+        {{ notification.message }}
       </div>
     </div>
 
     <div class="toast-actions">
       <button
         class="toast-action-btn"
-        *ngIf="currentNotification.action"
-        (click)="onAction()"
+        *ngIf="notification.action"
+        (click)="onAction(notification)"
+        [ngClass]="{'primary': notification.action.primary}"
       >
-        {{ currentNotification.action.label }}
+        {{ notification.action.label }}
       </button>
 
       <button
         class="toast-close-btn"
-        (click)="onClose()"
-        *ngIf="!currentNotification.persistent"
+        (click)="onClose(notification)"
+        *ngIf="!notification.persistent"
       >
         <i class="fas fa-times"></i>
       </button>
@@ -34,8 +42,249 @@
     <!-- Progress bar for timed notifications -->
     <div
       class="toast-progress"
-      *ngIf="currentNotification.duration && !currentNotification.persistent"
-      [style.animation-duration]="currentNotification.duration + 'ms'"
+      *ngIf="notification.duration && !notification.persistent"
+      [@progressAnimation]="getProgressState(notification)"
+      [style.animation-duration]="notification.duration + 'ms'"
+    ></div>
+  </div>
+</div>
+
+<div class="toaster-container toaster-top-left" *ngIf="hasNotificationsForPosition('top-left')">
+  <div
+    class="toast"
+    [ngClass]="notification.type"
+    [@toastAnimation]
+    *ngFor="let notification of getNotificationsForPosition('top-left'); trackBy: trackByNotificationId"
+  >
+    <div class="toast-icon">
+      <i [class]="getIconClass(notification.type)"></i>
+    </div>
+
+    <div class="toast-content">
+      <div class="toast-title" *ngIf="notification.title">
+        {{ notification.title }}
+      </div>
+      <div class="toast-message">
+        {{ notification.message }}
+      </div>
+    </div>
+
+    <div class="toast-actions">
+      <button
+        class="toast-action-btn"
+        *ngIf="notification.action"
+        (click)="onAction(notification)"
+        [ngClass]="{'primary': notification.action.primary}"
+      >
+        {{ notification.action.label }}
+      </button>
+
+      <button
+        class="toast-close-btn"
+        (click)="onClose(notification)"
+        *ngIf="!notification.persistent"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div
+      class="toast-progress"
+      *ngIf="notification.duration && !notification.persistent"
+      [@progressAnimation]="getProgressState(notification)"
+      [style.animation-duration]="notification.duration + 'ms'"
+    ></div>
+  </div>
+</div>
+
+<div class="toaster-container toaster-bottom-right" *ngIf="hasNotificationsForPosition('bottom-right')">
+  <div
+    class="toast"
+    [ngClass]="notification.type"
+    [@toastAnimation]
+    *ngFor="let notification of getNotificationsForPosition('bottom-right'); trackBy: trackByNotificationId"
+  >
+    <div class="toast-icon">
+      <i [class]="getIconClass(notification.type)"></i>
+    </div>
+
+    <div class="toast-content">
+      <div class="toast-title" *ngIf="notification.title">
+        {{ notification.title }}
+      </div>
+      <div class="toast-message">
+        {{ notification.message }}
+      </div>
+    </div>
+
+    <div class="toast-actions">
+      <button
+        class="toast-action-btn"
+        *ngIf="notification.action"
+        (click)="onAction(notification)"
+        [ngClass]="{'primary': notification.action.primary}"
+      >
+        {{ notification.action.label }}
+      </button>
+
+      <button
+        class="toast-close-btn"
+        (click)="onClose(notification)"
+        *ngIf="!notification.persistent"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div
+      class="toast-progress"
+      *ngIf="notification.duration && !notification.persistent"
+      [@progressAnimation]="getProgressState(notification)"
+      [style.animation-duration]="notification.duration + 'ms'"
+    ></div>
+  </div>
+</div>
+
+<div class="toaster-container toaster-bottom-left" *ngIf="hasNotificationsForPosition('bottom-left')">
+  <div
+    class="toast"
+    [ngClass]="notification.type"
+    [@toastAnimation]
+    *ngFor="let notification of getNotificationsForPosition('bottom-left'); trackBy: trackByNotificationId"
+  >
+    <div class="toast-icon">
+      <i [class]="getIconClass(notification.type)"></i>
+    </div>
+
+    <div class="toast-content">
+      <div class="toast-title" *ngIf="notification.title">
+        {{ notification.title }}
+      </div>
+      <div class="toast-message">
+        {{ notification.message }}
+      </div>
+    </div>
+
+    <div class="toast-actions">
+      <button
+        class="toast-action-btn"
+        *ngIf="notification.action"
+        (click)="onAction(notification)"
+        [ngClass]="{'primary': notification.action.primary}"
+      >
+        {{ notification.action.label }}
+      </button>
+
+      <button
+        class="toast-close-btn"
+        (click)="onClose(notification)"
+        *ngIf="!notification.persistent"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div
+      class="toast-progress"
+      *ngIf="notification.duration && !notification.persistent"
+      [@progressAnimation]="getProgressState(notification)"
+      [style.animation-duration]="notification.duration + 'ms'"
+    ></div>
+  </div>
+</div>
+
+<div class="toaster-container toaster-top-center" *ngIf="hasNotificationsForPosition('top-center')">
+  <div
+    class="toast"
+    [ngClass]="notification.type"
+    [@toastAnimation]
+    *ngFor="let notification of getNotificationsForPosition('top-center'); trackBy: trackByNotificationId"
+  >
+    <div class="toast-icon">
+      <i [class]="getIconClass(notification.type)"></i>
+    </div>
+
+    <div class="toast-content">
+      <div class="toast-title" *ngIf="notification.title">
+        {{ notification.title }}
+      </div>
+      <div class="toast-message">
+        {{ notification.message }}
+      </div>
+    </div>
+
+    <div class="toast-actions">
+      <button
+        class="toast-action-btn"
+        *ngIf="notification.action"
+        (click)="onAction(notification)"
+        [ngClass]="{'primary': notification.action.primary}"
+      >
+        {{ notification.action.label }}
+      </button>
+
+      <button
+        class="toast-close-btn"
+        (click)="onClose(notification)"
+        *ngIf="!notification.persistent"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div
+      class="toast-progress"
+      *ngIf="notification.duration && !notification.persistent"
+      [@progressAnimation]="getProgressState(notification)"
+      [style.animation-duration]="notification.duration + 'ms'"
+    ></div>
+  </div>
+</div>
+
+<div class="toaster-container toaster-bottom-center" *ngIf="hasNotificationsForPosition('bottom-center')">
+  <div
+    class="toast"
+    [ngClass]="notification.type"
+    [@toastAnimation]
+    *ngFor="let notification of getNotificationsForPosition('bottom-center'); trackBy: trackByNotificationId"
+  >
+    <div class="toast-icon">
+      <i [class]="getIconClass(notification.type)"></i>
+    </div>
+
+    <div class="toast-content">
+      <div class="toast-title" *ngIf="notification.title">
+        {{ notification.title }}
+      </div>
+      <div class="toast-message">
+        {{ notification.message }}
+      </div>
+    </div>
+
+    <div class="toast-actions">
+      <button
+        class="toast-action-btn"
+        *ngIf="notification.action"
+        (click)="onAction(notification)"
+        [ngClass]="{'primary': notification.action.primary}"
+      >
+        {{ notification.action.label }}
+      </button>
+
+      <button
+        class="toast-close-btn"
+        (click)="onClose(notification)"
+        *ngIf="!notification.persistent"
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div
+      class="toast-progress"
+      *ngIf="notification.duration && !notification.persistent"
+      [@progressAnimation]="getProgressState(notification)"
+      [style.animation-duration]="notification.duration + 'ms'"
     ></div>
   </div>
 </div>

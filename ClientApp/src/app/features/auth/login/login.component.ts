@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { emailValidator } from '../../../core/utilities/validators';
+import { LoginRequest } from '../../../core/models/auth.model';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +15,7 @@ import { emailValidator } from '../../../core/utilities/validators';
 export class LoginComponent {
   loginForm: FormGroup;
   isLoading = false;
+  showSocialLogin = true;
 
   constructor(
     private fb: FormBuilder,
@@ -30,7 +33,8 @@ export class LoginComponent {
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.isLoading = true;
-      this.authService.login(this.loginForm.value).subscribe({
+      const loginData: LoginRequest = this.loginForm.value;
+      this.authService.login(loginData).subscribe({
         next: (response) => {
           this.notificationService.showSuccess('Login successful!');
           this.router.navigate(['/dashboard']);
@@ -46,6 +50,21 @@ export class LoginComponent {
     } else {
       this.markFormGroupTouched();
     }
+  }
+
+  loginWithGoogle(): void {
+    // Implement Google OAuth login
+    window.location.href = `${environment.apiUrl}/auth/google`;
+  }
+
+  loginWithFacebook(): void {
+    // Implement Facebook OAuth login
+    window.location.href = `${environment.apiUrl}/auth/facebook`;
+  }
+
+  loginWithTwitter(): void {
+    // Implement Twitter OAuth login
+    window.location.href = `${environment.apiUrl}/auth/twitter`;
   }
 
   private markFormGroupTouched(): void {

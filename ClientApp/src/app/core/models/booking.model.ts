@@ -6,6 +6,7 @@ export interface Booking {
   endDate: Date;
   totalDays: number;
   totalPrice: number;
+  pricePerDay?: number;
   status: 'pending' | 'confirmed' | 'active' | 'completed' | 'cancelled';
   paymentStatus: 'pending' | 'paid' | 'refunded';
   pickupLocation: Location;

@@ -137,6 +137,17 @@
     background: rgba(255, 255, 255, 0.3);
     transform: translateY(-1px);
   }
+
+  &.primary {
+    background: #007bff;
+    border-color: #007bff;
+    color: white;
+
+    &:hover {
+      background: #0056b3;
+      border-color: #0056b3;
+    }
+  }
 }
 
 .toast-close-btn {
