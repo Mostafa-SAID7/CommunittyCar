@@ -1,0 +1,100 @@
+// Custom styles for Add Your Car component
+
+.add-your-car {
+  // Ensure full height
+  min-height: 100vh;
+}
+
+// Hero section responsive adjustments
+.hero {
+  @media (max-width: 768px) {
+    padding: 4rem 1rem;
+    h1 {
+      font-size: 2.5rem;
+    }
+    p {
+      font-size: 1.25rem;
+    }
+  }
+}
+
+// Benefits section
+.benefits {
+  .benefit-cards {
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+}
+
+// Process section
+.process {
+  .process-steps {
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+}
+
+// Requirements section
+.requirements {
+  .requirement-list {
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+}
+
+// Call to Action section
+.cta {
+  @media (max-width: 768px) {
+    padding: 3rem 1rem;
+    h2 {
+      font-size: 2rem;
+    }
+    p {
+      font-size: 1.125rem;
+    }
+    .cta-button {
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+    }
+  }
+}
+
+// Custom animations
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+// Hover effects
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Step circles
+.step-circle {
+  @media (max-width: 768px) {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.25rem;
+  }
+}

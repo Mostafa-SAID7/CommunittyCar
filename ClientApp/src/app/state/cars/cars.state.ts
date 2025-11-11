@@ -1,4 +1,4 @@
-import { Car } from '../../models/car.model';
+import { Car } from '../../../core/models/car.model';
 
 export interface CarFilters {
   searchTerm: string;

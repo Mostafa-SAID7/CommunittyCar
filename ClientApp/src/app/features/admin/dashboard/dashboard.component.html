@@ -1,0 +1,95 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-slate-900 mb-2">Admin Dashboard</h1>
+      <p class="text-slate-600">Welcome back! Here's what's happening with your platform.</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <ui-card *ngFor="let stat of stats" class="hover:shadow-lg transition-shadow duration-300">
+        <ui-card-header class="flex flex-row items-center justify-between space-y-0 pb-2">
+          <ui-card-title class="text-sm font-medium text-muted-foreground">{{ stat.title }}</ui-card-title>
+          <app-icon [name]="stat.icon" class="h-4 w-4 text-muted-foreground"></app-icon>
+        </ui-card-header>
+        <ui-card-content>
+          <div class="text-2xl font-bold text-slate-900">{{ stat.value }}</div>
+          <p class="text-xs text-muted-foreground flex items-center gap-1">
+            <app-icon
+              [name]="stat.changeType === 'positive' ? 'arrow-up' : stat.changeType === 'negative' ? 'arrow-down' : 'minus'"
+              class="h-3 w-3"
+              [class]="stat.changeType === 'positive' ? 'text-green-600' : stat.changeType === 'negative' ? 'text-red-600' : 'text-slate-600'">
+            </app-icon>
+            {{ stat.change }} from last month
+          </p>
+        </ui-card-content>
+      </ui-card>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Recent Activity -->
+      <div class="lg:col-span-2">
+        <ui-card>
+          <ui-card-header>
+            <ui-card-title class="flex items-center gap-2">
+              <app-icon name="clock" class="h-5 w-5"></app-icon>
+              Recent Activity
+            </ui-card-title>
+          </ui-card-header>
+          <ui-card-content>
+            <div class="space-y-4">
+              <div *ngFor="let activity of recentActivities" class="flex items-center gap-4 p-3 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors">
+                <div class="flex-shrink-0">
+                  <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <app-icon [name]="activity.icon" class="h-5 w-5 text-primary"></app-icon>
+                  </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-slate-900 truncate">{{ activity.description }}</p>
+                  <p class="text-xs text-muted-foreground">{{ activity.time }}</p>
+                </div>
+                <div class="flex-shrink-0">
+                  <div class="w-2 h-2 rounded-full bg-primary"></div>
+                </div>
+              </div>
+            </div>
+          </ui-card-content>
+        </ui-card>
+      </div>
+
+      <!-- Quick Actions -->
+      <div>
+        <ui-card>
+          <ui-card-header>
+            <ui-card-title class="flex items-center gap-2">
+              <app-icon name="zap" class="h-5 w-5"></app-icon>
+              Quick Actions
+            </ui-card-title>
+          </ui-card-header>
+          <ui-card-content>
+            <div class="space-y-3">
+              <button class="w-full flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:border-primary hover:bg-primary/5 transition-colors text-left">
+                <app-icon name="plus" class="h-4 w-4 text-primary"></app-icon>
+                <span class="text-sm font-medium">Add New User</span>
+              </button>
+              <button class="w-full flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:border-primary hover:bg-primary/5 transition-colors text-left">
+                <app-icon name="car" class="h-4 w-4 text-primary"></app-icon>
+                <span class="text-sm font-medium">Add New Car</span>
+              </button>
+              <button class="w-full flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:border-primary hover:bg-primary/5 transition-colors text-left">
+                <app-icon name="file" class="h-4 w-4 text-primary"></app-icon>
+                <span class="text-sm font-medium">Generate Report</span>
+              </button>
+              <button class="w-full flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:border-primary hover:bg-primary/5 transition-colors text-left">
+                <app-icon name="settings" class="h-4 w-4 text-primary"></app-icon>
+                <span class="text-sm font-medium">System Settings</span>
+              </button>
+            </div>
+          </ui-card-content>
+        </ui-card>
+      </div>
+    </div>
+  </div>
+</div>

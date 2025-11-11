@@ -1,4 +1,4 @@
-<footer class="footer">
+<footer class="footer" role="contentinfo">
   <div class="footer-container">
     <div class="footer-content">
       <div class="footer-section">
@@ -6,51 +6,52 @@
           <h3>Community Car</h3>
           <p>Your trusted car sharing platform</p>
         </div>
-        <div class="social-links">
-          <a *ngFor="let link of socialLinks" [href]="link.url" class="social-link" [title]="link.name">
-            {{ link.icon }}
+        <div class="social-links" role="list" aria-label="Social media links">
+          <a *ngFor="let link of socialLinks; trackBy: trackBySocialLink"
+             [href]="link.url"
+             class="social-link"
+             [attr.aria-label]="link.name + ' - Opens in new tab'"
+             [title]="link.name"
+             target="_blank"
+             rel="noopener noreferrer"
+             role="listitem">
+            <app-icon [name]="link.icon" class="social-icon"></app-icon>
+            <span class="social-tooltip">{{ link.name }}</span>
           </a>
         </div>
       </div>
 
-      <div class="footer-section">
-        <h4>Quick Links</h4>
-        <ul>
-          <li *ngFor="let link of quickLinks">
-            <a [href]="link.url">{{ link.name }}</a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="footer-section">
-        <h4>Cars</h4>
-        <ul>
-          <li *ngFor="let link of carLinks">
-            <a [href]="link.url">{{ link.name }}</a>
-          </li>
-        </ul>
-      </div>
+      <ng-container *ngFor="let section of footerSections; trackBy: trackBySection">
+        <nav class="footer-section" [attr.aria-labelledby]="'footer-' + section.title.toLowerCase().replace(' ', '-')">
+          <h4 [id]="'footer-' + section.title.toLowerCase().replace(' ', '-')">{{ section.title }}</h4>
+          <ul role="list">
+            <li *ngFor="let link of section.links; trackBy: trackByLink" role="listitem">
+              <a [routerLink]="link.url" routerLinkActive="active" [attr.aria-label]="link.name">{{ link.name }}</a>
+            </li>
+          </ul>
+        </nav>
+      </ng-container>
 
       <div class="footer-section">
         <h4>Contact Info</h4>
-        <div class="contact-info">
-          <p><strong>Email:</strong> support&#64;communitycar.com</p>
-          <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+        <address class="contact-info">
+          <p><strong>Email:</strong> <a href="mailto:support&#64;communitycar.com">support&#64;communitycar.com</a></p>
+          <p><strong>Phone:</strong> <a href="tel:+15551234567">+1 (555) 123-4567</a></p>
           <p><strong>Address:</strong> 123 Car Street, Auto City, AC 12345</p>
-        </div>
+        </address>
       </div>
     </div>
 
     <div class="footer-bottom">
       <div class="footer-bottom-content">
         <p>&copy; {{ currentYear }} Community Car. All rights reserved.</p>
-        <div class="footer-bottom-links">
-          <a href="/privacy">Privacy Policy</a>
-          <span class="separator">|</span>
-          <a href="/terms">Terms of Service</a>
-          <span class="separator">|</span>
-          <a href="/cookies">Cookie Policy</a>
-        </div>
+        <nav class="footer-bottom-links" aria-label="Legal links">
+          <a [routerLink]="'/privacy-policy'" routerLinkActive="active">Privacy Policy</a>
+          <span class="separator" aria-hidden="true">|</span>
+          <a [routerLink]="'/terms-of-service'" routerLinkActive="active">Terms of Service</a>
+          <span class="separator" aria-hidden="true">|</span>
+          <a [routerLink]="'/cookies'" routerLinkActive="active">Cookie Policy</a>
+        </nav>
       </div>
     </div>
   </div>

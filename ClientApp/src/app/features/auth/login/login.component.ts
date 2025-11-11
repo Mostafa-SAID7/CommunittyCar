@@ -7,11 +7,12 @@ import { NotificationService } from '../../../core/services/notification.service
 import { emailValidator } from '../../../core/utilities/validators';
 import { LoginRequest } from '../../../core/models/auth.model';
 import { environment } from '../../../../environments/environment';
+import { IconComponent } from '../../../shared/components/icons/icon.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, IconComponent],
   templateUrl: './login.component.html',
 })
 export class LoginComponent {

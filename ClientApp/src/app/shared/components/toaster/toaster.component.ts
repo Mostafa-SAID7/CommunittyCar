@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { NotificationService, ToasterNotification } from '../../../core/services/notification.service';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { toastAnimation, progressAnimation } from '../../../core/utilities/animations';
 
 @Component({
   selector: 'app-toaster',
@@ -11,22 +11,8 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   templateUrl: './toaster.component.html',
 
   animations: [
-    trigger('toastAnimation', [
-      state('in', style({ transform: 'translateX(0) scale(1)', opacity: 1 })),
-      transition('void => *', [
-        style({ transform: 'translateX(100%) scale(0.8)', opacity: 0 }),
-        animate('400ms cubic-bezier(0.68, -0.55, 0.265, 1.55)')
-      ]),
-      transition('* => void', [
-        animate('300ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-          style({ transform: 'translateX(100%) scale(0.8)', opacity: 0 }))
-      ])
-    ]),
-    trigger('progressAnimation', [
-      state('start', style({ width: '100%' })),
-      state('end', style({ width: '0%' })),
-      transition('start => end', animate('{{ duration }}ms linear'))
-    ])
+    toastAnimation,
+    progressAnimation
   ]
 })
 export class ToasterComponent implements OnInit, OnDestroy {

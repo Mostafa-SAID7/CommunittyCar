@@ -1,4 +1,4 @@
-import { Booking } from '../../models/booking.model';
+import { Booking } from '../../../core/models/booking.model';
 
 export interface BookingFilters {
   status: string;

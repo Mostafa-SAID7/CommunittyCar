@@ -1,0 +1,59 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Hero Section -->
+  <section class="bg-gradient-to-r from-blue-600 to-purple-700 text-white py-20">
+    <div class="container mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-6xl font-bold mb-4">Frequently Asked Questions</h1>
+      <p class="text-xl md:text-2xl">Find answers to common questions about Community Car</p>
+    </div>
+  </section>
+
+  <!-- FAQ Content -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4 max-w-4xl">
+      <div class="space-y-8">
+        <div *ngFor="let category of faqCategories; let categoryIndex = index" class="faq-category">
+          <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">{{ category.name }}</h2>
+          <div class="space-y-4">
+            <div *ngFor="let question of category.questions; let questionIndex = index"
+                 class="faq-item bg-gray-50 rounded-lg shadow-sm border border-gray-200">
+              <button
+                (click)="toggleQuestion(categoryIndex, questionIndex)"
+                class="w-full text-left p-6 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg">
+                <div class="flex justify-between items-center">
+                  <h3 class="text-lg font-semibold text-gray-800 pr-4">{{ question.question }}</h3>
+                  <svg
+                    class="w-6 h-6 text-gray-500 transform transition-transform duration-200 flex-shrink-0"
+                    [class.rotate-180]="question.expanded"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </button>
+              <div
+                *ngIf="question.expanded"
+                class="px-6 pb-6 text-gray-600 leading-relaxed">
+                <p>{{ question.answer }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Support Section -->
+  <section class="py-16 bg-gray-100">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">Still have questions?</h2>
+      <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+        Can't find the answer you're looking for? Our support team is here to help.
+      </p>
+      <a href="/contact"
+         class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200">
+        Contact Support
+      </a>
+    </div>
+  </section>
+</div>

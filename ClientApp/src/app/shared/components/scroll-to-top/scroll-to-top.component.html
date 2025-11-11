@@ -1,0 +1,10 @@
+<button
+  class="scroll-to-top-btn"
+  [class.visible]="isVisible"
+  (click)="scrollToTop()"
+  [attr.aria-label]="'Scroll to top'"
+  type="button">
+  <svg class="scroll-icon" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M7 14l5-5 5 5z"/>
+  </svg>
+</button>

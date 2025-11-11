@@ -6,6 +6,25 @@ import { trigger, state, style, transition, animate, query, stagger } from '@ang
 })
 export class AnimationService {
 
+  // Motion presets - Framer Motion style
+  static motionPresets = {
+    fadeIn: {
+      initial: { opacity: 0 },
+      animate: { opacity: 1 },
+      transition: { duration: 0.3, ease: 'easeIn' }
+    },
+    slideIn: {
+      initial: { x: -100, opacity: 0 },
+      animate: { x: 0, opacity: 1 },
+      transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
+    },
+    scaleIn: {
+      initial: { scale: 0.8, opacity: 0 },
+      animate: { scale: 1, opacity: 1 },
+      transition: { duration: 0.3, ease: [0.68, -0.55, 0.265, 1.55] }
+    }
+  };
+
   // Framer Motion-style animations for Angular
   static fadeIn = trigger('fadeIn', [
     transition(':enter', [
@@ -567,6 +586,16 @@ export class AnimationService {
   ]);
 
   constructor() { }
+
+  // Get motion preset by name
+  getMotionPreset(name: string) {
+    return AnimationService.motionPresets[name as keyof typeof AnimationService.motionPresets];
+  }
+
+  // Get all motion presets
+  getAllMotionPresets() {
+    return AnimationService.motionPresets;
+  }
 
   // Utility methods for dynamic animations
   createFadeInAnimation(duration: number = 300): any {

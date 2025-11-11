@@ -1,0 +1,102 @@
+// FAQ Component Styles
+
+.faq-category {
+  h2 {
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0.5rem;
+  }
+}
+
+.faq-item {
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  button {
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #f9fafb;
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+    }
+  }
+
+  .rotate-180 {
+    transform: rotate(180deg);
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .faq-category {
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+
+  .faq-item {
+    button {
+      padding: 1rem;
+
+      h3 {
+        font-size: 1rem;
+      }
+    }
+
+    .px-6 {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .pb-6 {
+      padding-bottom: 1rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .faq-item {
+    button {
+      padding: 0.75rem;
+
+      h3 {
+        font-size: 0.9rem;
+      }
+    }
+
+    .px-6 {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+
+    .pb-6 {
+      padding-bottom: 0.75rem;
+    }
+  }
+}
+
+// Animation for expand/collapse
+.faq-item > div:last-child {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+    padding-top: 0;
+    padding-bottom: 1.5rem;
+  }
+}

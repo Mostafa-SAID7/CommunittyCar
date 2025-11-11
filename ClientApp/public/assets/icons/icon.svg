@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" fill="#007bff" rx="64"/>
+  <g transform="translate(256, 256)">
+    <!-- Car body -->
+    <rect x="-120" y="-40" width="240" height="80" fill="white" rx="20"/>
+    <!-- Car roof -->
+    <rect x="-80" y="-60" width="160" height="40" fill="white" rx="15"/>
+    <!-- Wheels -->
+    <circle cx="-80" cy="40" r="25" fill="#333"/>
+    <circle cx="80" cy="40" r="25" fill="#333"/>
+    <circle cx="-80" cy="40" r="15" fill="#666"/>
+    <circle cx="80" cy="40" r="15" fill="#666"/>
+    <!-- Windows -->
+    <rect x="-70" y="-50" width="50" height="30" fill="#87ceeb" rx="5"/>
+    <rect x="20" y="-50" width="50" height="30" fill="#87ceeb" rx="5"/>
+    <!-- Headlights -->
+    <circle cx="-110" cy="-10" r="8" fill="#ffff00"/>
+    <circle cx="110" cy="-10" r="8" fill="#ffff00"/>
+  </g>
+  <text x="256" y="450" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="24" font-weight="bold">Community Car</text>
+</svg>

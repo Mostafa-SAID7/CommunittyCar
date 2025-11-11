@@ -1,0 +1,107 @@
+// Custom styles for Terms of Service component
+
+.terms-of-service {
+  // Ensure full height
+  min-height: 100vh;
+}
+
+// Hero section responsive adjustments
+.hero {
+  @media (max-width: 768px) {
+    padding: 4rem 1rem;
+    h1 {
+      font-size: 2.5rem;
+    }
+    p {
+      font-size: 1.25rem;
+    }
+  }
+}
+
+// Content section
+.terms-content {
+  .container {
+    @media (max-width: 768px) {
+      padding: 2rem 1rem;
+    }
+  }
+
+  .prose {
+    h2 {
+      @media (max-width: 768px) {
+        font-size: 1.875rem;
+      }
+    }
+
+    h3 {
+      @media (max-width: 768px) {
+        font-size: 1.5rem;
+      }
+    }
+
+    ul {
+      @media (max-width: 768px) {
+        padding-left: 1.5rem;
+      }
+    }
+
+    li {
+      @media (max-width: 768px) {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  .contact-info {
+    background-color: #f9fafb;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+
+    @media (max-width: 768px) {
+      padding: 1rem;
+    }
+
+    p {
+      margin-bottom: 0.5rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+// Custom animations
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+// Print styles
+@media print {
+  .hero {
+    display: none;
+  }
+
+  .terms-content {
+    .container {
+      max-width: none;
+      padding: 0;
+    }
+
+    .prose {
+      font-size: 12pt;
+      line-height: 1.4;
+    }
+  }
+}

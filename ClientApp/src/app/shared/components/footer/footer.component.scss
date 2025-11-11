@@ -1,0 +1,431 @@
+// Footer Component Styles
+.footer {
+  // Layout and positioning
+  background: linear-gradient(135deg, hsl(var(--background)), hsl(var(--muted)));
+  border-top: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  margin-top: auto;
+  position: relative;
+  overflow: hidden;
+
+  // Top accent line
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary) / 0.5), hsl(var(--primary)));
+    opacity: 0.3;
+  }
+}
+
+// Container for max width and padding
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+// Main content grid layout
+.footer-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 2rem;
+  padding: 3rem 0 2rem;
+}
+
+// Generic footer section styling
+.footer-section {
+  h4 {
+    color: hsl(var(--foreground));
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    position: relative;
+
+    // Underline accent
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -0.5rem;
+      left: 0;
+      width: 2rem;
+      height: 2px;
+      background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary) / 0.5));
+      border-radius: 1px;
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 0.5rem;
+
+      a {
+        color: hsl(var(--muted-foreground));
+        text-decoration: none;
+        font-size: 0.875rem;
+        transition: all var(--transition-fast);
+        position: relative;
+
+        &:hover {
+          color: hsl(var(--primary));
+          transform: translateX(4px);
+        }
+
+        // Animated underline on hover
+        &::before {
+          content: '';
+          position: absolute;
+          left: -1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 0;
+          height: 1px;
+          background: hsl(var(--primary));
+          transition: width var(--transition-fast);
+        }
+
+        &:hover::before {
+          width: 0.5rem;
+        }
+
+        // Focus state for accessibility
+        &:focus {
+          outline: 2px solid hsl(var(--primary));
+          outline-offset: 2px;
+        }
+      }
+    }
+  }
+}
+
+// Logo section
+.footer-logo {
+  h3 {
+    color: hsl(var(--primary));
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.8));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  p {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}
+
+// Social links container
+.social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+// Individual social link button
+.social-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+  text-decoration: none;
+  transition: all var(--transition-normal);
+  border: 1px solid hsl(var(--border));
+  overflow: visible;
+
+  &:hover {
+    transform: translateY(-4px) scale(1.1);
+    box-shadow: var(--shadow-lg);
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.8));
+    color: hsl(var(--primary-foreground));
+    border-color: hsl(var(--primary));
+  }
+
+  &:active {
+    transform: translateY(-2px) scale(1.05);
+  }
+
+  // Focus state for accessibility
+  &:focus {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
+  }
+
+  .social-icon {
+    font-size: 1.125rem;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    transition: all var(--transition-fast);
+  }
+
+  &:hover .social-icon {
+    transform: scale(1.1);
+    font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+  }
+
+  // Tooltip for social links
+  .social-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: hsl(var(--popover));
+    color: hsl(var(--popover-foreground));
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-md);
+    border: 1px solid hsl(var(--border));
+    z-index: 1000;
+
+    // Tooltip arrow
+    &::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: hsl(var(--popover));
+    }
+  }
+
+  &:hover .social-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-8px);
+  }
+}
+
+// Contact information section
+.contact-info {
+  p {
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+
+    strong {
+      color: hsl(var(--foreground));
+      font-weight: 600;
+    }
+  }
+}
+
+// Bottom section separator
+.footer-bottom {
+  border-top: 1px solid hsl(var(--border));
+  padding: 1.5rem 0;
+  margin-top: 2rem;
+}
+
+// Bottom content layout
+.footer-bottom-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  p {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.875rem;
+    margin: 0;
+  }
+}
+
+// Bottom navigation links
+.footer-bottom-links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  a {
+    color: hsl(var(--muted-foreground));
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color var(--transition-fast);
+
+    &:hover {
+      color: hsl(var(--primary));
+    }
+
+    // Focus state for accessibility
+    &:focus {
+      outline: 2px solid hsl(var(--primary));
+      outline-offset: 2px;
+    }
+  }
+
+  .separator {
+    color: hsl(var(--muted-foreground) / 0.5);
+    font-size: 0.875rem;
+  }
+}
+
+// Animation keyframes
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Apply fade-in animation to sections
+.footer-section {
+  animation: fadeInUp 0.6s ease-out;
+  animation-fill-mode: both;
+
+  &:nth-child(1) { animation-delay: 0.1s; }
+  &:nth-child(2) { animation-delay: 0.2s; }
+  &:nth-child(3) { animation-delay: 0.3s; }
+  &:nth-child(4) { animation-delay: 0.4s; }
+}
+
+// Respect user's motion preferences
+@media (prefers-reduced-motion: reduce) {
+  .footer-section {
+    animation: none;
+  }
+
+  .social-link,
+  .footer-section ul li a {
+    transition: none;
+  }
+
+  .social-link:hover {
+    transform: none;
+  }
+
+  .footer-section ul li a:hover {
+    transform: none;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .footer {
+    border-top: 2px solid hsl(var(--foreground));
+  }
+
+  .social-link {
+    border: 2px solid hsl(var(--foreground));
+  }
+}
+
+// Responsive design breakpoints
+@media (max-width: 1024px) {
+  .footer-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .footer-section:nth-child(1) {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem 0 1.5rem;
+  }
+
+  .social-links {
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  .footer-bottom-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .footer-bottom-links {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-container {
+    padding: 0 0.75rem;
+  }
+
+  .footer-content {
+    padding: 1.5rem 0 1rem;
+  }
+
+  .social-links {
+    gap: 0.75rem;
+  }
+
+  .social-link {
+    width: 2.25rem;
+    height: 2.25rem;
+
+    .social-icon {
+      font-size: 1rem;
+    }
+  }
+
+  .footer-section {
+    h4 {
+      font-size: 1rem;
+    }
+
+    ul li a {
+      font-size: 0.8125rem;
+    }
+  }
+
+  .contact-info p {
+    font-size: 0.8125rem;
+  }
+}
+
+// Handle long content gracefully
+.footer-section ul li a {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.contact-info p {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+// Ensure footer doesn't overflow on very small heights
+@media (max-height: 600px) {
+  .footer-content {
+    padding: 1.5rem 0 1rem;
+  }
+
+  .footer-bottom {
+    padding: 1rem 0;
+    margin-top: 1rem;
+  }
+}

@@ -1,0 +1,290 @@
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-primary to-primary/80" id="hero">
+   <div class="absolute inset-0">
+     <div class="absolute inset-0 bg-gradient-to-br from-black/30 to-black/10"></div>
+     <div class="absolute inset-0 overflow-hidden">
+       <div class="absolute w-80 h-80 bg-white/10 rounded-full top-1/4 left-1/4 animate-float animation-delay-0"></div>
+       <div class="absolute w-60 h-60 bg-white/10 rounded-full top-3/4 right-1/4 animate-float animation-delay-2"></div>
+       <div class="absolute w-40 h-40 bg-white/10 rounded-full bottom-1/4 left-1/3 animate-float animation-delay-4"></div>
+     </div>
+   </div>
+
+   <div class="relative z-10 py-8">
+     <div class="max-w-7xl mx-auto px-4">
+       <div class="max-w-3xl mb-12" @fadeInUp>
+         <h1 class="text-5xl md:text-6xl font-black text-white mb-6 leading-tight">
+           <span class="text-accent">Drive</span> Your Dreams
+           <br>with <span class="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">Community Car</span>
+         </h1>
+         <p class="text-xl text-white/90 mb-8 leading-relaxed">
+           Experience the freedom of the open road with our premium car rental service.
+           Choose from hundreds of vehicles and embark on your next adventure today.
+         </p>
+         <div class="flex flex-wrap gap-4">
+           <ui-button variant="default" size="lg" routerLink="/register" class="bg-white text-primary hover:bg-white/90 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+             <app-icon name="car" class="w-5 h-5 mr-2"></app-icon>
+             Start Your Journey
+           </ui-button>
+           <ui-button variant="outline" size="lg" (click)="scrollToSection('features')" class="bg-transparent border-white text-white hover:bg-white hover:text-primary">
+             <app-icon name="chevron-down" class="w-5 h-5 mr-2"></app-icon>
+             Learn More
+           </ui-button>
+         </div>
+       </div>
+
+       <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-96 h-64" @fadeInRight>
+         <div class="relative w-full h-full">
+           <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?w=600&h=400&fit=crop" alt="Luxury Car" class="w-full h-full object-cover rounded-3xl shadow-2xl">
+           <div class="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md rounded-2xl p-4 flex justify-between items-center">
+             <div class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-full font-semibold text-sm">
+               <app-icon name="map-pin" class="w-4 h-4"></app-icon>
+               From $29/day
+             </div>
+             <div class="flex flex-col items-end gap-1">
+               <div class="flex gap-1">
+                 <app-icon name="star" class="w-4 h-4 text-yellow-400 fill-current" *ngFor="let i of [1,2,3,4,5]"></app-icon>
+               </div>
+               <span class="text-xs text-muted-foreground font-medium">4.9 (2,500+ reviews)</span>
+             </div>
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>
+
+   <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 text-white cursor-pointer animate-bounce" (click)="scrollToSection('features')">
+     <div class="w-6 h-9 border-2 border-white rounded-full relative">
+       <div class="w-1 h-3 bg-white rounded-full absolute top-2 left-1/2 transform -translate-x-1/2 animate-pulse"></div>
+     </div>
+     <span class="text-sm">Scroll Down</span>
+   </div>
+ </section>
+
+<!-- Features Section -->
+<section class="features-section" id="features">
+  <div class="container">
+    <div class="section-header" @fadeInUp>
+      <h2 class="section-title">Why Choose Community Car?</h2>
+      <p class="section-subtitle">Discover the advantages that make us the preferred choice for car rentals</p>
+    </div>
+
+    <div class="features-grid" @staggerAnimation>
+      <div class="feature-card" *ngFor="let feature of features; trackBy: trackByFeature" @fadeInUp>
+        <div class="feature-icon">
+          <span class="material-icons {{ feature.color }}">{{ feature.icon }}</span>
+        </div>
+        <h3 class="feature-title">{{ feature.title }}</h3>
+        <p class="feature-description">{{ feature.description }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid" @staggerAnimation>
+      <div class="stat-card" *ngFor="let stat of statistics; trackBy: trackByStat" @counterAnimation>
+        <div class="stat-icon">
+          <span class="material-icons {{ stat.color }}">{{ stat.icon }}</span>
+        </div>
+        <div class="stat-content">
+          <div class="stat-number">{{ stat.value }}{{ stat.suffix }}</div>
+          <div class="stat-label">{{ stat.label }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonials-section" id="testimonials">
+  <div class="container">
+    <div class="section-header" @fadeInUp>
+      <h2 class="section-title">What Our Customers Say</h2>
+      <p class="section-subtitle">Real experiences from real customers who trust Community Car</p>
+    </div>
+
+    <div class="testimonials-carousel" @fadeInUp>
+      <div class="carousel-container">
+        <div class="testimonial-card" *ngFor="let testimonial of testimonials; let i = index; trackBy: trackByTestimonial"
+             [class.active]="i === currentSlide">
+          <div class="testimonial-content">
+            <div class="testimonial-rating">
+              <div class="stars">
+                <span class="material-icons star" [class.filled]="star === 1" *ngFor="let star of getStars(testimonial.rating)">star</span>
+              </div>
+            </div>
+            <blockquote class="testimonial-text">{{ testimonial.text }}</blockquote>
+            <div class="testimonial-author">
+              <img [src]="testimonial.avatar" [alt]="testimonial.name" class="author-avatar">
+              <div class="author-info">
+                <div class="author-name">{{ testimonial.name }}</div>
+                <div class="author-role">{{ testimonial.role }}</div>
+                <div class="testimonial-date">{{ testimonial.date }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-controls">
+        <button class="carousel-btn prev-btn" (click)="prevSlide()" aria-label="Previous testimonial">
+          <span class="material-icons">chevron_left</span>
+        </button>
+        <div class="carousel-indicators">
+          <button class="indicator" *ngFor="let testimonial of testimonials; let i = index; trackBy: trackByTestimonial"
+                  [class.active]="i === currentSlide" (click)="goToSlide(i)" [attr.aria-label]="'Go to testimonial ' + (i + 1)">
+          </button>
+        </div>
+        <button class="carousel-btn next-btn" (click)="nextSlide()" aria-label="Next testimonial">
+          <span class="material-icons">chevron_right</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-content" @fadeInUp>
+      <h2 class="cta-title">Ready to Hit the Road?</h2>
+      <p class="cta-subtitle">Join thousands of satisfied customers and experience the best car rental service today.</p>
+      <div class="cta-actions">
+        <a routerLink="/register" class="btn btn-primary btn-xl">
+          <span class="material-icons">person_add</span>
+          Get Started Free
+        </a>
+        <a routerLink="/cars" class="btn btn-outline btn-xl">
+          <span class="material-icons">search</span>
+          Browse Cars
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="section-header" @fadeInUp>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">Find answers to common questions about our car rental service</p>
+    </div>
+
+    <div class="faq-list" @staggerAnimation>
+      <div class="faq-item" *ngFor="let faq of faqs; trackBy: trackByFaq" @fadeInUp>
+        <button class="faq-question" (click)="toggleFAQ(faq)" [attr.aria-expanded]="faq.isOpen">
+          <span class="question-text">{{ faq.question }}</span>
+          <span class="faq-icon" [class.rotated]="faq.isOpen">
+            <span class="material-icons">expand_more</span>
+          </span>
+        </button>
+        <div class="faq-answer" [class.open]="faq.isOpen">
+          <div class="answer-content">
+            <p>{{ faq.answer }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact-section" id="contact">
+  <div class="container">
+    <div class="contact-content">
+      <div class="contact-info" @fadeInLeft>
+        <h2 class="contact-title">Get in Touch</h2>
+        <p class="contact-subtitle">Have questions? We're here to help you plan your perfect trip.</p>
+
+        <div class="contact-details">
+          <div class="contact-item">
+            <div class="contact-icon">
+              <span class="material-icons">phone</span>
+            </div>
+            <div class="contact-text">
+              <h4>Phone Support</h4>
+              <p>+1 (555) 123-4567</p>
+              <p>Mon-Fri: 8AM-8PM EST</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">
+              <span class="material-icons">email</span>
+            </div>
+            <div class="contact-text">
+              <h4>Email Support</h4>
+              <p>support&#64;communitycar.com</p>
+              <p>We respond within 2 hours</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon">
+              <span class="material-icons">location_on</span>
+            </div>
+            <div class="contact-text">
+              <h4>Visit Our Office</h4>
+              <p>123 Car Street, Auto City, AC 12345</p>
+              <p>Mon-Fri: 9AM-6PM EST</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-form" @fadeInRight>
+        <form class="form-card">
+          <h3>Send us a Message</h3>
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <select id="subject" name="subject" required>
+              <option value="">Select a subject</option>
+              <option value="booking">Booking Inquiry</option>
+              <option value="support">Technical Support</option>
+              <option value="billing">Billing Question</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">
+            <span class="material-icons">send</span>
+            Send Message
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="newsletter-section">
+  <div class="container">
+    <div class="newsletter-content" @fadeInUp>
+      <div class="newsletter-icon">
+        <span class="material-icons">mail</span>
+      </div>
+      <h3>Stay Updated</h3>
+      <p>Subscribe to our newsletter for the latest deals, new car arrivals, and travel tips.</p>
+      <div class="newsletter-form">
+        <input type="email" placeholder="Enter your email address" class="newsletter-input">
+        <button class="btn btn-primary newsletter-btn">
+          <span class="material-icons">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

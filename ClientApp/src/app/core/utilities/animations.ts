@@ -3,8 +3,21 @@ import { trigger, state, style, transition, animate, query, stagger } from '@ang
 // Framer Motion-style Angular animations
 // These are reusable animation triggers that can be imported and used across components
 
-// Fade animations
-export const fadeIn = trigger('fadeIn', [
+// Motion Presets - Framer Motion style configurations
+export const fadeIn = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  transition: { duration: 0.3, ease: 'easeIn' }
+};
+
+export const fadeOut = {
+  initial: { opacity: 1 },
+  animate: { opacity: 0 },
+  transition: { duration: 0.3, ease: 'easeOut' }
+};
+
+// Angular trigger equivalent for fadeIn
+export const fadeInTrigger = trigger('fadeIn', [
   transition(':enter', [
     style({ opacity: 0 }),
     animate('300ms ease-in', style({ opacity: 1 }))
@@ -14,7 +27,13 @@ export const fadeIn = trigger('fadeIn', [
   ])
 ]);
 
-export const fadeInUp = trigger('fadeInUp', [
+export const fadeInUp = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
+};
+
+export const fadeInUpTrigger = trigger('fadeInUp', [
   transition(':enter', [
     style({ opacity: 0, transform: 'translateY(20px)' }),
     animate('400ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
@@ -36,7 +55,13 @@ export const fadeInDown = trigger('fadeInDown', [
   ])
 ]);
 
-export const fadeInLeft = trigger('fadeInLeft', [
+export const fadeInLeft = {
+  initial: { opacity: 0, x: -20 },
+  animate: { opacity: 1, x: 0 },
+  transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
+};
+
+export const fadeInLeftTrigger = trigger('fadeInLeft', [
   transition(':enter', [
     style({ opacity: 0, transform: 'translateX(-20px)' }),
     animate('400ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
@@ -45,6 +70,54 @@ export const fadeInLeft = trigger('fadeInLeft', [
   transition(':leave', [
     animate('300ms ease-in', style({ opacity: 0, transform: 'translateX(20px)' }))
   ])
+]);
+
+export const slideInLeft = {
+  initial: { x: -100, opacity: 0 },
+  animate: { x: 0, opacity: 1 },
+  transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
+};
+
+export const slideInRight = {
+  initial: { x: 100, opacity: 0 },
+  animate: { x: 0, opacity: 1 },
+  transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
+};
+
+export const staggerAnimation = trigger('staggerAnimation', [
+  transition(':enter', [
+    query(':enter', [
+      style({ opacity: 0, transform: 'translateY(20px)' }),
+      stagger(100, [
+        animate('400ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ], { optional: true })
+  ])
+]);
+
+export const counterAnimation = trigger('counterAnimation', [
+  transition(':enter', [
+    style({ opacity: 0, transform: 'scale(0.5)' }),
+    animate('800ms ease-out', style({ opacity: 1, transform: 'scale(1)' }))
+  ])
+]);
+
+export const toastAnimation = trigger('toastAnimation', [
+  state('in', style({ transform: 'translateX(0) scale(1)', opacity: 1 })),
+  transition('void => *', [
+    style({ transform: 'translateX(100%) scale(0.8)', opacity: 0 }),
+    animate('400ms cubic-bezier(0.68, -0.55, 0.265, 1.55)')
+  ]),
+  transition('* => void', [
+    animate('300ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+      style({ transform: 'translateX(100%) scale(0.8)', opacity: 0 }))
+  ])
+]);
+
+export const progressAnimation = trigger('progressAnimation', [
+  state('start', style({ width: '100%' })),
+  state('end', style({ width: '0%' })),
+  transition('start => end', animate('{{ duration }}ms linear'))
 ]);
 
 export const fadeInRight = trigger('fadeInRight', [
@@ -59,7 +132,13 @@ export const fadeInRight = trigger('fadeInRight', [
 ]);
 
 // Scale animations
-export const scaleIn = trigger('scaleIn', [
+export const scaleIn = {
+  initial: { opacity: 0, scale: 0.8 },
+  animate: { opacity: 1, scale: 1 },
+  transition: { duration: 0.3, ease: [0.68, -0.55, 0.265, 1.55] }
+};
+
+export const scaleInTrigger = trigger('scaleIn', [
   transition(':enter', [
     style({ opacity: 0, transform: 'scale(0.8)' }),
     animate('300ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
@@ -124,7 +203,13 @@ export const slideInFromBottom = trigger('slideInFromBottom', [
 ]);
 
 // Bounce animations
-export const bounceIn = trigger('bounceIn', [
+export const bounceIn = {
+  initial: { opacity: 0, scale: 0.3 },
+  animate: { opacity: 1, scale: 1 },
+  transition: { duration: 0.6, ease: [0.68, -0.55, 0.265, 1.55] }
+};
+
+export const bounceInTrigger = trigger('bounceIn', [
   transition(':enter', [
     style({ opacity: 0, transform: 'scale(0.3)' }),
     animate('600ms cubic-bezier(0.68, -0.55, 0.265, 1.55)',
@@ -181,7 +266,13 @@ export const flipInY = trigger('flipInY', [
 ]);
 
 // Zoom animations
-export const zoomIn = trigger('zoomIn', [
+export const zoomIn = {
+  initial: { opacity: 0, scale: 0.3 },
+  animate: { opacity: 1, scale: 1 },
+  transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }
+};
+
+export const zoomInTrigger = trigger('zoomIn', [
   transition(':enter', [
     style({ opacity: 0, transform: 'scale(0.3)' }),
     animate('500ms cubic-bezier(0.25, 0.46, 0.45, 0.94)',
@@ -732,15 +823,27 @@ export const bounceAndGlow = trigger('bounceAndGlow', [
   ])
 ]);
 
+// Motion presets collection
+export const motionPresets = {
+  fadeIn,
+  fadeInUp,
+  fadeInLeft,
+  slideInLeft,
+  slideInRight,
+  scaleIn,
+  bounceIn,
+  zoomIn
+};
+
 // Export all animations as a collection
 export const allAnimations = [
-  fadeIn, fadeInUp, fadeInDown, fadeInLeft, fadeInRight,
-  scaleIn, scaleInBounce,
+  fadeInTrigger, fadeInUpTrigger, fadeInDown, fadeInLeftTrigger, fadeInRight,
+  scaleInTrigger, scaleInBounce,
   slideInFromLeft, slideInFromRight, slideInFromTop, slideInFromBottom,
-  bounceIn, bounceInUp, bounceInDown,
+  bounceInTrigger, bounceInUp, bounceInDown,
   rotateIn, rotateInDownLeft,
   flipInX, flipInY,
-  zoomIn, zoomInUp, zoomInDown,
+  zoomInTrigger, zoomInUp, zoomInDown,
   elasticIn, jello,
   pulse, shake, shakeX, wobble, swing, rubberBand,
   lightSpeedIn, lightSpeedOut,
