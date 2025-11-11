@@ -10,6 +10,7 @@
           <input
             type="text"
             id="name"
+            data-cy="name"
             formControlName="name"
             placeholder="Enter your full name"
             class="form-control"
@@ -27,6 +28,7 @@
         <input
           type="email"
           id="email"
+          data-cy="register-email"
           formControlName="email"
           placeholder="Enter your email"
           class="form-control"
@@ -43,6 +45,7 @@
         <input
           type="password"
           id="password"
+          data-cy="register-password"
           formControlName="password"
           placeholder="Create a strong password"
           class="form-control"
@@ -69,6 +72,7 @@
         <input
           type="password"
           id="confirmPassword"
+          data-cy="confirm-password"
           formControlName="confirmPassword"
           placeholder="Confirm your password"
           class="form-control"
@@ -81,7 +85,7 @@
       </div>
 
       <div class="form-group checkbox-group">
-        <input type="checkbox" id="acceptTerms" formControlName="acceptTerms">
+        <input type="checkbox" id="acceptTerms" data-cy="accept-terms" formControlName="acceptTerms">
         <label for="acceptTerms">
           I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a>
         </label>
@@ -90,7 +94,7 @@
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary" [disabled]="isLoading || registerForm.invalid">
+      <button type="submit" data-cy="register-button" class="btn btn-primary" [disabled]="isLoading || registerForm.invalid">
         <span *ngIf="isLoading">Creating Account...</span>
         <span *ngIf="!isLoading">Create Account</span>
       </button>

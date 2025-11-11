@@ -1,65 +1,84 @@
 export interface ChatMessage {
   id: string;
+  conversationId: string;
   senderId: string;
   senderName: string;
   senderAvatar?: string;
   content: string;
+  messageType: MessageType;
   timestamp: Date;
-  type: 'text' | 'image' | 'file' | 'system';
-  status: 'sending' | 'sent' | 'delivered' | 'read' | 'failed';
-  metadata?: MessageMetadata;
-}
-
-export interface MessageMetadata {
-  fileName?: string;
-  fileSize?: number;
-  fileType?: string;
-  imageUrl?: string;
-  replyTo?: string;
+  isRead: boolean;
+  status?: 'sending' | 'sent' | 'failed';
+  attachments?: ChatAttachment[];
 }
 
 export interface ChatConversation {
   id: string;
   participants: ChatParticipant[];
-  messages: ChatMessage[];
+  messages?: ChatMessage[];
   lastMessage?: ChatMessage;
   unreadCount: number;
-  isActive: boolean;
+  isActive?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface ChatParticipant {
-  id: string;
+  userId: string;
   name: string;
   avatar?: string;
-  role: 'user' | 'admin' | 'support';
-  isOnline: boolean;
-  lastSeen?: Date;
+  role: ParticipantRole;
+  joinedAt: Date;
+  isOnline?: boolean;
 }
 
-export interface ChatSession {
+export interface ChatAttachment {
   id: string;
-  userId: string;
-  agentId?: string;
-  status: 'waiting' | 'active' | 'closed';
-  priority: 'low' | 'medium' | 'high' | 'urgent';
-  category?: string;
-  startedAt: Date;
-  endedAt?: Date;
+  fileName: string;
+  fileUrl: string;
+  fileType: string;
+  fileSize: number;
 }
 
-export interface TypingIndicator {
+export enum MessageType {
+  TEXT = 'text',
+  IMAGE = 'image',
+  FILE = 'file',
+  SYSTEM = 'system'
+}
+
+export enum ParticipantRole {
+  OWNER = 'owner',
+  ADMIN = 'admin',
+  MEMBER = 'member',
+  SUPPORT = 'support'
+}
+
+export interface ChatMessageCreateRequest {
+  conversationId: string;
+  content: string;
+  messageType: MessageType;
+  attachments?: File[];
+}
+
+export interface ChatConversationCreateRequest {
+  participantIds: string[];
+  title?: string;
+}
+
+export interface ChatTypingIndicator {
+  conversationId: string;
   userId: string;
   userName: string;
   isTyping: boolean;
-  timestamp: Date;
 }
 
 export interface ChatSettings {
   soundEnabled: boolean;
   notificationsEnabled: boolean;
   autoScroll: boolean;
-  theme: 'light' | 'dark';
+  theme: string;
   language: string;
 }
+
+export type TypingIndicator = ChatTypingIndicator;

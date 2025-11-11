@@ -10,6 +10,7 @@
           <input
             type="text"
             id="otp"
+            data-cy="otp-input"
             formControlName="otp"
             placeholder="000000"
             class="otp-input"
@@ -24,7 +25,7 @@
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary" [disabled]="isLoading || otpForm.invalid">
+      <button type="submit" data-cy="verify-otp-button" class="btn btn-primary" [disabled]="isLoading || otpForm.invalid">
         <span *ngIf="isLoading">Verifying...</span>
         <span *ngIf="!isLoading">Verify Code</span>
       </button>

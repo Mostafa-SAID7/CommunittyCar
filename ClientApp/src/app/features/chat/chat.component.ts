@@ -1,139 +1,168 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { ChatService } from '../../core/services/chat.service';
+import { FormsModule } from '@angular/forms';
+import { Subject, takeUntil, combineLatest } from 'rxjs';
+import { ChatMessage, ChatConversation, ChatTypingIndicator, MessageType } from '../../core/models/chat.model';
+import { ChatStore } from '../../core/state/chat.store';
+import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner/loading-spinner.component';
+import { DateFormatPipe } from '../../shared/pipes/date-format.pipe';
 import { NotificationService } from '../../core/services/notification.service';
-
-interface ChatMessage {
-  id: string;
-  senderId: string;
-  senderName: string;
-  message: string;
-  timestamp: Date;
-  isAdmin: boolean;
-}
-
-interface ChatConversation {
-  id: string;
-  userId: string;
-  userName: string;
-  lastMessage: string;
-  lastMessageTime: Date;
-  unreadCount: number;
-  status: 'active' | 'closed';
-}
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, DateFormatPipe],
   template: `
-    <div class="chat-container">
-      <div class="chat-sidebar">
-        <div class="sidebar-header">
-          <h2>Live Chat Support</h2>
-          <span class="online-status">● Online</span>
-        </div>
-
-        <div class="conversations-list">
-          <div class="conversation-item"
-               *ngFor="let conversation of conversations"
-               [class.active]="conversation.id === activeConversationId"
-               (click)="selectConversation(conversation)">
-            <div class="user-avatar">
-              {{ conversation.userName.charAt(0).toUpperCase() }}
-            </div>
-            <div class="conversation-info">
-              <div class="user-name">{{ conversation.userName }}</div>
-              <div class="last-message">{{ conversation.lastMessage }}</div>
-            </div>
-            <div class="conversation-meta">
-              <span class="timestamp">{{ conversation.lastMessageTime | date:'shortTime' }}</span>
-              <span class="unread-count" *ngIf="conversation.unreadCount > 0">
-                {{ conversation.unreadCount }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="chat-main">
-        <div class="chat-header" *ngIf="activeConversation">
-          <div class="chat-user-info">
-            <div class="user-avatar">
-              {{ activeConversation.userName.charAt(0).toUpperCase() }}
-            </div>
-            <div class="user-details">
-              <h3>{{ activeConversation.userName }}</h3>
-              <span class="user-status">Online</span>
-            </div>
-          </div>
-          <div class="chat-actions">
-            <button class="btn-secondary" (click)="closeConversation()">Close Chat</button>
-          </div>
-        </div>
-
-        <div class="chat-messages" #messagesContainer>
-          <div class="message"
-               *ngFor="let message of messages"
-               [class.admin-message]="message.isAdmin"
-               [class.user-message]="!message.isAdmin">
-            <div class="message-avatar">
-              {{ message.senderName.charAt(0).toUpperCase() }}
-            </div>
-            <div class="message-content">
-              <div class="message-text">{{ message.message }}</div>
-              <div class="message-time">{{ message.timestamp | date:'shortTime' }}</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="chat-input" *ngIf="activeConversation">
-          <form [formGroup]="messageForm" (ngSubmit)="sendMessage()" class="message-form">
-            <input type="text"
-                   formControlName="message"
-                   placeholder="Type your message..."
-                   class="message-input"
-                   autocomplete="off">
-            <button type="submit"
-                    class="send-button"
-                    [disabled]="!messageForm.valid || isTyping">
-              <i class="fas fa-paper-plane"></i>
+    <div class="chat-page">
+      <div class="chat-container">
+        <!-- Conversations Sidebar -->
+        <div class="conversations-sidebar">
+          <div class="sidebar-header">
+            <h2>Messages</h2>
+            <button class="new-chat-btn" (click)="startNewConversation()">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+              </svg>
             </button>
-          </form>
-          <div class="typing-indicator" *ngIf="isTyping">
-            <span>Admin is typing...</span>
+          </div>
+
+          <div class="conversations-list">
+            <div
+              *ngFor="let conversation of conversations"
+              class="conversation-item"
+              [ngClass]="{ 'active': conversation.id === (activeConversation$ | async)?.id }"
+              (click)="selectConversation(conversation)">
+              <div class="conversation-avatar">
+                <span>{{ getConversationInitials(conversation) }}</span>
+              </div>
+              <div class="conversation-info">
+                <div class="conversation-name">{{ getConversationName(conversation) }}</div>
+                <div class="conversation-last-message">
+                  {{ conversation.lastMessage?.content || 'No messages yet' }}
+                </div>
+              </div>
+              <div class="conversation-meta">
+                <span class="conversation-time">
+                  {{ conversation.lastMessage?.timestamp | dateFormat:'short' }}
+                </span>
+                <span *ngIf="conversation.unreadCount > 0" class="unread-badge">
+                  {{ conversation.unreadCount }}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="chat-placeholder" *ngIf="!activeConversation">
-          <div class="placeholder-content">
-            <i class="fas fa-comments"></i>
-            <h3>Select a conversation</h3>
-            <p>Choose a conversation from the sidebar to start chatting</p>
+        <!-- Chat Area -->
+        <div class="chat-area" *ngIf="activeConversation$ | async as conversation; else noConversation">
+          <div class="chat-header">
+            <div class="chat-partner-info">
+              <div class="partner-avatar">
+                <span>{{ getConversationInitials(conversation) }}</span>
+              </div>
+              <div class="partner-details">
+                <h3>{{ getConversationName(conversation) }}</h3>
+                <span class="partner-status">Active</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="messages-container" #messagesContainer>
+            <div
+              *ngFor="let message of messages"
+              class="message-item"
+              [ngClass]="{ 'own': message.senderId === currentUserId }">
+              <div class="message-avatar" *ngIf="message.senderId !== currentUserId">
+                <span>{{ message.senderName.charAt(0).toUpperCase() }}</span>
+              </div>
+              <div class="message-content">
+                <div class="message-bubble">
+                  <p>{{ message.content }}</p>
+                  <span class="message-time">{{ message.timestamp | dateFormat:'time' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div *ngIf="typingIndicators.length > 0" class="typing-indicator">
+              <div class="typing-avatar">
+                <span>{{ typingIndicators[0].userName.charAt(0).toUpperCase() }}</span>
+              </div>
+              <div class="typing-bubble">
+                <div class="typing-dots">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="message-input-area">
+            <form (ngSubmit)="sendMessage()" #messageForm="ngForm">
+              <div class="input-container">
+                <input
+                  type="text"
+                  [(ngModel)]="newMessage"
+                  name="message"
+                  placeholder="Type a message..."
+                  (input)="onTyping()"
+                  (blur)="onStopTyping()"
+                  required
+                  #messageInput>
+                <button
+                  type="submit"
+                  [disabled]="!newMessage.trim() || loading"
+                  class="send-btn">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                  </svg>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
+
+        <ng-template #noConversation>
+          <div class="no-conversation">
+            <div class="empty-state">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+              </svg>
+              <h3>Select a conversation</h3>
+              <p>Choose a conversation from the sidebar to start chatting</p>
+            </div>
+          </div>
+        </ng-template>
       </div>
     </div>
   `,
   styles: [`
-    .chat-container {
-      display: flex;
+    .chat-page {
       height: calc(100vh - 4rem);
-      background: #f9fafb;
+      background: #f8fafc;
     }
 
-    .chat-sidebar {
-      width: 320px;
+    .chat-container {
+      display: flex;
+      height: 100%;
       background: white;
-      border-right: 1px solid #e5e7eb;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .conversations-sidebar {
+      width: 320px;
+      border-right: 1px solid #e2e8f0;
       display: flex;
       flex-direction: column;
     }
 
     .sidebar-header {
       padding: 1rem;
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 1px solid #e2e8f0;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -141,14 +170,27 @@ interface ChatConversation {
 
     .sidebar-header h2 {
       margin: 0;
-      font-size: 1.125rem;
+      font-size: 1.25rem;
       font-weight: 600;
+      color: #1e293b;
     }
 
-    .online-status {
-      color: #10b981;
-      font-size: 0.75rem;
-      font-weight: 500;
+    .new-chat-btn {
+      width: 2rem;
+      height: 2rem;
+      border: none;
+      background: #3b82f6;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .new-chat-btn:hover {
+      background: #2563eb;
     }
 
     .conversations-list {
@@ -157,47 +199,59 @@ interface ChatConversation {
     }
 
     .conversation-item {
-      display: flex;
-      align-items: center;
       padding: 1rem;
       cursor: pointer;
-      border-bottom: 1px solid #f3f4f6;
+      border-bottom: 1px solid #f1f5f9;
       transition: background-color 0.2s;
     }
 
-    .conversation-item:hover,
-    .conversation-item.active {
-      background: #f3f4f6;
+    .conversation-item:hover {
+      background: #f8fafc;
     }
 
-    .user-avatar {
-      width: 40px;
-      height: 40px;
+    .conversation-item.active {
+      background: #eff6ff;
+      border-right: 3px solid #3b82f6;
+    }
+
+    .conversation-item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .conversation-avatar {
+      width: 2.5rem;
+      height: 2.5rem;
       border-radius: 50%;
       background: #3b82f6;
-      color: white;
       display: flex;
       align-items: center;
       justify-content: center;
+      color: white;
       font-weight: 600;
-      margin-right: 0.75rem;
     }
 
     .conversation-info {
       flex: 1;
+      min-width: 0;
     }
 
-    .user-name {
-      font-weight: 500;
+    .conversation-name {
+      font-weight: 600;
+      color: #1e293b;
       margin-bottom: 0.25rem;
-    }
-
-    .last-message {
-      font-size: 0.875rem;
-      color: #6b7280;
+      white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .conversation-last-message {
+      font-size: 0.875rem;
+      color: #64748b;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .conversation-meta {
@@ -207,335 +261,416 @@ interface ChatConversation {
       gap: 0.25rem;
     }
 
-    .timestamp {
+    .conversation-time {
       font-size: 0.75rem;
-      color: #9ca3af;
+      color: #94a3b8;
     }
 
-    .unread-count {
+    .unread-badge {
       background: #ef4444;
       color: white;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       font-size: 0.75rem;
-      font-weight: 500;
+      font-weight: 600;
+      padding: 0.125rem 0.375rem;
+      border-radius: 0.75rem;
+      min-width: 1.25rem;
+      text-align: center;
     }
 
-    .chat-main {
+    .chat-area {
       flex: 1;
       display: flex;
       flex-direction: column;
     }
 
     .chat-header {
-      background: white;
       padding: 1rem;
-      border-bottom: 1px solid #e5e7eb;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      border-bottom: 1px solid #e2e8f0;
+      background: white;
     }
 
-    .chat-user-info {
+    .chat-partner-info {
       display: flex;
       align-items: center;
+      gap: 0.75rem;
     }
 
-    .user-details h3 {
-      margin: 0;
-      font-size: 1.125rem;
+    .partner-avatar {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background: #3b82f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
       font-weight: 600;
     }
 
-    .user-status {
-      color: #10b981;
+    .partner-details h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .partner-status {
       font-size: 0.875rem;
+      color: #10b981;
     }
 
-    .chat-actions .btn-secondary {
-      background: #6b7280;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      border: none;
-      cursor: pointer;
-    }
-
-    .chat-messages {
+    .messages-container {
       flex: 1;
-      overflow-y: auto;
       padding: 1rem;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 1rem;
     }
 
-    .message {
+    .message-item {
       display: flex;
       gap: 0.75rem;
-      max-width: 70%;
+      align-items: flex-end;
     }
 
-    .admin-message {
-      align-self: flex-start;
-    }
-
-    .user-message {
-      align-self: flex-end;
+    .message-item.own {
       flex-direction: row-reverse;
     }
 
     .message-avatar {
-      width: 32px;
-      height: 32px;
+      width: 2rem;
+      height: 2rem;
       border-radius: 50%;
-      background: #6b7280;
-      color: white;
+      background: #e2e8f0;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.875rem;
-      font-weight: 500;
-      flex-shrink: 0;
-    }
-
-    .admin-message .message-avatar {
-      background: #3b82f6;
+      font-weight: 600;
+      color: #64748b;
     }
 
     .message-content {
-      background: white;
-      padding: 0.75rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      max-width: 70%;
     }
 
-    .user-message .message-content {
+    .message-bubble {
+      padding: 0.75rem 1rem;
+      border-radius: 1rem;
+      position: relative;
+    }
+
+    .message-item:not(.own) .message-bubble {
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+
+    .message-item.own .message-bubble {
       background: #3b82f6;
       color: white;
     }
 
-    .message-text {
-      margin-bottom: 0.25rem;
+    .message-bubble p {
+      margin: 0;
+      font-size: 0.875rem;
+      line-height: 1.4;
     }
 
     .message-time {
       font-size: 0.75rem;
-      color: #9ca3af;
+      opacity: 0.7;
+      margin-top: 0.25rem;
+      display: block;
     }
 
-    .user-message .message-time {
-      color: rgba(255, 255, 255, 0.7);
+    .typing-indicator {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
     }
 
-    .chat-input {
-      background: white;
+    .typing-avatar {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .typing-bubble {
+      padding: 0.75rem 1rem;
+      background: #f1f5f9;
+      border-radius: 1rem;
+    }
+
+    .typing-dots {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .typing-dots span {
+      width: 0.375rem;
+      height: 0.375rem;
+      background: #94a3b8;
+      border-radius: 50%;
+      animation: typing 1.4s infinite;
+    }
+
+    .typing-dots span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dots span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% {
+        transform: translateY(0);
+      }
+      30% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .message-input-area {
       padding: 1rem;
-      border-top: 1px solid #e5e7eb;
+      border-top: 1px solid #e2e8f0;
+      background: white;
     }
 
-    .message-form {
+    .input-container {
       display: flex;
       gap: 0.5rem;
+      align-items: center;
     }
 
-    .message-input {
+    .input-container input {
       flex: 1;
-      padding: 0.75rem;
+      padding: 0.75rem 1rem;
       border: 1px solid #d1d5db;
-      border-radius: 0.5rem;
-      font-size: 1rem;
+      border-radius: 2rem;
+      outline: none;
+      font-size: 0.875rem;
     }
 
-    .message-input:focus {
-      outline: none;
+    .input-container input:focus {
       border-color: #3b82f6;
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
 
-    .send-button {
+    .send-btn {
+      width: 2.5rem;
+      height: 2.5rem;
+      border: none;
       background: #3b82f6;
       color: white;
-      border: none;
-      padding: 0.75rem 1rem;
-      border-radius: 0.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
       transition: background-color 0.2s;
     }
 
-    .send-button:hover:not(:disabled) {
+    .send-btn:hover:not(:disabled) {
       background: #2563eb;
     }
 
-    .send-button:disabled {
-      background: #9ca3af;
+    .send-btn:disabled {
+      opacity: 0.5;
       cursor: not-allowed;
     }
 
-    .typing-indicator {
-      margin-top: 0.5rem;
-      font-size: 0.875rem;
-      color: #6b7280;
-      font-style: italic;
-    }
-
-    .chat-placeholder {
+    .no-conversation {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .placeholder-content {
+    .empty-state {
       text-align: center;
-      color: #6b7280;
+      color: #64748b;
     }
 
-    .placeholder-content i {
-      font-size: 3rem;
-      margin-bottom: 1rem;
+    .empty-state svg {
+      width: 4rem;
+      height: 4rem;
+      margin: 0 auto 1rem;
       opacity: 0.5;
     }
 
-    .placeholder-content h3 {
-      margin: 0 0 0.5rem 0;
+    .empty-state h3 {
+      margin: 0 0 0.5rem;
       font-size: 1.25rem;
+      font-weight: 600;
+      color: #1e293b;
     }
 
-    .placeholder-content p {
+    .empty-state p {
       margin: 0;
+      font-size: 0.875rem;
+    }
+
+    @media (max-width: 768px) {
+      .conversations-sidebar {
+        width: 280px;
+      }
+
+      .message-content {
+        max-width: 85%;
+      }
     }
   `]
 })
 export class ChatComponent implements OnInit, OnDestroy {
-  conversations: ChatConversation[] = [];
-  activeConversation: ChatConversation | null = null;
-  activeConversationId: string | null = null;
-  messages: ChatMessage[] = [];
-  messageForm: FormGroup;
-  isTyping = false;
+  @ViewChild('messagesContainer') messagesContainer!: ElementRef;
+  @ViewChild('messageInput') messageInput!: ElementRef;
 
-  constructor(
-    private fb: FormBuilder,
-    private chatService: ChatService,
-    private notificationService: NotificationService
-  ) {
-    this.messageForm = this.fb.group({
-      message: ['']
-    });
-  }
+  private destroy$ = new Subject<void>();
+  private typingTimeout: any;
+
+  conversations: ChatConversation[] = [];
+  activeConversation$: any;
+  messages: ChatMessage[] = [];
+  typingIndicators: ChatTypingIndicator[] = [];
+  newMessage = '';
+  currentUserId = 'current-user'; // This should come from auth service
+  loading = false;
+
+  constructor(private chatStore: ChatStore, private notificationService: NotificationService) {}
 
   ngOnInit(): void {
-    this.loadConversations();
+    this.activeConversation$ = this.chatStore.activeConversation$;
+
+    // Subscribe to store state
+    this.chatStore.conversations$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((conversations: any) => {
+        this.conversations = conversations;
+      });
+
+    combineLatest([
+      this.chatStore.messages$,
+      this.chatStore.activeConversation$
+    ]).pipe(takeUntil(this.destroy$))
+    .subscribe((result: any) => {
+      const [messages, activeConversation] = result;
+      if (activeConversation) {
+        this.messages = messages[activeConversation.id] || [];
+        this.scrollToBottom();
+      }
+    });
+
+    this.chatStore.typingIndicators$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((indicators: any) => {
+        this.typingIndicators = indicators;
+      });
+
+    this.chatStore.loading$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((loading: any) => {
+        this.loading = loading;
+      });
+
+    // Load conversations
+    (this.chatStore as any).loadConversations();
   }
 
   ngOnDestroy(): void {
-    // Cleanup subscriptions
-  }
-
-  loadConversations(): void {
-    // Mock data - replace with actual API call
-    this.conversations = [
-      {
-        id: '1',
-        userId: 'user-123',
-        userName: 'John Doe',
-        lastMessage: 'Hi, I need help with my booking',
-        lastMessageTime: new Date(),
-        unreadCount: 2,
-        status: 'active'
-      },
-      {
-        id: '2',
-        userId: 'user-456',
-        userName: 'Jane Smith',
-        lastMessage: 'Thanks for the assistance!',
-        lastMessageTime: new Date(Date.now() - 3600000),
-        unreadCount: 0,
-        status: 'active'
-      }
-    ];
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   selectConversation(conversation: ChatConversation): void {
-    this.activeConversation = conversation;
-    this.activeConversationId = conversation.id;
-    this.loadMessages(conversation.id);
-    conversation.unreadCount = 0;
-  }
-
-  loadMessages(conversationId: string): void {
-    // Mock messages - replace with actual API call
-    this.messages = [
-      {
-        id: '1',
-        senderId: 'user-123',
-        senderName: 'John Doe',
-        message: 'Hi, I need help with my booking',
-        timestamp: new Date(Date.now() - 300000),
-        isAdmin: false
-      },
-      {
-        id: '2',
-        senderId: 'admin',
-        senderName: 'Support',
-        message: 'Hello! I\'d be happy to help you with your booking. What seems to be the issue?',
-        timestamp: new Date(Date.now() - 240000),
-        isAdmin: true
-      },
-      {
-        id: '3',
-        senderId: 'user-123',
-        senderName: 'John Doe',
-        message: 'I\'m having trouble finding available cars for next week',
-        timestamp: new Date(Date.now() - 180000),
-        isAdmin: false
-      }
-    ];
+    (this.chatStore as any).setActiveConversation(conversation);
+    (this.chatStore as any).loadMessages({ conversationId: conversation.id });
+    (this.chatStore as any).markConversationAsRead(conversation.id);
   }
 
   sendMessage(): void {
-    if (this.messageForm.valid && this.activeConversation) {
-      const messageText = this.messageForm.value.message.trim();
-      if (messageText) {
-        const message: ChatMessage = {
-          id: Date.now().toString(),
-          senderId: 'admin',
-          senderName: 'Support',
-          message: messageText,
-          timestamp: new Date(),
-          isAdmin: true
-        };
+    if (!this.newMessage.trim()) return;
 
-        this.messages.push(message);
-        this.messageForm.reset();
+    const activeConversation = (this.chatStore as any).get().activeConversation;
+    if (!activeConversation) return;
 
-        // Update conversation
-        if (this.activeConversation) {
-          this.activeConversation.lastMessage = messageText;
-          this.activeConversation.lastMessageTime = new Date();
-        }
+    // Create message object
+    const message: ChatMessage = {
+      id: Date.now().toString(), // Temporary ID
+      conversationId: activeConversation.id,
+      senderId: this.currentUserId,
+      senderName: 'You', // Should come from auth service
+      content: this.newMessage.trim(),
+      messageType: MessageType.TEXT,
+      timestamp: new Date(),
+      isRead: false
+    };
 
-        // Simulate typing indicator
-        this.isTyping = true;
-        setTimeout(() => {
-          this.isTyping = false;
-        }, 2000);
-      }
+    // Optimistically add message
+    this.chatStore.sendMessage(message);
+
+    // Clear input
+    this.newMessage = '';
+    this.messageInput.nativeElement.focus();
+    this.onStopTyping();
+  }
+
+  onTyping(): void {
+    const activeConversation = (this.chatStore as any).get().activeConversation;
+    if (!activeConversation) return;
+
+    // Send typing indicator
+    // This would integrate with SignalR service
+
+    // Clear existing timeout
+    if (this.typingTimeout) {
+      clearTimeout(this.typingTimeout);
+    }
+
+    // Set new timeout to stop typing
+    this.typingTimeout = setTimeout(() => {
+      this.onStopTyping();
+    }, 1000);
+  }
+
+  onStopTyping(): void {
+    // Stop typing indicator
+    // This would integrate with SignalR service
+    if (this.typingTimeout) {
+      clearTimeout(this.typingTimeout);
     }
   }
 
-  closeConversation(): void {
-    if (this.activeConversation) {
-      this.activeConversation.status = 'closed';
-      this.activeConversation = null;
-      this.activeConversationId = null;
-      this.messages = [];
-      this.notificationService.showSuccess('Conversation closed');
-    }
+  startNewConversation(): void {
+    // Open modal or navigate to contact selection
+    console.log('Start new conversation');
+  }
+
+  private scrollToBottom(): void {
+    setTimeout(() => {
+      if (this.messagesContainer) {
+        this.messagesContainer.nativeElement.scrollTop =
+          this.messagesContainer.nativeElement.scrollHeight;
+      }
+    });
+  }
+
+  getConversationInitials(conversation: ChatConversation): string {
+    const name = this.getConversationName(conversation);
+    return name.split(' ').map(n => n.charAt(0)).join('').toUpperCase().substring(0, 2);
+  }
+
+  getConversationName(conversation: ChatConversation): string {
+    // For now, just return participant names
+    // In a real app, you'd have conversation names
+    return conversation.participants.map(p => p.name).join(', ');
   }
 }

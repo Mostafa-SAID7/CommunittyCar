@@ -77,6 +77,7 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">Pickup Date *</label>
                 <input
                   type="date"
+                  data-cy="booking-start-date"
                   formControlName="startDate"
                   class="input w-full"
                   [min]="getMinDate()"
@@ -90,6 +91,7 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">Return Date *</label>
                 <input
                   type="date"
+                  data-cy="booking-end-date"
                   formControlName="endDate"
                   class="input w-full"
                   [min]="getMinEndDate()"
@@ -110,6 +112,7 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">Street Address *</label>
                 <input
                   type="text"
+                  data-cy="pickup-address"
                   formControlName="pickupLocation.address"
                   class="input w-full"
                   placeholder="123 Main Street"
@@ -253,6 +256,7 @@
             </button>
             <button
               type="submit"
+              data-cy="confirm-booking-button"
               [disabled]="isLoading || bookingForm.invalid || totalPrice === 0"
               class="btn btn-primary"
             >

@@ -17,7 +17,7 @@
       <p class="redirect-message">
         You will be redirected to the login page in a few seconds...
       </p>
-      <button type="button" class="btn btn-primary" (click)="goToLogin()">
+      <button type="button" data-cy="go-to-login" class="btn btn-primary" (click)="goToLogin()">
         Go to Login
       </button>
     </div>
@@ -29,7 +29,7 @@
       <p class="error-message">{{ errorMessage }}</p>
 
       <div class="error-actions">
-        <button type="button" class="btn btn-primary" (click)="resendVerification()">
+        <button type="button" data-cy="resend-verification" class="btn btn-primary" (click)="resendVerification()">
           Resend Verification Email
         </button>
         <button type="button" class="btn btn-secondary" (click)="goToLogin()">

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseSignalStore } from './base-signal-store';
-import { AuthState, initialAuthState } from '../../state/auth/auth.state';
+import { AuthState, initialAuthState } from './auth.state';
 import { User } from '../models/user.model';
 import { AuthResponse } from '../models/auth.model';
 

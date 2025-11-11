@@ -1,4 +1,4 @@
-import { AuthState } from './auth/auth.state';
+import { AuthState } from '../core/state/auth.state';
 import { CarsState } from './cars/cars.state';
 import { BookingsState } from './bookings/bookings.state';
 import { UiState } from './ui/ui.state';

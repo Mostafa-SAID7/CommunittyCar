@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
-import { LiveChatWidgetComponent } from '../../shared/components/live-chat-widget/live-chat-widget.component';
 import { ScrollToTopComponent } from '../../shared/components/scroll-to-top/scroll-to-top.component';
 import { NetworkStatusComponent } from '../../shared/components/network-status/network-status.component';
 import { PwaInstallPromptComponent } from '../../shared/components/pwa-install-prompt/pwa-install-prompt.component';
@@ -12,7 +11,7 @@ import { PwaInstallPromptComponent } from '../../shared/components/pwa-install-p
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [CommonModule, RouterModule, NavbarComponent, FooterComponent, LiveChatWidgetComponent, ScrollToTopComponent, NetworkStatusComponent, PwaInstallPromptComponent],
+  imports: [CommonModule, RouterModule, NavbarComponent, FooterComponent, ScrollToTopComponent, NetworkStatusComponent, PwaInstallPromptComponent],
   templateUrl: './main-layout.component.html',
 })
 export class MainLayoutComponent implements OnInit {

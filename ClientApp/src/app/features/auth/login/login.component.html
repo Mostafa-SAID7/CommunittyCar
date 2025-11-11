@@ -20,13 +20,14 @@
             </label>
             <div class="relative">
               <input
-                type="email"
-                id="email"
-                formControlName="email"
-                placeholder="Enter your email"
-                class="input w-full pl-4 pr-4"
-                [class]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched ? 'border-error-500 focus:ring-error-500' : ''"
-              >
+                  type="email"
+                  id="email"
+                  data-cy="email"
+                  formControlName="email"
+                  placeholder="Enter your email"
+                  class="input w-full pl-4 pr-4"
+                  [class]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched ? 'border-error-500 focus:ring-error-500' : ''"
+                >
               <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
                 <svg *ngIf="loginForm.get('email')?.valid && loginForm.get('email')?.touched" class="h-5 w-5 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -48,6 +49,7 @@
               <input
                 type="password"
                 id="password"
+                data-cy="password"
                 formControlName="password"
                 placeholder="Enter your password"
                 class="input w-full pl-4 pr-4"
@@ -81,6 +83,7 @@
           <!-- Submit Button -->
           <button
             type="submit"
+            data-cy="login-button"
             class="btn btn-primary w-full py-3 text-base font-semibold"
             [disabled]="isLoading"
             [class]="isLoading ? 'opacity-75 cursor-not-allowed' : 'hover:shadow-lg transform hover:-translate-y-0.5'"

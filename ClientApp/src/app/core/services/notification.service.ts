@@ -1,265 +1,145 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, timer } from 'rxjs';
-import { filter, take } from 'rxjs/operators';
-
-export interface Notification {
-  id: string;
-  type: 'success' | 'error' | 'info' | 'warning';
-  title?: string;
-  message: string;
-  duration?: number;
-  timestamp: Date;
-  read?: boolean;
-  action?: NotificationAction;
-  persistent?: boolean;
-  category?: string;
-  priority?: 'low' | 'medium' | 'high';
-  data?: any;
-}
-
-export interface NotificationAction {
-  label: string;
-  callback: () => void;
-  primary?: boolean;
-}
-
-export interface ToasterNotification extends Notification {
-  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top-center' | 'bottom-center';
-}
-
-export interface NotificationSettings {
-  enableSound: boolean;
-  enableVibration: boolean;
-  showInNotificationCenter: boolean;
-  autoHideToasters: boolean;
-  maxNotifications: number;
-}
+import { HttpClient } from '@angular/common/http';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
+import { Notification, NotificationCreateRequest, NotificationUpdateRequest } from '../models/notification.model';
+import { ApiResponse } from '../models/api-response.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
-  private notificationsSubject = new BehaviorSubject<Notification[]>([]);
-  private toasterSubject = new BehaviorSubject<ToasterNotification | null>(null);
-  private settings: NotificationSettings = {
-    enableSound: true,
-    enableVibration: false,
-    showInNotificationCenter: true,
-    autoHideToasters: true,
-    maxNotifications: 50
-  };
+  private apiUrl = `${environment.apiUrl}/api/notifications`;
+  private notifications$ = new BehaviorSubject<Notification[]>([]);
+  private unreadCount$ = new BehaviorSubject<number>(0);
 
-  public notifications$ = this.notificationsSubject.asObservable();
-  public toaster$ = this.toasterSubject.asObservable();
+  constructor(private http: HttpClient) {}
 
-  // Toaster methods
-  showSuccess(message: string, title?: string, duration: number = 3000, position?: ToasterNotification['position']): void {
-    this.showToaster({
-      type: 'success',
-      message,
-      title,
-      duration,
-      position: position || 'top-right',
-      id: this.generateId(),
-      timestamp: new Date()
-    });
-  }
-
-  showError(message: string, title?: string, duration: number = 5000, position?: ToasterNotification['position']): void {
-    this.showToaster({
-      type: 'error',
-      message,
-      title,
-      duration,
-      position: position || 'top-right',
-      id: this.generateId(),
-      timestamp: new Date()
-    });
-  }
-
-  showInfo(message: string, title?: string, duration: number = 3000, position?: ToasterNotification['position']): void {
-    this.showToaster({
-      type: 'info',
-      message,
-      title,
-      duration,
-      position: position || 'top-right',
-      id: this.generateId(),
-      timestamp: new Date()
-    });
-  }
-
-  showWarning(message: string, title?: string, duration: number = 4000, position?: ToasterNotification['position']): void {
-    this.showToaster({
-      type: 'warning',
-      message,
-      title,
-      duration,
-      position: position || 'top-right',
-      id: this.generateId(),
-      timestamp: new Date()
-    });
-  }
-
-  showToaster(notification: ToasterNotification): void {
-    this.toasterSubject.next(notification);
-    if (notification.duration && !notification.persistent && this.settings.autoHideToasters) {
-      timer(notification.duration).pipe(take(1)).subscribe(() => {
-        this.clearToaster();
-      });
-    }
-    this.playNotificationSound(notification.type);
-  }
-
-  clearToaster(): void {
-    this.toasterSubject.next(null);
-  }
-
-  // Notification center methods
-  addNotification(notification: Omit<Notification, 'id' | 'timestamp'>): string {
-    const id = this.generateId();
-    const newNotification: Notification = {
-      ...notification,
-      id,
-      timestamp: new Date(),
-      read: false,
-      priority: notification.priority || 'medium'
-    };
-
-    const currentNotifications = this.notificationsSubject.value;
-
-    // Limit notifications to max setting
-    let updatedNotifications = [newNotification, ...currentNotifications];
-    if (updatedNotifications.length > this.settings.maxNotifications) {
-      updatedNotifications = updatedNotifications.slice(0, this.settings.maxNotifications);
-    }
-
-    this.notificationsSubject.next(updatedNotifications);
-
-    // Play sound for high priority notifications
-    if (notification.priority === 'high' && this.settings.enableSound) {
-      this.playNotificationSound('warning');
-    }
-
-    return id;
-  }
-
-  removeNotification(id: string): void {
-    const currentNotifications = this.notificationsSubject.value;
-    this.notificationsSubject.next(currentNotifications.filter(n => n.id !== id));
-  }
-
-  markAsRead(id: string): void {
-    const currentNotifications = this.notificationsSubject.value;
-    const updatedNotifications = currentNotifications.map(n =>
-      n.id === id ? { ...n, read: true } : n
-    );
-    this.notificationsSubject.next(updatedNotifications);
-  }
-
-  markAllAsRead(): void {
-    const currentNotifications = this.notificationsSubject.value;
-    const updatedNotifications = currentNotifications.map(n => ({ ...n, read: true }));
-    this.notificationsSubject.next(updatedNotifications);
-  }
-
-  clearAllNotifications(): void {
-    this.notificationsSubject.next([]);
-  }
-
-  clearNotificationsByCategory(category: string): void {
-    const currentNotifications = this.notificationsSubject.value;
-    this.notificationsSubject.next(currentNotifications.filter(n => n.category !== category));
-  }
-
-  getNotificationsByCategory(category: string): Observable<Notification[]> {
-    return this.notifications$.pipe(
-      filter(notifications => notifications.some(n => n.category === category))
+  getNotifications(): Observable<Notification[]> {
+    return this.http.get<ApiResponse<Notification[]>>(this.apiUrl).pipe(
+      map(response => response.data || []),
+      tap(notifications => {
+        this.notifications$.next(notifications);
+        this.updateUnreadCount(notifications);
+      })
     );
   }
 
-  getUnreadCount(): Observable<number> {
-    return new Observable(observer => {
-      this.notifications$.subscribe(notifications => {
-        const unreadCount = notifications.filter(n => !n.read).length;
-        observer.next(unreadCount);
-      });
-    });
+  getNotification(id: string): Observable<Notification> {
+    return this.http.get<ApiResponse<Notification>>(`${this.apiUrl}/${id}`).pipe(
+      map(response => response.data!),
+      tap(notification => {
+        this.updateNotificationInList(notification);
+      })
+    );
   }
 
-  getUnreadCountByCategory(category: string): Observable<number> {
-    return new Observable(observer => {
-      this.notifications$.subscribe(notifications => {
-        const unreadCount = notifications.filter(n => !n.read && n.category === category).length;
-        observer.next(unreadCount);
-      });
-    });
+  createNotification(notification: NotificationCreateRequest): Observable<Notification> {
+    return this.http.post<ApiResponse<Notification>>(this.apiUrl, notification).pipe(
+      map(response => response.data!),
+      tap(notification => {
+        this.addNotificationToList(notification);
+      })
+    );
   }
 
-  // Settings methods
-  updateSettings(newSettings: Partial<NotificationSettings>): void {
-    this.settings = { ...this.settings, ...newSettings };
+  markAsRead(id: string): Observable<any> {
+    const updateRequest: NotificationUpdateRequest = { isRead: true };
+    return this.http.put<ApiResponse<any>>(`${this.apiUrl}/${id}/read`, updateRequest).pipe(
+      tap(response => {
+        if (response.success) {
+          this.markNotificationAsRead(id);
+        }
+      })
+    );
   }
 
-  getSettings(): NotificationSettings {
-    return { ...this.settings };
+  markAllAsRead(): Observable<any> {
+    return this.http.put<ApiResponse<any>>(`${this.apiUrl}/mark-all-read`, {}).pipe(
+      tap(response => {
+        if (response.success) {
+          this.markAllNotificationsAsRead();
+        }
+      })
+    );
   }
 
-  // Utility methods
-  private generateId(): string {
-    return Math.random().toString(36).substr(2, 9);
+  deleteNotification(id: string): Observable<any> {
+    return this.http.delete<ApiResponse<any>>(`${this.apiUrl}/${id}`).pipe(
+      tap(response => {
+        if (response.success) {
+          this.removeNotificationFromList(id);
+        }
+      })
+    );
   }
 
-  private playNotificationSound(type: string): void {
-    if (!this.settings.enableSound) return;
+  // Local state management
+  getNotificationsObservable(): Observable<Notification[]> {
+    return this.notifications$.asObservable();
+  }
 
-    // Create audio context for notification sounds
-    try {
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
+  getUnreadCountObservable(): Observable<number> {
+    return this.unreadCount$.asObservable();
+  }
 
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
+  getCurrentNotifications(): Notification[] {
+    return this.notifications$.value;
+  }
 
-      // Different frequencies for different notification types
-      const frequencies = {
-        success: 800,
-        error: 400,
-        warning: 600,
-        info: 500
-      };
+  getUnreadCountValue(): number {
+    return this.unreadCount$.value;
+  }
 
-      oscillator.frequency.setValueAtTime(frequencies[type as keyof typeof frequencies] || 500, audioContext.currentTime);
-      oscillator.type = 'sine';
+  // Real-time updates from SignalR
+  addRealTimeNotification(notification: Notification): void {
+    this.addNotificationToList(notification);
+  }
 
-      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+  private addNotificationToList(notification: Notification): void {
+    const currentNotifications = this.notifications$.value;
+    const updatedNotifications = [notification, ...currentNotifications];
+    this.notifications$.next(updatedNotifications);
+    this.updateUnreadCount(updatedNotifications);
+  }
 
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.3);
-    } catch (error) {
-      // Fallback for browsers that don't support Web Audio API
-      console.warn('Notification sound not supported in this browser');
+  private updateNotificationInList(notification: Notification): void {
+    const currentNotifications = this.notifications$.value;
+    const index = currentNotifications.findIndex(n => n.id === notification.id);
+    if (index !== -1) {
+      currentNotifications[index] = notification;
+      this.notifications$.next([...currentNotifications]);
+      this.updateUnreadCount(currentNotifications);
     }
   }
 
-  // Bulk operations
-  addMultipleNotifications(notifications: Omit<Notification, 'id' | 'timestamp'>[]): string[] {
-    return notifications.map(notification => this.addNotification(notification));
+  private markNotificationAsRead(id: string): void {
+    const currentNotifications = this.notifications$.value;
+    const notification = currentNotifications.find(n => n.id === id);
+    if (notification && !notification.isRead) {
+      notification.isRead = true;
+      this.notifications$.next([...currentNotifications]);
+      this.updateUnreadCount(currentNotifications);
+    }
   }
 
-  removeMultipleNotifications(ids: string[]): void {
-    const currentNotifications = this.notificationsSubject.value;
-    this.notificationsSubject.next(currentNotifications.filter(n => !ids.includes(n.id)));
+  private markAllNotificationsAsRead(): void {
+    const currentNotifications = this.notifications$.value;
+    const updatedNotifications = currentNotifications.map(n => ({ ...n, isRead: true }));
+    this.notifications$.next(updatedNotifications);
+    this.unreadCount$.next(0);
   }
 
-  // Legacy methods for backward compatibility
-  showNotification(notification: Notification): void {
-    this.showToaster(notification as ToasterNotification);
+  private removeNotificationFromList(id: string): void {
+    const currentNotifications = this.notifications$.value;
+    const filteredNotifications = currentNotifications.filter(n => n.id !== id);
+    this.notifications$.next(filteredNotifications);
+    this.updateUnreadCount(filteredNotifications);
   }
 
-  clear(): void {
-    this.clearToaster();
+  private updateUnreadCount(notifications: Notification[]): void {
+    const unreadCount = notifications.filter(n => !n.isRead).length;
+    this.unreadCount$.next(unreadCount);
   }
 }

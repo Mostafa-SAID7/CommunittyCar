@@ -4,7 +4,6 @@ import { NavbarComponent } from './shared/components/navbar/navbar.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { ToasterComponent } from './shared/components/toaster/toaster.component';
 import { NotificationCenterComponent } from './shared/components/notification-center/notification-center.component';
-import { LiveChatComponent } from './shared/components/live-chat/live-chat.component';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +13,6 @@ import { LiveChatComponent } from './shared/components/live-chat/live-chat.compo
     FooterComponent,
     ToasterComponent,
     NotificationCenterComponent,
-    LiveChatComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']

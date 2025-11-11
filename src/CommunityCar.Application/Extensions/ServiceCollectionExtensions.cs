@@ -23,6 +23,10 @@ public static class ServiceCollectionExtensions
         // services.AddScoped<IOtpService, OtpService>(); // Commented out - interface not found
         services.AddScoped<IEmailService, Services.EmailService>();
         services.AddScoped<IProfileService, ProfileService>();
+        services.AddScoped<INotificationService, Infrastructure.Services.NotificationService>();
+        services.AddScoped<IChatService, Infrastructure.Services.ChatService>();
+        services.AddScoped<IPostService, Infrastructure.Services.PostService>();
+        services.AddScoped<ICommentService, Infrastructure.Services.CommentService>();
         // services.AddScoped<ICarService, CarService>(); // Commented out - service not implemented
         // services.AddScoped<IBookingService, BookingService>(); // Commented out - service not implemented
         // services.AddScoped<IAuditService, AuditService>(); // Commented out - service not implemented
@@ -32,14 +36,16 @@ public static class ServiceCollectionExtensions
         services.AddValidatorsFromAssemblyContaining<LoginRequestValidator>();
         services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
         services.AddValidatorsFromAssemblyContaining<UpdateProfileRequestValidator>();
+        services.AddValidatorsFromAssemblyContaining<global::CommunityCar.Application.Validators.Notifications.CreateNotificationRequestValidator>();
+        services.AddValidatorsFromAssemblyContaining<global::CommunityCar.Application.Validators.Chat.SendChatMessageRequestValidator>();
         // services.AddValidatorsFromAssemblyContaining<CreateCarRequestValidator>(); // Commented out - validator not implemented
         // services.AddValidatorsFromAssemblyContaining<CreateBookingRequestValidator>(); // Commented out - validator not implemented
 
-        // Register MediatR - commented out as package not installed
-        // services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+        // Register MediatR
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
 
-        // Register AutoMapper - commented out due to version incompatibility
-        // services.AddAutoMapper(typeof(ServiceCollectionExtensions));
+        // Register AutoMapper
+        services.AddAutoMapper(typeof(ServiceCollectionExtensions));
 
         return services;
     }

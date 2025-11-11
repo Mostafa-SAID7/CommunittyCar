@@ -10,12 +10,14 @@
         <div class="flex">
           <input
             type="text"
+            data-cy="search-input"
             [(ngModel)]="searchTerm"
             (keyup.enter)="onSearch()"
             placeholder="Search by make or model..."
             class="flex-1 px-4 py-3 rounded-l-lg text-gray-900 focus:outline-none"
           >
           <button
+            data-cy="search-button"
             (click)="onSearch()"
             class="bg-white text-blue-600 px-6 py-3 rounded-r-lg hover:bg-gray-100 transition-colors"
           >
@@ -42,12 +44,14 @@
           <div class="flex space-x-2">
             <input
               type="number"
+              data-cy="min-price"
               [(ngModel)]="selectedFilters.minPrice"
               placeholder="Min"
               class="input w-1/2"
             >
             <input
               type="number"
+              data-cy="max-price"
               [(ngModel)]="selectedFilters.maxPrice"
               placeholder="Max"
               class="input w-1/2"
@@ -59,6 +63,7 @@
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">Fuel Type</label>
           <select
+            data-cy="fuel-type-select"
             [(ngModel)]="selectedFilters.fuelType"
             class="input w-full"
           >
@@ -74,6 +79,7 @@
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">Transmission</label>
           <select
+            data-cy="transmission-select"
             [(ngModel)]="selectedFilters.transmission"
             class="input w-full"
           >
@@ -86,6 +92,7 @@
         <!-- Search Button -->
         <div class="flex items-end">
           <button
+            data-cy="apply-filters-button"
             (click)="onFilter()"
             class="btn btn-primary w-full"
           >
@@ -179,12 +186,14 @@
           <!-- Actions -->
           <div class="flex space-x-2">
             <button
+              data-cy="view-details-button"
               (click)="onViewDetails(car)"
               class="flex-1 btn btn-outline text-sm py-2"
             >
               View Details
             </button>
             <button
+              data-cy="book-now-button"
               (click)="onBookCar(car)"
               class="flex-1 btn btn-primary text-sm py-2"
             >
@@ -217,6 +226,7 @@
     <h2 class="text-3xl font-bold mb-4">Ready to Find Your Perfect Car?</h2>
     <p class="text-xl mb-8">Explore our full collection and book your dream ride today.</p>
     <button
+      data-cy="browse-all-cars-button"
       (click)="browseAllCars()"
       class="btn bg-white text-gray-900 hover:bg-gray-100 px-8 py-3 text-lg"
     >

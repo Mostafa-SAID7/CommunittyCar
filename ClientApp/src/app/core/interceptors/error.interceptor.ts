@@ -19,7 +19,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           // Backend returned an unsuccessful response code
           errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
         }
-        this.notificationService.showError(errorMessage);
+        // this.notificationService.showError(errorMessage);
         return throwError(errorMessage);
       })
     );

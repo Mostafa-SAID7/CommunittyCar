@@ -103,6 +103,7 @@
               <label class="block text-sm font-medium text-gray-700 mb-1">Pick-up Date</label>
               <input
                 type="date"
+                data-cy="pickup-date"
                 [(ngModel)]="bookingDates.startDate"
                 class="input w-full"
                 [min]="getMinDate()"
@@ -112,6 +113,7 @@
               <label class="block text-sm font-medium text-gray-700 mb-1">Return Date</label>
               <input
                 type="date"
+                data-cy="return-date"
                 [(ngModel)]="bookingDates.endDate"
                 class="input w-full"
                 [min]="bookingDates.startDate"
@@ -123,6 +125,7 @@
         <!-- Actions -->
         <div class="space-y-3">
           <button
+            data-cy="book-now-details"
             (click)="onBookNow()"
             class="btn btn-primary w-full py-3 text-lg"
             [disabled]="!bookingDates.startDate || !bookingDates.endDate"

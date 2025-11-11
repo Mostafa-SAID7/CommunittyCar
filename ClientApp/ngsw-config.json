@@ -61,6 +61,17 @@
         "maxAge": "5m",
         "timeout": "10s"
       }
+    },
+    {
+      "name": "api-i18n",
+      "urls": [
+        "/assets/i18n/*.json"
+      ],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 10,
+        "maxAge": "24h"
+      }
     }
   ]
 }

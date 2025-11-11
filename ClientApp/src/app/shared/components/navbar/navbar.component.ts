@@ -1,15 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ThemeService } from '../../../core/services/theme.service';
 import { User } from '../../../core/models/user.model';
 import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { I18nService } from '../../../core/services/i18n.service';
+import { NotificationsStore } from '../../../core/state/notifications.store';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, LanguageSwitcherComponent],
+  imports: [CommonModule, RouterModule, LanguageSwitcherComponent, TranslatePipe],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
@@ -56,9 +59,12 @@ export class NavbarComponent implements OnInit {
     }
   ];
 
+  private i18nService = inject(I18nService);
+
   constructor(
     private authService: AuthService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private notificationsStore: NotificationsStore
   ) {}
 
   ngOnInit(): void {
@@ -105,7 +111,7 @@ export class NavbarComponent implements OnInit {
   }
 
   get unreadNotificationsCount(): number {
-    return this.notifications.filter(notification => !notification.read).length;
+    return this.notificationsStore.getUnreadCount();
   }
 
   toggleNotificationMenu(): void {

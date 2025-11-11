@@ -1,4 +1,5 @@
 using CommunityCar.Application.Extensions;
+using CommunityCar.Api.Hubs;
 using CommunityCar.Infrastructure.Configurations.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -18,7 +19,7 @@ builder.Services.AddIdentityConfiguration(builder.Configuration);
 // Configure CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngularApp", policy =>
+    options.AddPolicy("AllowReactApp", policy =>
     {
         policy.WithOrigins("http://localhost:3000", "https://localhost:3000", "http://localhost:5000", "https://localhost:5000")
               .AllowAnyHeader()
@@ -55,6 +56,9 @@ builder.Services.AddApiServices();
 // Register HttpClient for external API calls
 builder.Services.AddHttpClient();
 
+// Configure SignalR
+builder.Services.AddSignalR();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -63,7 +67,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "CommunityCar API",
         Version = "v1",
-        Description = "A comprehensive API for CommunityCar application with authentication, user profiles, and more.",
+        Description = "A comprehensive API for CommunityCar application with authentication, user profiles, notifications, chat, and community features.",
         Contact = new OpenApiContact
         {
             Name = "CommunityCar Support",
@@ -149,5 +153,10 @@ app.UseAuthorization();
 app.UseStaticFiles();
 
 app.MapControllers();
+
+// Map SignalR hubs
+app.MapHub<NotificationHub>("/notificationHub");
+app.MapHub<ChatHub>("/chatHub");
+app.MapHub<ForumHub>("/forumHub");
 
 app.Run();

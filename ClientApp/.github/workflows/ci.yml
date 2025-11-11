@@ -1,0 +1,79 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run linting
+      run: npm run lint
+
+    - name: Run unit tests with coverage
+      run: npm run test:ci -- --code-coverage
+
+    - name: Upload unit test coverage
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+        flags: unit-tests
+        name: unit-tests
+
+    - name: Build application
+      run: npm run build
+
+    - name: Run E2E tests
+      run: npm run e2e:ci
+      continue-on-error: true  # E2E tests might be flaky
+
+    - name: Upload E2E test coverage
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/e2e/lcov.info
+        flags: e2e-tests
+        name: e2e-tests
+      continue-on-error: true
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build for production
+      run: npm run build:prod
+
+    - name: Deploy to staging
+      run: |
+        # Add deployment commands here
+        echo "Deploying to staging environment"
+        # Example: rsync, scp, or cloud provider CLI
