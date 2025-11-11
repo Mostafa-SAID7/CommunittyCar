@@ -7,7 +7,7 @@ export type AlertType = 'success' | 'error' | 'warning' | 'info';
   selector: 'app-alert',
   imports: [CommonModule],
   templateUrl: './alert.component.html',
-  styleUrls: ['./alert.component.scss']
+
 })
 export class AlertComponent {
   @Input() type: AlertType = 'info';
@@ -61,3 +61,4 @@ export class AlertComponent {
     return `${baseClasses} ${typeClass}`;
   }
 }
+

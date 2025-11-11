@@ -12,7 +12,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   standalone: true,
   imports: [CommonModule, FormsModule, DateFormatPipe],
   templateUrl: './live-chat.component.html',
-  styleUrls: ['./live-chat.component.scss'],
+
   animations: [
     trigger('slideInOut', [
       state('in', style({ transform: 'translateY(0)', opacity: 1 })),

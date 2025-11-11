@@ -8,6 +8,6 @@ import { FooterComponent } from '../../shared/components/footer/footer.component
   standalone: true,
   imports: [RouterModule, NavbarComponent, FooterComponent],
   templateUrl: './main-layout.component.html',
-  styleUrls: ['./main-layout.component.scss']
+
 })
 export class MainLayoutComponent {}

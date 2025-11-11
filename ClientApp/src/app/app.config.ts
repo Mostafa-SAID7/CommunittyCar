@@ -5,7 +5,6 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { provideServiceWorker } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
 import { routes } from './app.routes';
@@ -42,10 +41,6 @@ export const appConfig: ApplicationConfig = {
       FormsModule,
       CommonModule,
       IconModule
-    ),
-    provideServiceWorker('ngsw-worker.js', {
-      enabled: environment.production,
-      registrationStrategy: 'registerWhenStable:30000'
-    })
+    )
   ]
 };

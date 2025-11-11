@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthApiService } from '../../../core/services/api/auth-api.service';
 import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-setup-2fa',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './setup-2fa.component.html',
-  styleUrls: ['./setup-2fa.component.scss']
 })
 export class Setup2faComponent implements OnInit {
   twoFactorForm: FormGroup;

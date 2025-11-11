@@ -10,7 +10,7 @@ import { NotificationCenterComponent } from '../../shared/components/notificatio
   standalone: true,
   imports: [CommonModule, RouterOutlet, NotificationCenterComponent],
   templateUrl: './admin-layout.component.html',
-  styleUrls: ['./admin-layout.component.scss']
+
 })
 export class AdminLayoutComponent implements OnInit {
   isSidebarCollapsed = false;
@@ -43,3 +43,4 @@ export class AdminLayoutComponent implements OnInit {
     return `${this.currentUser.firstName?.charAt(0) || ''}${this.currentUser.lastName?.charAt(0) || ''}`.toUpperCase();
   }
 }
+

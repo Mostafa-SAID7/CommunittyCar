@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
 import { ProfileApiService } from '../../../core/services/api/profile-api.service';
@@ -9,9 +10,8 @@ import { emailValidator, phoneNumberValidator } from '../../../core/utilities/va
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './edit-profile.component.html',
-  styleUrls: ['./edit-profile.component.scss']
 })
 export class EditProfileComponent implements OnInit {
   currentUser: User | null = null;

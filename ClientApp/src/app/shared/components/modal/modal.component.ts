@@ -7,7 +7,7 @@ export type ModalSize = 'small' | 'medium' | 'large' | 'extra-large';
   selector: 'app-modal',
   imports: [CommonModule],
   templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.scss']
+
 })
 export class ModalComponent {
   @Input() isOpen: boolean = false;
@@ -81,3 +81,4 @@ export class ModalComponent {
     return classes.join(' ');
   }
 }
+

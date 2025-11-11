@@ -9,7 +9,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   standalone: true,
   imports: [CommonModule],
   templateUrl: './toaster.component.html',
-  styleUrls: ['./toaster.component.scss'],
+
   animations: [
     trigger('toastAnimation', [
       state('in', style({ transform: 'translateX(0) scale(1)', opacity: 1 })),

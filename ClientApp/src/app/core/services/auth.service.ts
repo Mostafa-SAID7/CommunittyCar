@@ -103,12 +103,12 @@ export class AuthService {
 
   is2FAEnabled(): boolean {
     const user = this.currentUserSubject.value;
-    return user ? user.is2FAEnabled : false;
+    return user ? user.is2FAEnabled ?? false : false;
   }
 
   isEmailVerified(): boolean {
     const user = this.currentUserSubject.value;
-    return user ? user.isEmailVerified : false;
+    return user ? user.isEmailVerified ?? false : false;
   }
 
   private decodeToken(token: string): User {

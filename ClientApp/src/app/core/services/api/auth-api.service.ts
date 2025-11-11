@@ -14,51 +14,51 @@ export class AuthApiService {
   constructor(private http: HttpClient) {}
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials);
+    return this.http.post<AuthResponse>(`${this.apiUrl}/Auth/login`, credentials);
   }
 
   register(userData: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, userData);
+    return this.http.post<AuthResponse>(`${this.apiUrl}/Auth/register`, userData);
   }
 
   generateOtp(email: string): Observable<{ success: boolean; message: string }> {
-    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/auth/generate-otp`, { email });
+    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/Auth/generate-otp`, { email });
   }
 
   verifyOtp(email: string, otp: string): Observable<{ success: boolean; message: string; token?: string }> {
-    return this.http.post<{ success: boolean; message: string; token?: string }>(`${this.apiUrl}/auth/verify-otp`, { email, otp });
+    return this.http.post<{ success: boolean; message: string; token?: string }>(`${this.apiUrl}/Auth/verify-otp`, { email, otp });
   }
 
   socialLogin(provider: string, token: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/social-login`, { provider, token });
+    return this.http.post<AuthResponse>(`${this.apiUrl}/Auth/social-login`, { provider, token });
   }
 
   refreshToken(refreshToken: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/refresh-token`, { refreshToken });
+    return this.http.post<AuthResponse>(`${this.apiUrl}/Auth/refresh-token`, { refreshToken });
   }
 
   logout(): Observable<{ success: boolean; message: string }> {
-    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/auth/logout`, {});
+    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/Auth/logout`, {});
   }
 
   enable2FA(): Observable<{ success: boolean; message: string; secret?: string; qrCodeUrl?: string }> {
-    return this.http.post<{ success: boolean; message: string; secret?: string; qrCodeUrl?: string }>(`${this.apiUrl}/auth/enable-2fa`, {});
+    return this.http.post<{ success: boolean; message: string; secret?: string; qrCodeUrl?: string }>(`${this.apiUrl}/Auth/enable-2fa`, {});
   }
 
   verify2FA(code: string): Observable<{ success: boolean; message: string }> {
-    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/auth/verify-2fa`, { code });
+    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/Auth/verify-2fa`, { code });
   }
 
   disable2FA(): Observable<{ success: boolean; message: string }> {
-    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/auth/disable-2fa`, {});
+    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/Auth/disable-2fa`, {});
   }
 
   resetPassword(data: { email: string; otp: string; newPassword: string }): Observable<{ success: boolean; message: string }> {
-    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/auth/reset-password`, data);
+    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/Auth/reset-password`, data);
   }
 
   verifyEmail(token: string): Observable<{ success: boolean; message: string }> {
-    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/auth/verify-email`, { token });
+    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/Auth/verify-email`, { token });
   }
 
   changePassword(data: { currentPassword: string; newPassword: string }): Observable<{ success: boolean; message: string }> {

@@ -15,6 +15,7 @@ export interface Car {
   images: string[];
   features: string[];
   location: Location;
+  status: 'available' | 'booked' | 'maintenance';
   availability: Availability[];
   rating: number;
   reviewCount: number;

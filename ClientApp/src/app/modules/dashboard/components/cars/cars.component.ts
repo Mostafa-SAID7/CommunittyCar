@@ -72,7 +72,7 @@ import { Car } from '../../../../core/models/car.model';
             </div>
             <div class="car-price">
               <span class="price">{{ car.pricePerDay }}/day</span>
-              <span class="location">{{ car.location }}</span>
+              <span class="location">{{ car.location.city }}, {{ car.location.state }}</span>
             </div>
             <div class="car-actions">
               <button class="btn-secondary" (click)="viewCar(car)">View</button>
@@ -276,33 +276,63 @@ export class CarsComponent implements OnInit {
     this.cars = [
       {
         id: '1',
+        ownerId: 'owner1',
         make: 'Toyota',
         model: 'Camry',
         year: 2022,
+        color: 'White',
+        licensePlate: 'ABC123',
+        mileage: 15000,
         pricePerDay: 45,
-        fuelType: 'Gasoline',
-        transmission: 'Automatic',
+        fuelType: 'petrol',
+        transmission: 'automatic',
         seats: 5,
-        location: 'New York',
+        location: {
+          address: '123 Main St',
+          city: 'New York',
+          state: 'NY',
+          zipCode: '10001',
+          country: 'USA',
+          latitude: 40.7128,
+          longitude: -74.0060
+        },
         status: 'available',
         images: ['/assets/images/cars/toyota-camry.jpg'],
         features: ['AC', 'Bluetooth', 'GPS'],
+        availability: [],
+        rating: 4.5,
+        reviewCount: 12,
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
         id: '2',
+        ownerId: 'owner2',
         make: 'Honda',
         model: 'Civic',
         year: 2023,
+        color: 'Blue',
+        licensePlate: 'XYZ789',
+        mileage: 8000,
         pricePerDay: 40,
-        fuelType: 'Gasoline',
-        transmission: 'Manual',
+        fuelType: 'petrol',
+        transmission: 'manual',
         seats: 5,
-        location: 'Los Angeles',
+        location: {
+          address: '456 Oak Ave',
+          city: 'Los Angeles',
+          state: 'CA',
+          zipCode: '90210',
+          country: 'USA',
+          latitude: 34.0522,
+          longitude: -118.2437
+        },
         status: 'booked',
         images: ['/assets/images/cars/honda-civic.jpg'],
         features: ['AC', 'Bluetooth'],
+        availability: [],
+        rating: 4.2,
+        reviewCount: 8,
         createdAt: new Date(),
         updatedAt: new Date()
       }

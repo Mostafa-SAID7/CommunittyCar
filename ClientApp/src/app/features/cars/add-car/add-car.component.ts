@@ -11,7 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   selector: 'app-add-car',
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './add-car.component.html',
-  styleUrls: ['./add-car.component.scss']
+
 })
 export class AddCarComponent {
   carForm: FormGroup;
@@ -151,3 +151,4 @@ export class AddCarComponent {
     this.router.navigate(['/cars']);
   }
 }
+

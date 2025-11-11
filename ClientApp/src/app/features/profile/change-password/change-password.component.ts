@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthApiService } from '../../../core/services/api/auth-api.service';
 import { NotificationService } from '../../../core/services/notification.service';
@@ -7,9 +8,8 @@ import { passwordMatchValidator } from '../../../core/utilities/validators';
 @Component({
   selector: 'app-change-password',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './change-password.component.html',
-  styleUrls: ['./change-password.component.scss']
 })
 export class ChangePasswordComponent {
   changePasswordForm: FormGroup;

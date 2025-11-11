@@ -39,7 +39,7 @@ export interface CarListResponse {
   providedIn: 'root'
 })
 export class CarApiService {
-  private readonly apiUrl = environment.apiUrl;
+  private readonly apiUrl = `${environment.apiUrl}/Cars`;
 
   constructor(private http: HttpClient) {}
 
@@ -66,23 +66,23 @@ export class CarApiService {
       });
     }
 
-    return this.http.get<CarListResponse>(`${this.apiUrl}/cars`, { params: httpParams });
+    return this.http.get<CarListResponse>(`${this.apiUrl}`, { params: httpParams });
   }
 
   getCar(id: string): Observable<Car> {
-    return this.http.get<Car>(`${this.apiUrl}/cars/${id}`);
+    return this.http.get<Car>(`${this.apiUrl}/${id}`);
   }
 
   addCar(car: Omit<Car, 'id'>): Observable<Car> {
-    return this.http.post<Car>(`${this.apiUrl}/cars`, car);
+    return this.http.post<Car>(`${this.apiUrl}`, car);
   }
 
   updateCar(id: string, car: Partial<Car>): Observable<Car> {
-    return this.http.put<Car>(`${this.apiUrl}/cars/${id}`, car);
+    return this.http.put<Car>(`${this.apiUrl}/${id}`, car);
   }
 
   deleteCar(id: string): Observable<{ success: boolean; message: string }> {
-    return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/cars/${id}`);
+    return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/${id}`);
   }
 
   uploadCarImages(id: string, images: File[]): Observable<{ success: boolean; message: string; urls?: string[] }> {
@@ -91,7 +91,7 @@ export class CarApiService {
       formData.append(`images`, image);
     });
 
-    return this.http.post<{ success: boolean; message: string; urls?: string[] }>(`${this.apiUrl}/cars/${id}/upload-images`, formData);
+    return this.http.post<{ success: boolean; message: string; urls?: string[] }>(`${this.apiUrl}/${id}/upload-images`, formData);
   }
 
   getCarAvailability(id: string, startDate: Date, endDate: Date): Observable<{ available: boolean; conflictingBookings?: any[] }> {
@@ -99,7 +99,7 @@ export class CarApiService {
       .set('startDate', startDate.toISOString())
       .set('endDate', endDate.toISOString());
 
-    return this.http.get<{ available: boolean; conflictingBookings?: any[] }>(`${this.apiUrl}/cars/${id}/availability`, { params });
+    return this.http.get<{ available: boolean; conflictingBookings?: any[] }>(`${this.apiUrl}/${id}/availability`, { params });
   }
 
   getCarReviews(id: string, page: number = 1, limit: number = 10): Observable<any> {
@@ -107,31 +107,31 @@ export class CarApiService {
       .set('page', page.toString())
       .set('limit', limit.toString());
 
-    return this.http.get(`${this.apiUrl}/cars/${id}/reviews`, { params });
+    return this.http.get(`${this.apiUrl}/${id}/reviews`, { params });
   }
 
   addCarReview(id: string, review: { rating: number; comment: string }): Observable<{ success: boolean; message: string }> {
-    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/cars/${id}/reviews`, review);
+    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/${id}/reviews`, review);
   }
 
   getMakes(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}/cars/makes`);
+    return this.http.get<string[]>(`${this.apiUrl}/makes`);
   }
 
   getModels(make: string): Observable<string[]> {
     const params = new HttpParams().set('make', make);
-    return this.http.get<string[]>(`${this.apiUrl}/cars/models`, { params });
+    return this.http.get<string[]>(`${this.apiUrl}/models`, { params });
   }
 
   getPopularLocations(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}/cars/popular-locations`);
+    return this.http.get<string[]>(`${this.apiUrl}/popular-locations`);
   }
 
   toggleFavorite(id: string): Observable<{ success: boolean; message: string; isFavorite: boolean }> {
-    return this.http.post<{ success: boolean; message: string; isFavorite: boolean }>(`${this.apiUrl}/cars/${id}/favorite`, {});
+    return this.http.post<{ success: boolean; message: string; isFavorite: boolean }>(`${this.apiUrl}/${id}/favorite`, {});
   }
 
   getFavorites(): Observable<Car[]> {
-    return this.http.get<Car[]>(`${this.apiUrl}/cars/favorites`);
+    return this.http.get<Car[]>(`${this.apiUrl}/favorites`);
   }
 }

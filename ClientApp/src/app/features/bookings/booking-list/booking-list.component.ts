@@ -9,7 +9,6 @@ import { LoadingSpinnerComponent } from '../../../shared/components/loading-spin
 @Component({
   selector: 'app-booking-list',
   templateUrl: './booking-list.component.html',
-  styleUrls: ['./booking-list.component.scss'],
   standalone: true,
   imports: [CommonModule, RouterModule, LoadingSpinnerComponent]
 })

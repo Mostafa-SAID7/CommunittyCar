@@ -64,7 +64,7 @@ export interface CreateBookingRequest {
   providedIn: 'root'
 })
 export class BookingApiService {
-  private readonly apiUrl = environment.apiUrl;
+  private readonly apiUrl = `${environment.apiUrl}/Bookings`;
 
   constructor(private http: HttpClient) {}
 
@@ -80,41 +80,41 @@ export class BookingApiService {
             const dateRange = value as { start: Date; end: Date };
             httpParams = httpParams.set('startDate', dateRange.start.toISOString());
             httpParams = httpParams.set('endDate', dateRange.end.toISOString());
-          } else if (typeof value === 'object' && value instanceof Date) {
-            httpParams = httpParams.set(key, value.toISOString());
+          } else if (typeof value === 'object' && (value as any) instanceof Date) {
+            httpParams = httpParams.set(key, (value as Date).toISOString());
           } else {
-            httpParams = httpParams.set(key, value.toString());
+            httpParams = httpParams.set(key, String(value));
           }
         }
       });
     }
 
-    return this.http.get<BookingListResponse>(`${this.apiUrl}/bookings`, { params: httpParams });
+    return this.http.get<BookingListResponse>(`${this.apiUrl}`, { params: httpParams });
   }
 
   getBooking(id: string): Observable<Booking> {
-    return this.http.get<Booking>(`${this.apiUrl}/bookings/${id}`);
+    return this.http.get<Booking>(`${this.apiUrl}/${id}`);
   }
 
   createBooking(bookingData: CreateBookingRequest): Observable<{ success: boolean; message: string; booking?: Booking; paymentUrl?: string }> {
-    return this.http.post<{ success: boolean; message: string; booking?: Booking; paymentUrl?: string }>(`${this.apiUrl}/bookings`, bookingData);
+    return this.http.post<{ success: boolean; message: string; booking?: Booking; paymentUrl?: string }>(`${this.apiUrl}`, bookingData);
   }
 
   updateBooking(id: string, bookingData: Partial<Booking>): Observable<{ success: boolean; message: string; booking?: Booking }> {
-    return this.http.put<{ success: boolean; message: string; booking?: Booking }>(`${this.apiUrl}/bookings/${id}`, bookingData);
+    return this.http.put<{ success: boolean; message: string; booking?: Booking }>(`${this.apiUrl}/${id}`, bookingData);
   }
 
   cancelBooking(id: string, reason?: string): Observable<{ success: boolean; message: string }> {
     const params = reason ? new HttpParams().set('reason', reason) : new HttpParams();
-    return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/bookings/${id}`, { params });
+    return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/${id}`, { params });
   }
 
   confirmBooking(id: string): Observable<{ success: boolean; message: string }> {
-    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/bookings/${id}/confirm`, {});
+    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/${id}/confirm`, {});
   }
 
   extendBooking(id: string, newEndDate: Date): Observable<{ success: boolean; message: string; booking?: Booking }> {
-    return this.http.post<{ success: boolean; message: string; booking?: Booking }>(`${this.apiUrl}/bookings/${id}/extend`, { newEndDate: newEndDate.toISOString() });
+    return this.http.post<{ success: boolean; message: string; booking?: Booking }>(`${this.apiUrl}/${id}/extend`, { newEndDate: newEndDate.toISOString() });
   }
 
   getBookingHistory(userId?: string, page: number = 1, limit: number = 10): Observable<BookingListResponse> {
@@ -126,17 +126,17 @@ export class BookingApiService {
       params.set('userId', userId);
     }
 
-    return this.http.get<BookingListResponse>(`${this.apiUrl}/bookings/history`, { params });
+    return this.http.get<BookingListResponse>(`${this.apiUrl}/history`, { params });
   }
 
   getUpcomingBookings(userId?: string): Observable<Booking[]> {
     const params = userId ? new HttpParams().set('userId', userId) : new HttpParams();
-    return this.http.get<Booking[]>(`${this.apiUrl}/bookings/upcoming`, { params });
+    return this.http.get<Booking[]>(`${this.apiUrl}/upcoming`, { params });
   }
 
   getActiveBookings(userId?: string): Observable<Booking[]> {
     const params = userId ? new HttpParams().set('userId', userId) : new HttpParams();
-    return this.http.get<Booking[]>(`${this.apiUrl}/bookings/active`, { params });
+    return this.http.get<Booking[]>(`${this.apiUrl}/active`, { params });
   }
 
   calculateBookingPrice(carId: string, startDate: Date, endDate: Date): Observable<{ totalPrice: number; pricePerDay: number; totalDays: number; taxes: number; fees: number }> {
@@ -145,19 +145,19 @@ export class BookingApiService {
       .set('startDate', startDate.toISOString())
       .set('endDate', endDate.toISOString());
 
-    return this.http.get<{ totalPrice: number; pricePerDay: number; totalDays: number; taxes: number; fees: number }>(`${this.apiUrl}/bookings/calculate-price`, { params });
+    return this.http.get<{ totalPrice: number; pricePerDay: number; totalDays: number; taxes: number; fees: number }>(`${this.apiUrl}/calculate-price`, { params });
   }
 
   processPayment(bookingId: string, paymentData: any): Observable<{ success: boolean; message: string; transactionId?: string }> {
-    return this.http.post<{ success: boolean; message: string; transactionId?: string }>(`${this.apiUrl}/bookings/${bookingId}/payment`, paymentData);
+    return this.http.post<{ success: boolean; message: string; transactionId?: string }>(`${this.apiUrl}/${bookingId}/payment`, paymentData);
   }
 
   getPaymentStatus(bookingId: string): Observable<{ status: string; transactionId?: string; amount?: number }> {
-    return this.http.get<{ status: string; transactionId?: string; amount?: number }>(`${this.apiUrl}/bookings/${bookingId}/payment-status`);
+    return this.http.get<{ status: string; transactionId?: string; amount?: number }>(`${this.apiUrl}/${bookingId}/payment-status`);
   }
 
   addBookingReview(bookingId: string, review: { rating: number; comment: string }): Observable<{ success: boolean; message: string }> {
-    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/bookings/${bookingId}/review`, review);
+    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/${bookingId}/review`, review);
   }
 
   getBookingStatistics(userId?: string): Observable<{
@@ -176,6 +176,6 @@ export class BookingApiService {
       completedBookings: number;
       cancelledBookings: number;
       averageRating: number;
-    }>(`${this.apiUrl}/bookings/statistics`, { params });
+    }>(`${this.apiUrl}/statistics`, { params });
   }
 }

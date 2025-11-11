@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthApiService } from '../../../core/services/api/auth-api.service';
 import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-verify-email',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './verify-email.component.html',
-  styleUrls: ['./verify-email.component.scss']
 })
 export class VerifyEmailComponent implements OnInit {
   isLoading = true;

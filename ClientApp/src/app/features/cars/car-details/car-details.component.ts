@@ -11,8 +11,7 @@ import { LoadingSpinnerComponent } from '../../../shared/components/loading-spin
   selector: 'app-car-details',
   standalone: true,
   imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
-  templateUrl: './car-details.component.html',
-  styleUrls: ['./car-details.component.scss']
+  templateUrl: './car-details.component.html'
 })
 export class CarDetailsComponent implements OnInit {
   car: Car | null = null;

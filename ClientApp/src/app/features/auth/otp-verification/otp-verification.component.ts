@@ -1,13 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthApiService } from '../../../core/services/api/auth-api.service';
 import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-otp-verification',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './otp-verification.component.html',
-  styleUrls: ['./otp-verification.component.scss']
 })
 export class OtpVerificationComponent implements OnInit, OnDestroy {
   otpForm: FormGroup;

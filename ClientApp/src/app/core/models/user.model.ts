@@ -8,6 +8,7 @@ export interface User {
   address?: Address;
   preferences?: UserPreferences;
   isEmailVerified?: boolean;
+  is2FAEnabled?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

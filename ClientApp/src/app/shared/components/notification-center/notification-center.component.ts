@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { NotificationService, Notification } from '../../../core/services/notification.service';
 import { DateFormatPipe } from '../../pipes/date-format.pipe';
@@ -8,9 +9,9 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 @Component({
   selector: 'app-notification-center',
   standalone: true,
-  imports: [CommonModule, DateFormatPipe],
+  imports: [CommonModule, FormsModule, DateFormatPipe],
   templateUrl: './notification-center.component.html',
-  styleUrls: ['./notification-center.component.scss'],
+
   animations: [
     trigger('slideInOut', [
       state('in', style({ transform: 'translateX(0)', opacity: 1 })),

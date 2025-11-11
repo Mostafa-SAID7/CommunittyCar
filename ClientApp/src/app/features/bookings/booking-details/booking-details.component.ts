@@ -5,13 +5,13 @@ import { BookingApiService } from '../../../core/services/api/booking-api.servic
 import { NotificationService } from '../../../core/services/notification.service';
 import { Booking } from '../../../core/models/booking.model';
 import { LoadingSpinnerComponent } from '../../../shared/components/loading-spinner/loading-spinner.component';
+import { IconComponent } from '../../../shared/components/icons/icon.component';
 
 @Component({
   selector: 'app-booking-details',
   templateUrl: './booking-details.component.html',
-  styleUrls: ['./booking-details.component.scss'],
   standalone: true,
-  imports: [CommonModule, LoadingSpinnerComponent]
+  imports: [CommonModule, LoadingSpinnerComponent, IconComponent]
 })
 export class BookingDetailsComponent implements OnInit {
   booking: Booking | null = null;

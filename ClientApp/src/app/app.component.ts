@@ -17,7 +17,7 @@ import { LiveChatComponent } from './shared/components/live-chat/live-chat.compo
     LiveChatComponent
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   title = 'Community Car';

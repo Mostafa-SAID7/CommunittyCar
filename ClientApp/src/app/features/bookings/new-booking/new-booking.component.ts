@@ -14,7 +14,7 @@ import { LoadingSpinnerComponent } from '../../../shared/components/loading-spin
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, LoadingSpinnerComponent],
   templateUrl: './new-booking.component.html',
-  styleUrls: ['./new-booking.component.scss']
+
 })
 export class NewBookingComponent implements OnInit {
   car: Car | null = null;
@@ -169,3 +169,4 @@ export class NewBookingComponent implements OnInit {
     return this.getTotalDays();
   }
 }
+

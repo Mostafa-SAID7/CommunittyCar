@@ -10,7 +10,6 @@ import { LoadingSpinnerComponent } from '../../../shared/components/loading-spin
 @Component({
   selector: 'app-car-list',
   templateUrl: './car-list.component.html',
-  styleUrls: ['./car-list.component.scss'],
   standalone: true,
   imports: [CommonModule, FormsModule, LoadingSpinnerComponent]
 })
@@ -85,5 +84,9 @@ export class CarListComponent implements OnInit {
 
       return matchesSearch && matchesFilters;
     });
+  }
+
+  trackByCar(index: number, car: Car): string {
+    return car.id;
   }
 }

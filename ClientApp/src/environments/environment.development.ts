@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api',
+  apiUrl: 'http://localhost:7144/api',
   wsUrl: 'ws://localhost:3000',
   appName: 'Community Car (Dev)',
   appVersion: '1.0.0-dev',

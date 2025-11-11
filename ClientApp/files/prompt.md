@@ -1,3 +1,8 @@
+for icons used : lucide-angular
+used motion for animations
+Integrate shadcn UI components and styles
+used tailwindcss-animate for animations
+
 Update existing files to integrate new features
 Enhance overall 
 Review existing files and enhance it
@@ -21,12 +26,18 @@ Test ng serve after fixes
 
 Analyze error patterns and categorize issues
 Fix missing CommonModule imports for ngClass, ngModel, pipes
-Fix null safety issues with booking object
-Import missing components (loading-spinner, notification-center, etc.)
+Fix null safety issues with all object
+Import missing components 
 Fix type mismatches in cars component
 Add missing properties to Car model
 Fix HTML entity in footer
 Fix CSS class issue in styles.scss
 Import RouterModule for router-outlet
-Fix BookingListResponse type issue
+Fix Response type issue
 Test compilation after fixes
+
+Review current package.json
+Update package.json 
+Update angular.json 
+Update tailwind.config.js for shadcn compatibility
+Test configuration changes
